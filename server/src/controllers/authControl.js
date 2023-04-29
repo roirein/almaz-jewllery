@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const {v4: uuidv4} = require('uuid');
 const jwt = require('jsonwebtoken');
 const { HTTP_STATUS_CODES } = require('../consts/system-consts');
-const {insertUser, insertCustomer, getCustomerByEmail, updateUserToken} = require('../database/queries')
+const {insertUser, insertCustomer, getUserByEmail, updateUserToken} = require('../database/queries')
 
 const createCustomer = async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, Number(process.env.HASH_SALT))
@@ -13,7 +13,8 @@ const createCustomer = async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
+        shouldReplace: false
     }
 
     const customer = {
@@ -24,13 +25,13 @@ const createCustomer = async (req, res) => {
         phoneNumber2: req.body.phoneNumber2
     }
 
-    await insertUser(user)
+    await insertUser(user);
     await insertCustomer(customer);
     res.status(HTTP_STATUS_CODES.CREATED).send('User created successfully')
 }
 
 const loginUser = async (req, res) => {
-    const user = await getCustomerByEmail(req.body.email);
+    const user = await getUserByEmail(req.body.email);
     const token = jwt.sign({_id: user.Id}, process.env.JWT_SECRET)
     user.Token = token;
     await updateUserToken(token, user.Id);

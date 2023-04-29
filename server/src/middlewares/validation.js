@@ -25,12 +25,13 @@ const registerValidation = async (req, res, next) => {
         if (req.body.phoneNumber2 && !phoneRegex.test(req.body.phoneNumber2)){
             throw {status: HTTP_STATUS_CODES.BAD_REQUEST, message: ERROR_MESSAGES.VALIDATION_FAILS_INVALID_PHONE}
         }
-        const user = await geUserByEmail(req.body.email);
+        const user = await getUserByEmail(req.body.email);
         if (user) {
             throw {status: HTTP_STATUS_CODES.CONFLICT, message: ERROR_MESSAGES.VALIDATION_FAIL_USER_EXIST}
         }
         next()
     } catch(e) {
+        console.log(e)
         next(e)
     }
 }

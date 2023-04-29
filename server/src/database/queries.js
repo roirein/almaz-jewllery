@@ -1,16 +1,21 @@
 const dbClient = require('./connection')
-const {CUSTOMER_TABLE_COLUMNS_NAMES, USER_TABLE_COLUMNS_NAMES} = require('../consts/db-consts')
+const {CUSTOMER_TABLE_COLUMNS_NAMES, USER_TABLE_COLUMNS_NAMES, EMPLOYEE_TABLE_COLUMNS_NAMES} = require('../consts/db-consts')
 
 const insertUser = async (user) => {
-    await dbClient.query(
-        `INSERT INTO users (
-            "${USER_TABLE_COLUMNS_NAMES.ID}", 
-            "${USER_TABLE_COLUMNS_NAMES.FIRST_NAME}", 
-            "${USER_TABLE_COLUMNS_NAMES.LAST_NAME}", 
-            "${USER_TABLE_COLUMNS_NAMES.EMAIL}", 
-            "${USER_TABLE_COLUMNS_NAMES.PASSWORD}")
-        VALUES ('${user.id}', '${user.firstName}', '${user.lastName}', '${user.email}', '${user.password}');
-        `)
+    try {
+        await dbClient.query(
+            `INSERT INTO users (
+                "${USER_TABLE_COLUMNS_NAMES.ID}", 
+                "${USER_TABLE_COLUMNS_NAMES.FIRST_NAME}", 
+                "${USER_TABLE_COLUMNS_NAMES.LAST_NAME}", 
+                "${USER_TABLE_COLUMNS_NAMES.EMAIL}", 
+                "${USER_TABLE_COLUMNS_NAMES.PASSWORD}",
+                "${USER_TABLE_COLUMNS_NAMES.SHOULD_REPLACE_PASSWORD}")
+            VALUES ('${user.id}', '${user.firstName}', '${user.lastName}', '${user.email}', '${user.password}', '${user.shouldReplace}');
+            `)
+    } catch(e) {
+        return 
+    }
 }
 
 const insertCustomer = async (customer) => {
@@ -23,6 +28,20 @@ const insertCustomer = async (customer) => {
             "${CUSTOMER_TABLE_COLUMNS_NAMES.PHONE_TWO}")
         VALUES ('${customer.userId}', '${customer.customerId}', '${customer.businessName}', '${customer.phoneNumber1}', '${customer.phoneNumber2}');
         `)
+}
+
+const insertEmployee = async (employee) => {
+    try {
+        await dbClient.query(
+            `INSERT INTO employees (
+                "${EMPLOYEE_TABLE_COLUMNS_NAMES.USER_ID}",
+                "${EMPLOYEE_TABLE_COLUMNS_NAMES.EMPLOYEE_ID}",
+                "${EMPLOYEE_TABLE_COLUMNS_NAMES.PERMISSION_LEVEL}")
+            VALUES ('${employee.userId}', '${employee.employeeId}', '${employee.permissionLevel}');
+            `)
+    } catch (e) {
+        return 
+    }
 }
 
 const getUserByEmail = async (email) => {
@@ -58,6 +77,7 @@ const updateUserToken = async (token, userId) => {
 module.exports = {
     insertUser,
     insertCustomer,
+    insertEmployee,
     getUserByEmail,
     getUserById,
     updateUserToken

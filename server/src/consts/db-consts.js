@@ -4,7 +4,8 @@ const USER_TABLE_COLUMNS_NAMES = {
     LAST_NAME: 'lastName',
     EMAIL: 'Email',
     PASSWORD: 'Password',
-    TOKEN: 'Token'
+    TOKEN: 'Token',
+    SHOULD_REPLACE_PASSWORD: 'shouldReplacePassword'
 }
 
 const CUSTOMER_TABLE_COLUMNS_NAMES = {
@@ -19,7 +20,7 @@ const CUSTOMER_TABLE_COLUMNS_NAMES = {
 const EMPLOYEE_TABLE_COLUMNS_NAMES = {
     USER_ID: 'UserId',
     EMPLOYEE_ID: 'EmplyoeeId',
-    ROLE: 'Role'
+    PERMISSION_LEVEL: 'permissionLevel'
 }
 
 module.exports = {

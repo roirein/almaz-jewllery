@@ -1,4 +1,4 @@
-const {USER_TABLE_COLUMNS_NAMES, CUSTOMER_TABLE_COLUMNS_NAMES} = require('../consts/db-consts');
+const {USER_TABLE_COLUMNS_NAMES, CUSTOMER_TABLE_COLUMNS_NAMES, EMPLOYEE_TABLE_COLUMNS_NAMES} = require('../consts/db-consts');
 
 const createUserTable = async (client) => {
     try {
@@ -10,11 +10,12 @@ const createUserTable = async (client) => {
                 "${USER_TABLE_COLUMNS_NAMES.EMAIL}" VARCHAR(100) UNIQUE,
                 "${USER_TABLE_COLUMNS_NAMES.PASSWORD}" VARCHAR(100),
                 "${USER_TABLE_COLUMNS_NAMES.TOKEN}" VARCHAR(200) DEFAULT NULL,
+                "${USER_TABLE_COLUMNS_NAMES.SHOULD_REPLACE_PASSWORD}" BOOLEAN,
                 PRIMARY KEY("${USER_TABLE_COLUMNS_NAMES.ID}") 
             );`
         )
     } catch (e) {
-        return
+        return;
     }
 }
 
@@ -35,16 +36,35 @@ const createCustomerTable = async (client) => {
             );`
         )
     } catch(e){
-        console.log(e)
+       return
     }
 }
 
+const createEmployeeTable = async (client) => {
+    try {
+        await client.query(
+            `CREATE TABLE IF NOT EXISTS "employees" (
+                "${EMPLOYEE_TABLE_COLUMNS_NAMES.USER_ID}" VARCHAR(100) UNIQUE,
+                "${EMPLOYEE_TABLE_COLUMNS_NAMES.EMPLOYEE_ID}" VARCHAR(100) UNIQUE,
+                "${EMPLOYEE_TABLE_COLUMNS_NAMES.PERMISSION_LEVEL}" INT,
+                PRIMARY KEY ("${EMPLOYEE_TABLE_COLUMNS_NAMES.EMPLOYEE_ID}"),
+                CONSTRAINT fk_user_id 
+                    FOREIGN KEY ("${EMPLOYEE_TABLE_COLUMNS_NAMES.USER_ID}")
+                    REFERENCES "users" ("${USER_TABLE_COLUMNS_NAMES.ID}")
+            );`
+        )
+    } catch (e) {
+        return
+    }
+}
+ 
 
 
 const createDB = async (client) => {
-    await createUserTable(client)
-    await createCustomerTable(client)
-    return true
+    await createUserTable(client);
+    await createCustomerTable(client);
+    await createEmployeeTable(client);
+    return true;
 }
 
 module.exports = createDB
