@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+require('dotenv').config()
 
 const DBClient = require('./database/connection');
 const createDB = require('./database/db');
@@ -9,7 +10,7 @@ const {HTTP_STATUS_CODES} = require('./consts/db-consts')
 const authRoute = require('./routes/authentication');
 
 const app = express();
-const port = 3000
+const port = process.env.SERVER_PORT || 3000
 
 createDB(DBClient).then((res) => {
     if (res) {

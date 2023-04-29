@@ -5,7 +5,7 @@ const { HTTP_STATUS_CODES } = require('../consts/system-consts');
 const {insertUser, insertCustomer, getCustomerByEmail, updateUserToken} = require('../database/queries')
 
 const createCustomer = async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 8)
+    const hashedPassword = await bcrypt.hash(req.body.password, process.env.HASH_SALT)
     const userId = uuidv4()
 
     const user = {
@@ -31,14 +31,20 @@ const createCustomer = async (req, res) => {
 
 const loginUser = async (req, res) => {
     const user = await getCustomerByEmail(req.body.email);
-    const token = jwt.sign({_id: user.Id}, 'secret')
+    const token = jwt.sign({_id: user.Id}, process.env.JWT_SECRET)
     user.Token = token;
-    updateUserToken(token, user.Email);
+    await updateUserToken(token, user.Email);
     delete user.password
     res.status(HTTP_STATUS_CODES.SUCCESS).send(user)
 }
 
+const logoutUser = async (req, res) => {
+    await updateUserToken(null, req.body.email);
+    res.status(HTTP_STATUS_CODES.SUCCESS).send({})
+}
+
 module.exports = {
     createCustomer,
-    loginUser
+    loginUser,
+    logoutUser
 }

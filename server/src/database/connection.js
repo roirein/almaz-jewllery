@@ -1,16 +1,16 @@
 const {Client} = require('pg');
 
 const client1 = new Client({
-    user: 'postgres',
-    host: '127.0.0.1',
-    port: 5432,
-    password: '1234',
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD
 });
 
 const createDatatbase = async () => {
-    client1.connect()
     try {
-        await client1.query('CREATE DATABASE almaz_databse');
+        await client1.connect()
+        await client1.query(`CREATE DATABASE ${process.env.DB_NAME}`);
     } catch (error) {
         return
     } finally {
@@ -19,12 +19,13 @@ const createDatatbase = async () => {
 }
 
 const client2 = new Client({
-    user: 'postgres',
-    host: '127.0.0.1',
-    port: 5432,
-    password: '1234',
-    database: 'almaz_databse'
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
+
 
 createDatatbase().then(() => {
     client2.connect()
