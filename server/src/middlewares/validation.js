@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const {USER_COLUMNS_NAMES} = require('../consts/db-consts');
 const {HTTP_STATUS_CODES} = require('../consts/system-consts')
 const {ERROR_MESSAGES} = require('../consts/messages')
-const {getCustomerByEmail} = require('../database/queries');
+const {getUserByEmail} = require('../database/queries');
 
 const registerValidation = async (req, res, next) => {
     try {
@@ -25,7 +25,7 @@ const registerValidation = async (req, res, next) => {
         if (req.body.phoneNumber2 && !phoneRegex.test(req.body.phoneNumber2)){
             throw {status: HTTP_STATUS_CODES.BAD_REQUEST, message: ERROR_MESSAGES.VALIDATION_FAILS_INVALID_PHONE}
         }
-        const user = await getCustomerByEmail(req.body.email);
+        const user = await geUserByEmail(req.body.email);
         if (user) {
             throw {status: HTTP_STATUS_CODES.CONFLICT, message: ERROR_MESSAGES.VALIDATION_FAIL_USER_EXIST}
         }
@@ -46,7 +46,10 @@ const loginValidation = async (req, res, next) => {
         if (!validator.isEmail(req.body.email)) {
             throw {status: HTTP_STATUS_CODES.BAD_REQUEST, message: ERROR_MESSAGES.VALIDATION_FAILS_INVALID_EMAIL}
         }
-        const user = await getCustomerByEmail(req.body.email);
+        const user = await getUSerByEmail(req.body.email);
+        if (!user) {
+            throw {status: HTTP_STATUS_CODES.UNAUTHORIZED, message: ERROR_MESSAGES.LOGIN_FAILED_WRONG_CREDENTIALS}
+        }
         const isMatch = await bcrypt.compare(req.body.password, user.Password)
         if (!isMatch) {
             throw {status: HTTP_STATUS_CODES.UNAUTHORIZED, message: ERROR_MESSAGES.LOGIN_FAILED_WRONG_CREDENTIALS}

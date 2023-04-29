@@ -25,7 +25,7 @@ const insertCustomer = async (customer) => {
         `)
 }
 
-const getCustomerByEmail = async (email) => {
+const getUserByEmail = async (email) => {
     const users = await dbClient.query(
         `SELECT * FROM users WHERE "Email"='${email}'`
     )
@@ -36,10 +36,21 @@ const getCustomerByEmail = async (email) => {
     return users.rows[0];
 }
 
-const updateUserToken = async (token, email) => {
+const getUserById = async (id) => {
+    const users = await dbClient.query(
+        `SELECT * FROM users WHERE "Id"='${id}'`
+    )
+
+    if (users.rows.length === 0) {
+        return undefined;
+    }
+    return users.rows[0];
+}
+
+const updateUserToken = async (token, userId) => {
     await dbClient.query(
         `UPDATE "users"
-        SET "Token"='${token}' WHERE "Email"='${email}'
+        SET "Token"='${token}' WHERE "Id"='${userId}'
         `
     )
 }
@@ -47,6 +58,7 @@ const updateUserToken = async (token, email) => {
 module.exports = {
     insertUser,
     insertCustomer,
-    getCustomerByEmail,
+    getUserByEmail,
+    getUserById,
     updateUserToken
 }

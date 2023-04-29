@@ -4,7 +4,7 @@ const ERROR_MESSAGES = {
     VALIDATION_FAIL_USER_EXIST: 'User already exist',
     VALIDATION_FAILS_INVALID_EMAIL: 'Email is in a wrong format',
     VALIDATION_FAILS_INVALID_PHONE: 'Phone number is in a wrong format',
-    LOGIN_FAILED_WRONG_CREDENTIALS: 'Email or Password is incorrect'
+    LOGIN_FAILED_WRONG_CREDENTIALS: 'Email or Password is incorrect',
 }
 
 module.exports = {
