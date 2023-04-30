@@ -1,4 +1,6 @@
 const express = require('express');
+const {createServer} = require('http');
+const socketio = require('socket.io');
 const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
@@ -16,6 +18,8 @@ const {insertUser, insertEmployee} = require('./database/queries')
 const authRoute = require('./routes/authentication');
 
 const app = express();
+const server = createServer(app)
+const io = socketio(server)
 const port = process.env.SERVER_PORT || 3000;
 
 const parser = parse({
@@ -28,7 +32,7 @@ parser.on('readable', async () => {
         const userId = uuidv4();
         const employeeId = uuidv4();
         const temporaryPassword = Math.random().toString(36).slice(-8);
-        const hashedPassword = bcrypt.hash(temporaryPassword, Number(process.env.HASH_SALT))
+        const hashedPassword = await bcrypt.hash(temporaryPassword, Number(process.env.HASH_SALT))
 
         const user = {
             id: userId,
@@ -44,7 +48,7 @@ parser.on('readable', async () => {
             employeeId: employeeId,
             permissionLevel: record[3]
         }
-        sendTemporaryPasswordMail(temporaryPassword, record[2]);
+        //sendTemporaryPasswordMail(temporaryPassword, record[2]);
         await insertUser(user);
         await insertEmployee(employee);
     }
@@ -72,13 +76,18 @@ app.use(express.json());
 app.use(morgan('dev'))
 app.use(cors());
 
-app.use('/auth', authRoute);
+app.use('/auth', authRoute(io));
 
 app.use((err, req, res, next) => {
     console.log(err.status)
     res.status(err.status || HTTP_STATUS_CODES.SERVER_ERROR).send(err.message)
 })
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+    console.log('user is online');
+
+})
+
+server.listen(port, () => {
     console.log(`server is up and running on port ${port}`)
 })

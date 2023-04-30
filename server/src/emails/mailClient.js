@@ -1,4 +1,5 @@
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
+require('dotenv').config();
 
 const client = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -11,7 +12,5 @@ const client = nodemailer.createTransport({
     },
     tls: {rejectUnauthorized: false}
 })
-
-
 
 module.exports = client

@@ -3,12 +3,17 @@ const {registerValidation, loginValidation} = require('../middlewares/validation
 const {authorizeUser} = require('../middlewares/authorization')
 const {createCustomer, loginUser, logoutUser} = require('../controllers/authControl');
 
-const router = express.Router();
+const authRoute = (io) => {
 
-router.post('/register', registerValidation, createCustomer);
+    const router = express.Router();
 
-router.post('/login', loginValidation, loginUser);
+    router.post('/register', registerValidation, (req, res) => createCustomer(req, res, io));
 
-router.post('/logout', authorizeUser, logoutUser)
+    router.post('/login', loginValidation, loginUser);
 
-module.exports = router;
+    router.post('/logout', authorizeUser, logoutUser);
+
+    return router
+}
+
+module.exports = authRoute;

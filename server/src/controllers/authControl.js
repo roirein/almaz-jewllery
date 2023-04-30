@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const { HTTP_STATUS_CODES } = require('../consts/system-consts');
 const {insertUser, insertCustomer, getUserByEmail, updateUserToken} = require('../database/queries')
 
-const createCustomer = async (req, res) => {
+const createCustomer = async (req, res, io) => {
+
     const hashedPassword = await bcrypt.hash(req.body.password, Number(process.env.HASH_SALT))
     const userId = uuidv4()
 
@@ -24,7 +25,7 @@ const createCustomer = async (req, res) => {
         phoneNumber1: req.body.phoneNumber1,
         phoneNumber2: req.body.phoneNumber2
     }
-
+    io.emit('newCustomer', {...user, ...customer})
     await insertUser(user);
     await insertCustomer(customer);
     res.status(HTTP_STATUS_CODES.CREATED).send('User created successfully')

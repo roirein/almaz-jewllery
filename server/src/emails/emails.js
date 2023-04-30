@@ -1,7 +1,5 @@
 const mailer = require('./mailClient');
 
-console.log(mailer.sendMail)
-
 const sendTemporaryPasswordMail = (password, recipent) => {
     mailer.sendMail(
         {
@@ -12,6 +10,7 @@ const sendTemporaryPasswordMail = (password, recipent) => {
         }
     )
 }
+
 
 module.exports = {
     sendTemporaryPasswordMail
