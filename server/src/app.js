@@ -3,7 +3,9 @@ const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
 const {parse} = require('csv-parse');
-const {v4: uuidv4} = require('uuid')
+const {v4: uuidv4} = require('uuid');
+const bcrypt = require('bcryptjs');
+const {sendTemporaryPasswordMail} = require('./emails/emails')
 require('dotenv').config();
 
 const DBClient = require('./database/connection');
@@ -25,14 +27,15 @@ parser.on('readable', async () => {
     while ((record = parser.read()) !== null) {
         const userId = uuidv4();
         const employeeId = uuidv4();
-        const temporaryPassword = Math.random().toString(36).slice(-8)
+        const temporaryPassword = Math.random().toString(36).slice(-8);
+        const hashedPassword = bcrypt.hash(temporaryPassword, Number(process.env.HASH_SALT))
 
         const user = {
             id: userId,
             firstName: record[0],
             lastName: record[1],
             email: record[2],
-            password: temporaryPassword,
+            password: hashedPassword,
             shouldReplace: true
         }
 
@@ -41,7 +44,7 @@ parser.on('readable', async () => {
             employeeId: employeeId,
             permissionLevel: record[3]
         }
-
+        sendTemporaryPasswordMail(temporaryPassword, record[2]);
         await insertUser(user);
         await insertEmployee(employee);
     }
@@ -79,4 +82,3 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`server is up and running on port ${port}`)
 })
-
