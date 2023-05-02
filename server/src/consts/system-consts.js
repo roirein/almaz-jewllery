@@ -17,7 +17,14 @@ const ROLES = {
     EMPLOYEE: 'Employee'
 }
 
+const REQUEST_STATUS = {
+    PENDING: 'pending',
+    APPROVED: 'approved',
+    REJECTED: 'rejected'
+}
+
 module.exports = {
     HTTP_STATUS_CODES,
-    ROLES
+    ROLES,
+    REQUEST_STATUS
 }

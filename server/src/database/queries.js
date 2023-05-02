@@ -1,5 +1,10 @@
 const dbClient = require('./connection')
-const {CUSTOMER_TABLE_COLUMNS_NAMES, USER_TABLE_COLUMNS_NAMES, EMPLOYEE_TABLE_COLUMNS_NAMES} = require('../consts/db-consts')
+const {
+    CUSTOMER_TABLE_COLUMNS_NAMES,
+    USER_TABLE_COLUMNS_NAMES,
+    EMPLOYEE_TABLE_COLUMNS_NAMES,
+    REQUEST_TABLE_COLUMNS
+} = require('../consts/db-consts')
 
 const insertUser = async (user) => {
     try {
@@ -44,6 +49,20 @@ const insertEmployee = async (employee) => {
     }
 }
 
+const insertRequest = async (request) => {
+    try {
+        await dbClient.query(
+            `INSERT INTO requests(
+                "${REQUEST_TABLE_COLUMNS.REQUEST_ID}",
+                "${REQUEST_TABLE_COLUMNS.REQUESTER_ID}",
+                "${REQUEST_TABLE_COLUMNS.CREATED}")
+            VALUES ('${request.id}', '${request.requesterId}', 'to_timestamp(${Date.now()} / 1000)')
+        `)
+    } catch (e) {
+        return
+    }
+}
+
 const getUserByEmail = async (email) => {
     const users = await dbClient.query(
         `SELECT * FROM users WHERE "Email"='${email}'`
@@ -80,5 +99,6 @@ module.exports = {
     insertEmployee,
     getUserByEmail,
     getUserById,
-    updateUserToken
+    updateUserToken,
+    insertRequest
 }

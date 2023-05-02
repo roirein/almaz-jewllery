@@ -1,25 +1,31 @@
+// require express related packages
 const express = require('express');
 const {createServer} = require('http');
-const socketio = require('socket.io');
+
+// require supported packges
 const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
 const {parse} = require('csv-parse');
-const {v4: uuidv4} = require('uuid');
-const bcrypt = require('bcryptjs');
-const {sendTemporaryPasswordMail} = require('./emails/emails')
 require('dotenv').config();
 
+// require db related files 
 const DBClient = require('./database/connection');
 const createDB = require('./database/db');
-const {HTTP_STATUS_CODES} = require('./consts/db-consts')
-const {insertUser, insertEmployee} = require('./database/queries')
+const {createAndInsertNewEmployee} = require('./utils/utils')
 
-const authRoute = require('./routes/authentication');
+// require consts and socket io 
+const {HTTP_STATUS_CODES} = require('./consts/db-consts')
+const socket = require('./socket/socket');
 
 const app = express();
 const server = createServer(app)
-const io = socketio(server)
+socket.init(server);
+
+require('./socket/listener'); // activate socket connection
+
+const authRoute = require('./routes/authentication');
+
 const port = process.env.SERVER_PORT || 3000;
 
 const parser = parse({
@@ -29,28 +35,7 @@ const parser = parse({
 parser.on('readable', async () => {
     let record;
     while ((record = parser.read()) !== null) {
-        const userId = uuidv4();
-        const employeeId = uuidv4();
-        const temporaryPassword = Math.random().toString(36).slice(-8);
-        const hashedPassword = await bcrypt.hash(temporaryPassword, Number(process.env.HASH_SALT))
-
-        const user = {
-            id: userId,
-            firstName: record[0],
-            lastName: record[1],
-            email: record[2],
-            password: hashedPassword,
-            shouldReplace: true
-        }
-
-        const employee = {
-            userId: userId,
-            employeeId: employeeId,
-            permissionLevel: record[3]
-        }
-        //sendTemporaryPasswordMail(temporaryPassword, record[2]);
-        await insertUser(user);
-        await insertEmployee(employee);
+        await createAndInsertNewEmployee(record);
     }
 })
 
@@ -76,16 +61,11 @@ app.use(express.json());
 app.use(morgan('dev'))
 app.use(cors());
 
-app.use('/auth', authRoute(io));
+app.use('/auth', authRoute);
 
 app.use((err, req, res, next) => {
     console.log(err.status)
     res.status(err.status || HTTP_STATUS_CODES.SERVER_ERROR).send(err.message)
-})
-
-io.on('connection', (socket) => {
-    console.log('user is online');
-
 })
 
 server.listen(port, () => {

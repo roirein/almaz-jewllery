@@ -1,4 +1,11 @@
-const {USER_TABLE_COLUMNS_NAMES, CUSTOMER_TABLE_COLUMNS_NAMES, EMPLOYEE_TABLE_COLUMNS_NAMES} = require('../consts/db-consts');
+const {
+    USER_TABLE_COLUMNS_NAMES,
+    CUSTOMER_TABLE_COLUMNS_NAMES,
+    EMPLOYEE_TABLE_COLUMNS_NAMES,
+    REQUEST_TABLE_COLUMNS
+} = require('../consts/db-consts');
+
+const {REQUEST_STATUS} = require('../consts/system-consts')
 
 const createUserTable = async (client) => {
     try {
@@ -57,6 +64,26 @@ const createEmployeeTable = async (client) => {
         return
     }
 }
+
+const createRequestTable = async (client) =>  {
+    try {
+        await client.query(
+            `CREATE TABLE IF NOT EXISTS "requests" (
+                "${REQUEST_TABLE_COLUMNS.REQUEST_ID}" VARCHAR(100) UNIQUE,
+                "${REQUEST_TABLE_COLUMNS.REQUESTER_ID}" VARCHAR(100) UNIQUE,
+                "${REQUEST_TABLE_COLUMNS.STATUS}" VARCHAR(15) DEFAULT '${REQUEST_STATUS.PENDING}',
+                "${REQUEST_TABLE_COLUMNS.CREATED}" DATE DEFAULT NULL
+                "${REQUEST_TABLE_COLUMNS.RESPONDED}" DATE DEFAULT NULL,
+                PRIMARY KEY ("${REQUEST_TABLE_COLUMNS.REQUEST_ID}"),
+                CONSTRAINT fk_user_id 
+                    FOREIGN KEY ("${REQUEST_TABLE_COLUMNS.REQUESTER_ID}")
+                    REFERENCES "users" ("${USER_TABLE_COLUMNS_NAMES.ID}")
+            );`
+        )
+    } catch (e) {
+        return
+    }
+}
  
 
 
@@ -64,6 +91,7 @@ const createDB = async (client) => {
     await createUserTable(client);
     await createCustomerTable(client);
     await createEmployeeTable(client);
+    await createRequestTable(client)
     return true;
 }
 

@@ -23,9 +23,18 @@ const EMPLOYEE_TABLE_COLUMNS_NAMES = {
     PERMISSION_LEVEL: 'permissionLevel'
 }
 
+const REQUEST_TABLE_COLUMNS = {
+    REQUEST_ID: 'requestId',
+    REQUESTER_ID: 'requesterId',
+    STATUS: 'status',
+    CREATED: 'created',
+    RESPONDED: 'responded'
+}
+
 module.exports = {
     USER_TABLE_COLUMNS_NAMES,
     CUSTOMER_TABLE_COLUMNS_NAMES,
-    EMPLOYEE_TABLE_COLUMNS_NAMES
+    EMPLOYEE_TABLE_COLUMNS_NAMES,
+    REQUEST_TABLE_COLUMNS
 }
 
