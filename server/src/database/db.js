@@ -18,6 +18,7 @@ const createUserTable = async (client) => {
                 "${USER_TABLE_COLUMNS_NAMES.PASSWORD}" VARCHAR(100),
                 "${USER_TABLE_COLUMNS_NAMES.TOKEN}" VARCHAR(200) DEFAULT NULL,
                 "${USER_TABLE_COLUMNS_NAMES.SHOULD_REPLACE_PASSWORD}" BOOLEAN,
+                "${USER_TABLE_COLUMNS_NAMES.IS_CUSTOMER}" BOOLEAN,
                 PRIMARY KEY("${USER_TABLE_COLUMNS_NAMES.ID}") 
             );`
         )
@@ -72,7 +73,7 @@ const createRequestTable = async (client) =>  {
                 "${REQUEST_TABLE_COLUMNS.REQUEST_ID}" VARCHAR(100) UNIQUE,
                 "${REQUEST_TABLE_COLUMNS.REQUESTER_ID}" VARCHAR(100) UNIQUE,
                 "${REQUEST_TABLE_COLUMNS.STATUS}" VARCHAR(15) DEFAULT '${REQUEST_STATUS.PENDING}',
-                "${REQUEST_TABLE_COLUMNS.CREATED}" DATE DEFAULT NULL
+                "${REQUEST_TABLE_COLUMNS.CREATED}" DATE DEFAULT NULL,
                 "${REQUEST_TABLE_COLUMNS.RESPONDED}" DATE DEFAULT NULL,
                 PRIMARY KEY ("${REQUEST_TABLE_COLUMNS.REQUEST_ID}"),
                 CONSTRAINT fk_user_id 
@@ -81,6 +82,7 @@ const createRequestTable = async (client) =>  {
             );`
         )
     } catch (e) {
+        console.log(e)
         return
     }
 }

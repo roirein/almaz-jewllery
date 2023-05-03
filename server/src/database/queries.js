@@ -15,8 +15,9 @@ const insertUser = async (user) => {
                 "${USER_TABLE_COLUMNS_NAMES.LAST_NAME}", 
                 "${USER_TABLE_COLUMNS_NAMES.EMAIL}", 
                 "${USER_TABLE_COLUMNS_NAMES.PASSWORD}",
-                "${USER_TABLE_COLUMNS_NAMES.SHOULD_REPLACE_PASSWORD}")
-            VALUES ('${user.id}', '${user.firstName}', '${user.lastName}', '${user.email}', '${user.password}', '${user.shouldReplace}');
+                "${USER_TABLE_COLUMNS_NAMES.SHOULD_REPLACE_PASSWORD}",
+                "${USER_TABLE_COLUMNS_NAMES.IS_CUSTOMER}")
+            VALUES ('${user.id}', '${user.firstName}', '${user.lastName}', '${user.email}', '${user.password}', '${user.shouldReplace}', '${user.isCustomer}');
             `)
     } catch(e) {
         return 
@@ -93,6 +94,50 @@ const updateUserToken = async (token, userId) => {
     )
 }
 
+const getCustomerByUserId = async (userId) => {
+    const customers = await dbClient.query(
+        `SELECT * from "customers" WHERE "${CUSTOMER_TABLE_COLUMNS_NAMES.USER_ID}"='${userId}'`
+    )
+
+    if (customers.rows.length === 0) {
+        return undefined
+    }
+    return customers.rows[0];
+}
+
+const getEmployeeByUserId = async (userId) => {
+    const employees = await dbClient.query(
+        `SELECT * from "employees" WHERE "${EMPLOYEE_TABLE_COLUMNS_NAMES.USER_ID}"='${userId}'`
+    )
+
+    console.log(userId)
+
+    if (employees.rows.length === 0) {
+        return undefined
+    }
+    return employees.rows[0];
+}
+
+const approveCustomer = async (userId) => {
+    try {
+        await dbClient.query(
+            `UPDATE "customers"
+            SET "Approved"=TRUE WHERE "${CUSTOMER_TABLE_COLUMNS_NAMES.USER_ID}"='${userId}'
+            `
+        )
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const setNewPassword = async (email, password) => {
+    await dbClient.query(
+        `UPDATE "users"
+        SET "Password"='${password}', "shouldReplacePassword"='${false}' WHERE "Email"='${email}'
+        `
+    )
+}
+
 module.exports = {
     insertUser,
     insertCustomer,
@@ -100,5 +145,9 @@ module.exports = {
     getUserByEmail,
     getUserById,
     updateUserToken,
-    insertRequest
+    insertRequest,
+    getCustomerByUserId,
+    getEmployeeByUserId,
+    approveCustomer,
+    setNewPassword
 }

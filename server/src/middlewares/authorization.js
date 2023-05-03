@@ -14,10 +14,25 @@ const authorizeUser = async (req, res, next) => {
         req.userId = userId;
         next()
     } catch (e) {
+        console.log(e)
+        next(e)
+    }
+}
+
+const isAdmin = async (req, res, next) => {
+    try {
+        console.log(req.body.permissionLevel)
+        if (Object.keys(req.body).includes('permissionLevel') && req.body.permissionLevel === 0) {
+            next()
+        } else {
+            throw {status: HTTP_STATUS_CODES.FORBIDDEN, message: 'Unauthorized'}
+        }
+    } catch (e) {
         next(e)
     }
 }
 
 module.exports = {
-    authorizeUser
+    authorizeUser,
+    isAdmin
 }

@@ -4,13 +4,15 @@ const users = {}
 
 try {
     io.on('connection', (socket) => {
-
+        
         socket.on('admin-login', (data) => {
+            console.log(data)
             const userId = data.userId;
             users[userId] = {
                 socketId: socket.id,
                 permissionLevel: 0
             }
+            console.log(users)
         })
     })
 } catch (error) {

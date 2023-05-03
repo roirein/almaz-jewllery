@@ -15,7 +15,8 @@ const createAndInsertNewEmployee = async (record) => {
         lastName: record[1],
         email: record[2],
         password: hashedPassword,
-        shouldReplace: true
+        shouldReplace: true,
+        isCustomer: false
     }
 
     const employee = {
@@ -23,7 +24,7 @@ const createAndInsertNewEmployee = async (record) => {
         employeeId: employeeId,
         permissionLevel: record[3]
     }
-    sendTemporaryPasswordMail(temporaryPassword, record[2]);
+    //sendTemporaryPasswordMail(temporaryPassword, record[2]);
     await insertUser(user);
     await insertEmployee(employee);
 }

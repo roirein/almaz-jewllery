@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const {v4: uuidv4} = require('uuid');
 const jwt = require('jsonwebtoken');
 const { HTTP_STATUS_CODES } = require('../consts/system-consts');
-const {insertUser, insertCustomer, getUserByEmail, updateUserToken, insertRequest} = require('../database/queries');
+const {insertUser, insertCustomer, getUserByEmail, updateUserToken, insertRequest, setNewPassword, getCustomerByUserId, getEmployeeByUserId} = require('../database/queries');
 const io = require('../socket/socket').getIo()
 const users = require('../socket/listener');
 
@@ -17,7 +17,8 @@ const createCustomer = async (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         password: hashedPassword,
-        shouldReplace: false
+        shouldReplace: false,
+        isCustomer: true
     }
 
     const customer = {
@@ -33,10 +34,11 @@ const createCustomer = async (req, res) => {
         requesterId: userId,
     };
     delete userData.password;
+    console.log(users)
     const adminSocketId = Object.entries(users).find(entry => entry[1].permissionLevel === 0);
     if (adminSocketId) {
-        console.log(adminSocketId)
-        io.to(adminSocketId[0]).emit('newCustomer', {...user, ...customer});
+        console.log(adminSocketId[1].socketId)
+        io.to(adminSocketId[1].socketId).emit(userData);
     }
     await insertRequest(request);
     await insertUser(user);
@@ -50,7 +52,9 @@ const loginUser = async (req, res) => {
     user.Token = token;
     await updateUserToken(token, user.Id);
     delete user.Password
-    res.status(HTTP_STATUS_CODES.SUCCESS).send(user)
+    const userAdditionalData = user.isCustomer ? await getCustomerByUserId(user.Id) : await getEmployeeByUserId(user.Id);
+    console.log(userAdditionalData)
+    res.status(HTTP_STATUS_CODES.SUCCESS).send({...user, ...userAdditionalData})
 }
 
 const logoutUser = async (req, res) => {
@@ -58,8 +62,15 @@ const logoutUser = async (req, res) => {
     res.status(HTTP_STATUS_CODES.SUCCESS).send({})
 }
 
+const resetPassword = async (req, res) => {
+    const hashedPassword = await bcrypt.hash(req.body.password, process.env.HASH_SALT);
+    await setNewPassword(req.body.email, hashedPassword);
+    res.status(HTTP_STATUS_CODES.SUCCESS).send('Password changed succesffully')
+} 
+
 module.exports = {
     createCustomer,
     loginUser,
-    logoutUser
+    logoutUser,
+    resetPassword
 }

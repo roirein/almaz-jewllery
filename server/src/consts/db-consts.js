@@ -5,7 +5,8 @@ const USER_TABLE_COLUMNS_NAMES = {
     EMAIL: 'Email',
     PASSWORD: 'Password',
     TOKEN: 'Token',
-    SHOULD_REPLACE_PASSWORD: 'shouldReplacePassword'
+    SHOULD_REPLACE_PASSWORD: 'shouldReplacePassword',
+    IS_CUSTOMER: 'isCustomer'
 }
 
 const CUSTOMER_TABLE_COLUMNS_NAMES = {

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const {USER_COLUMNS_NAMES} = require('../consts/db-consts');
 const {HTTP_STATUS_CODES} = require('../consts/system-consts')
 const {ERROR_MESSAGES} = require('../consts/messages')
-const {getUserByEmail} = require('../database/queries');
+const {getUserByEmail, getCustomerByUserId} = require('../database/queries');
 
 const registerValidation = async (req, res, next) => {
     try {
@@ -47,13 +47,19 @@ const loginValidation = async (req, res, next) => {
         if (!validator.isEmail(req.body.email)) {
             throw {status: HTTP_STATUS_CODES.BAD_REQUEST, message: ERROR_MESSAGES.VALIDATION_FAILS_INVALID_EMAIL}
         }
-        const user = await getUSerByEmail(req.body.email);
+        const user = await getUserByEmail(req.body.email);
         if (!user) {
             throw {status: HTTP_STATUS_CODES.UNAUTHORIZED, message: ERROR_MESSAGES.LOGIN_FAILED_WRONG_CREDENTIALS}
         }
         const isMatch = await bcrypt.compare(req.body.password, user.Password)
         if (!isMatch) {
             throw {status: HTTP_STATUS_CODES.UNAUTHORIZED, message: ERROR_MESSAGES.LOGIN_FAILED_WRONG_CREDENTIALS}
+        }
+        if (user.isCustomer) {
+            const isApproved = await getCustomerByUserId(user?.id).Approved;
+            if (!isApproved) {
+                throw {status: HTTP_STATUS_CODES.UNAUTHORIZED, message: ERROR_MESSAGES.LOGIN_FAILED_USER_NOT_APPROVED}
+            }
         }
         next()
     } catch (e) {
@@ -62,7 +68,23 @@ const loginValidation = async (req, res, next) => {
     }
 }
 
+const resetPasswordValidation = async (req, res, next) => {
+    try {
+        const user = getUserByEmail(req.body.email);
+        if (!user) {
+            throw {status: HTTP_STATUS_CODES.NOT_FOUND, message: 'no user correspoind the email'}
+        }
+        if (req.body.password !== req.body.confirmPassword) {
+            throw {status: HTTP_STATUS_CODES.BAD_REQUEST, message: 'The confirmation field not the same as password field'}
+        }
+        next()
+    } catch(e) {
+        next(e);
+    }
+}
+
 module.exports = {
     registerValidation,
-    loginValidation
+    loginValidation,
+    resetPasswordValidation
 }
