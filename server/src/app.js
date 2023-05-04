@@ -26,6 +26,7 @@ require('./socket/listener'); // activate socket connection
 
 const authRoute = require('./routes/authentication');
 const employeeRoute = require('./routes/employee');
+const customerRoute = require('./routes/customer');
 
 const port = process.env.SERVER_PORT || 3000;
 
@@ -64,8 +65,10 @@ app.use(cors());
 
 app.use('/auth', authRoute);
 app.use('/employee', employeeRoute);
+app.use('/customer', customerRoute);
 
 app.use((err, req, res, next) => {
+    console.log(err)
     res.status(err.status || HTTP_STATUS_CODES.SERVER_ERROR).send(err.message)
 })
 

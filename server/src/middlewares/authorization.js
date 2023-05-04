@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {getUserById} = require('../database/queries');
+const {getUserById, getCustomerByUserId} = require('../database/queries');
 const {HTTP_STATUS_CODES} = require('../consts/system-consts')
 
 const authorizeUser = async (req, res, next) => {
@@ -10,6 +10,13 @@ const authorizeUser = async (req, res, next) => {
         const user = await getUserById(userId);
         if (!user) {
             throw {status: HTTP_STATUS_CODES.FORBIDDEN, message: 'Unauthorized'}
+        }
+        if (user.isCustomer) {
+            const customer = getCustomerByUserId(userId);
+            if (!customer.Approved) {
+                throw {status: HTTP_STATUS_CODES.FORBIDDEN, message: 'Unauthorized'};
+            }
+
         }
         req.userId = userId;
         next()
