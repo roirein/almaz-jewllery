@@ -1,30 +1,40 @@
-const HTTP_STATUS_CODES = {
-    "SUCCESS": 200,
-    "CREATED": 201,
-    "NO_CONTENT": 204,
-    "BAD_REQUEST": 400,
-    "UNAUTHORIZED": 401,
-    "FORBIDDEN": 403,
-    "NOT_FOUND": 404,
-    "CONFLICT": 409,
-    "SERVER_ERROR": 500
-}
-
 const ROLES = {
-    MANAGER: 'Manager',
-    DESING_MANAGER: 'designManager',
-    PRODUCTION_MANAGER: 'productionManager',
-    EMPLOYEE: 'Employee'
+    MANAGER: 'manager',
+    DESIGN_MANAGER: 'design_manager',
+    PRODUCTION_MANAGER: 'production_mangaer',
+    EMPLOYEE: 'employee',
 }
 
-const REQUEST_STATUS = {
-    PENDING: 'pending',
+const ORDER_STATUS = {
+    CREATED: 'created',
     APPROVED: 'approved',
-    REJECTED: 'rejected'
+    IN_DESIGN: 'in_design',
+    IN_CASTINg: 'in_casting',
+    IN_PRODUCTION: 'in_production',
+    READY: 'ready',
+    DELIVERED: 'delivered',
+    COMPLETED: 'completed'
 }
 
-module.exports = {
-    HTTP_STATUS_CODES,
-    ROLES,
-    REQUEST_STATUS
+const DESIGN_STATUS = {
+    created: 'created',
+    IN_PROGRESS: 'in_progress',
+    MANAGER_REVIEW: 'manager_review',
+    APPROVED: 'approved',
+    COMPLETED: 'completed'
+}
+
+const CASTING_STATUS = {
+    SENT: 'sent',
+    IN_PROGRESS: 'in_progress',
+    COMPLETED: 'completed'
+}
+
+const PRODUCTION_STATUS = {
+    CREATED: 'created',
+    JEWELER: 'jeweler',
+    INLAYING: 'inlaying',
+    FINISHING: 'finishing',
+    QUALITY_ASSURANCE: 'quality_assurance',
+    COMPLETED: 'completed'
 }

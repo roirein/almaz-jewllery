@@ -10,9 +10,8 @@ const {parse} = require('csv-parse');
 require('dotenv').config();
 
 // require db related files 
-const DBClient = require('./database/connection');
-const createDB = require('./database/db');
-const {createAndInsertNewEmployee} = require('./utils/utils')
+require('./database/connection');
+//const {createAndInsertNewEmployee} = require('./utils/utils')
 
 // require consts and socket io 
 const {HTTP_STATUS_CODES} = require('./consts/db-consts')
@@ -24,9 +23,9 @@ socket.init(server);
 
 require('./socket/listener'); // activate socket connection
 
-const authRoute = require('./routes/authentication');
-const employeeRoute = require('./routes/employee');
-const customerRoute = require('./routes/customer');
+// const authRoute = require('./routes/authentication');
+// const employeeRoute = require('./routes/employee');
+// const customerRoute = require('./routes/customer');
 
 const port = process.env.SERVER_PORT || 3000;
 
@@ -49,23 +48,23 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-createDB(DBClient).then((res) => {
-    if (res) {
-        try {
-            fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser)
-        } catch (e) {
-            return 
-        }
-    }
-});
+// createDB(DBClient).then((res) => {
+//     if (res) {
+//         try {
+//             fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser)
+//         } catch (e) {
+//             return 
+//         }
+//     }
+// });
 
 app.use(express.json());
 app.use(morgan('dev'))
 app.use(cors());
 
-app.use('/auth', authRoute);
-app.use('/employee', employeeRoute);
-app.use('/customer', customerRoute);
+// app.use('/auth', authRoute);
+// app.use('/employee', employeeRoute);
+// app.use('/customer', customerRoute);
 
 app.use((err, req, res, next) => {
     console.log(err)
