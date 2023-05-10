@@ -1,6 +1,7 @@
 const {DataTypes, Sequelize} = require('sequelize');
 const sequelize = require('../../database/connection');
 const {v4: uuidv4} = require('uuid');
+const bcrypt = require('bcryptjs')
 
 const User = sequelize.define('User', {
     id: {
@@ -35,11 +36,7 @@ const User = sequelize.define('User', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            len: [8, 24],
-            is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)” + “(?=.*[-+_!@#$%^&*., ?]).+$/
-        },
+        allowNull: false
     },
     type: {
         type: DataTypes.STRING,
@@ -50,12 +47,22 @@ const User = sequelize.define('User', {
         allowNull: true,
         unique: true
     }
+}, {
+    timestamps: false
 });
 
-User.beforeCreate((user) => {
-    user.id = uuidv4()
-})
+User.beforeCreate(async (user) => {
+    user.id = uuidv4();
 
-User.
+    const isPasswordLengthValid = user.password.length >= 8 && user.password.length <= 24;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$@])[A-Za-z\d!#$@]{8,}$/;
+
+    const isValidPassword = passwordRegex.test(user.password)
+    console.log(isValidPassword, isPasswordLengthValid, user.password.length)
+    if (!isPasswordLengthValid || !isValidPassword) {
+        throw new Error('invalid password')
+    }
+    user.password = await bcrypt.hash(user.password, Number(process.env.HASH_SALT));
+})
 
 module.exports = User;

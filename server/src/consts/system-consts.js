@@ -5,6 +5,11 @@ const ROLES = {
     EMPLOYEE: 'employee',
 }
 
+const USER_TYPES = {
+    EMPLOYEE: 'employee',
+    CUSTOMER: 'customer'
+}
+
 const ORDER_STATUS = {
     CREATED: 'created',
     APPROVED: 'approved',
@@ -37,4 +42,8 @@ const PRODUCTION_STATUS = {
     FINISHING: 'finishing',
     QUALITY_ASSURANCE: 'quality_assurance',
     COMPLETED: 'completed'
+}
+
+module.exports = {
+    USER_TYPES
 }

@@ -1,16 +1,17 @@
 // require express related packages
 const express = require('express');
 const {createServer} = require('http');
-
 // require supported packges
 const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
 const {parse} = require('csv-parse');
 require('dotenv').config();
-
 // require db related files 
-require('./database/connection');
+const seqelize = require('./database/connection');
+require('./models/users/userModel');
+require('./models/users/customerModel');
+seqelize.sync({force: true})
 //const {createAndInsertNewEmployee} = require('./utils/utils')
 
 // require consts and socket io 
@@ -23,7 +24,8 @@ socket.init(server);
 
 require('./socket/listener'); // activate socket connection
 
-// const authRoute = require('./routes/authentication');
+
+const authRoute = require('./routes/authentication');
 // const employeeRoute = require('./routes/employee');
 // const customerRoute = require('./routes/customer');
 
@@ -62,7 +64,7 @@ app.use(express.json());
 app.use(morgan('dev'))
 app.use(cors());
 
-// app.use('/auth', authRoute);
+app.use('/auth', authRoute);
 // app.use('/employee', employeeRoute);
 // app.use('/customer', customerRoute);
 
