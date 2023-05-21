@@ -1,7 +1,7 @@
 const ROLES = {
     MANAGER: 'manager',
-    DESIGN_MANAGER: 'design_manager',
-    PRODUCTION_MANAGER: 'production_mangaer',
+    DESIGN_MANAGER: 'design manager',
+    PRODUCTION_MANAGER: 'production mangaer',
     EMPLOYEE: 'employee',
 }
 
@@ -45,5 +45,6 @@ const PRODUCTION_STATUS = {
 }
 
 module.exports = {
-    USER_TYPES
+    USER_TYPES,
+    ROLES
 }

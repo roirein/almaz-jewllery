@@ -4,9 +4,12 @@ const {HTTP_STATUS_CODE} = require('../consts/http-consts');
 const {REGISTERATION_MESSAGES, LOGIN_MESSAGES} = require('../consts/messages');
 const User = require('../models/users/userModel');
 const Customer = require('../models/users/customerModel');
+const Notification = require('../models/messages/notificationModel');
+const Employee = require('../models/users/employeeModel');
 const {Op} = require('sequelize')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const io = require('../services/socket/socket').getIo();
 
 const createNewCustomer = async (req, res, next) => {
     try{
@@ -44,7 +47,15 @@ const createNewCustomer = async (req, res, next) => {
     
         const user = await User.create(newUser);
         await Customer.create({id: user.id, ...newCustomer});
-        res.status(HTTP_STATUS_CODE.CREATED).send(REGISTERATION_MESSAGES.USER_CREATED_SUCCESS)
+
+        const notification = {
+            recipient: 'admins',
+            content: `${firstName} ${lastName} asked to join the system, please approve or decline his/her request`
+        }
+
+        await Notification.create(notification);
+        io.to('admins').emit('new-user', notification);
+        res.status(HTTP_STATUS_CODE.CREATED).send(REGISTERATION_MESSAGES.USER_CREATED_SUCCESS);
     } catch (e) {
         next(e)
     }
@@ -67,10 +78,23 @@ const loginUser = async (req, res, next) => {
         if (!isPasswordMatch) {
             throw new HttpError(LOGIN_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS_CODE.UNAUTHORIZED); 
         }
+        if (user.type === USER_TYPES.EMPLOYEE) {
+            const employee = await Employee.findByPk(user.dataValues.id);
+            if (employee.dataValues.shouldReplacePassword) {
+                // redirect to reset password
+            }
+        }
+        if (user.type === USER_TYPES.CUSTOMER) {
+            const customer = await Customer.findByPk(user.dataValues.id);
+            if (!customer.dataValues.isApproved) {
+                throw new HttpError('You must wait for the admin to approve your user', HTTP_STATUS_CODE.FORBIDDEN);
+            }  
+        }
         const authToken = jwt.sign({_id: user.dataValues.id}, process.env.JWT_SECRET);
         user.token = authToken;
         await user.save();
         res.status(HTTP_STATUS_CODE.SUCCESS).send(LOGIN_MESSAGES.LOGGED_IN_SUCCESSFULLY);
+
     } catch(e) {
         next(e)
     }

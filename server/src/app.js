@@ -12,8 +12,9 @@ require('dotenv').config();
 const seqelize = require('./database/connection');
 require('./models/users/userModel');
 require('./models/users/customerModel');
-seqelize.sync({force: true})
-//const {createAndInsertNewEmployee} = require('./utils/utils')
+require('./models/users/employeeModel');
+
+const {createAndInsertNewEmployee} = require('./utils/utils')
 
 // require consts and socket io 
 
@@ -51,15 +52,9 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-// createDB(DBClient).then((res) => {
-//     if (res) {
-//         try {
-//             fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser)
-//         } catch (e) {
-//             return 
-//         }
-//     }
-// });
+seqelize.sync({force: true}).then(() => {
+    fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
+});
 
 app.use(express.json());
 app.use(morgan('dev'))

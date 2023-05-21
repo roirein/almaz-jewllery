@@ -16,8 +16,4 @@ router.post('/resetPasswordCode', () => {});
 
 router.patch('/resetPassword', () => {});
 
-router.put('/updateUserData', () => {});
-
-router.get('/user/:id', authorizeUser, () => {});
-
 module.exports = router;
