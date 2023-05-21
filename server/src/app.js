@@ -6,6 +6,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
 const {parse} = require('csv-parse');
+const {HTTP_STATUS_CODE} = require('./consts/http-consts')
 require('dotenv').config();
 // require db related files 
 const seqelize = require('./database/connection');
@@ -15,18 +16,18 @@ seqelize.sync({force: true})
 //const {createAndInsertNewEmployee} = require('./utils/utils')
 
 // require consts and socket io 
-const {HTTP_STATUS_CODES} = require('./consts/db-consts')
-const socket = require('./socket/socket');
+
+const socket = require('./services/socket/socket');
 
 const app = express();
 const server = createServer(app)
 socket.init(server);
 
-require('./socket/listener'); // activate socket connection
+require('./services/socket/listener'); // activate socket connection
 
 
-const authRoute = require('./routes/authentication');
-// const employeeRoute = require('./routes/employee');
+const authRoute = require('./routes/user');
+const employeeRoute = require('./routes/employee');
 // const customerRoute = require('./routes/customer');
 
 const port = process.env.SERVER_PORT || 3000;
@@ -70,7 +71,7 @@ app.use('/auth', authRoute);
 
 app.use((err, req, res, next) => {
     console.log(err)
-    res.status(err.status || HTTP_STATUS_CODES.SERVER_ERROR).send(err.message)
+    res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)
 })
 
 server.listen(port, () => {

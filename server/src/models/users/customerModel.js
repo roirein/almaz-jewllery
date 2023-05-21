@@ -17,7 +17,6 @@ const Customer = sequelize.define('Customer', {
     secondaryPhone: {
         type: DataTypes.STRING, // add validation that enforce this number not to appear in user table
         allowNull: true,
-        unique: true,
         validate: {
             is: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
         }
@@ -31,6 +30,6 @@ const Customer = sequelize.define('Customer', {
     timestamps: false
 });
 
-Customer.belongsTo(User, {foreignKey: 'id'})
+Customer.belongsTo(User, {foreignKey: 'id'});
 
-module.exports = Customer;
+module.exports = Customer

@@ -58,11 +58,10 @@ User.beforeCreate(async (user) => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!#$@])[A-Za-z\d!#$@]{8,}$/;
 
     const isValidPassword = passwordRegex.test(user.password)
-    console.log(isValidPassword, isPasswordLengthValid, user.password.length)
     if (!isPasswordLengthValid || !isValidPassword) {
         throw new Error('invalid password')
     }
     user.password = await bcrypt.hash(user.password, Number(process.env.HASH_SALT));
 })
 
-module.exports = User;
+module.exports = User

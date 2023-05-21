@@ -13,4 +13,4 @@ const client = nodemailer.createTransport({
     tls: {rejectUnauthorized: false}
 })
 
-module.exports = client
+module.exports = client;

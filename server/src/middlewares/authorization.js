@@ -1,39 +1,23 @@
 const jwt = require('jsonwebtoken');
-const {getUserById, getCustomerByUserId} = require('../database/queries');
-const {HTTP_STATUS_CODES} = require('../consts/system-consts')
+const {HTTP_STATUS_CODE} = require('../consts/http-consts');
+const User = require('../models/users/userModel');
+const {NOT_AUTHORIZED} = require('../consts/messages');
+const HttpError = require('../utils/classes/http-error');
+
 
 const authorizeUser = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '');
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decodedToken._id;
-        const user = await getUserById(userId);
+        console.log(userId)
+        const user = await User.findByPk(userId)
+        console.log(user)
         if (!user) {
-            throw {status: HTTP_STATUS_CODES.FORBIDDEN, message: 'Unauthorized'}
-        }
-        if (user.isCustomer) {
-            const customer = getCustomerByUserId(userId);
-            if (!customer.Approved) {
-                throw {status: HTTP_STATUS_CODES.FORBIDDEN, message: 'Unauthorized'};
-            }
-
+            throw new HttpError(NOT_AUTHORIZED.UNAUTHORIZED, HTTP_STATUS_CODE.UNAUTHORIZED)
         }
         req.userId = userId;
         next()
-    } catch (e) {
-        console.log(e)
-        next(e)
-    }
-}
-
-const isAdmin = async (req, res, next) => {
-    try {
-        console.log(req.body.permissionLevel)
-        if (Object.keys(req.body).includes('permissionLevel') && req.body.permissionLevel === 0) {
-            next()
-        } else {
-            throw {status: HTTP_STATUS_CODES.FORBIDDEN, message: 'Unauthorized'}
-        }
     } catch (e) {
         next(e)
     }
@@ -41,5 +25,4 @@ const isAdmin = async (req, res, next) => {
 
 module.exports = {
     authorizeUser,
-    isAdmin
 }
