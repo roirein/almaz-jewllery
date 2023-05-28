@@ -13,6 +13,8 @@ const seqelize = require('./database/connection');
 require('./models/users/userModel');
 require('./models/users/customerModel');
 require('./models/users/employeeModel');
+//const Order = require('./models/orders/orderModel');
+//Order.sync({force: true})
 
 const {createAndInsertNewEmployee} = require('./utils/utils')
 
@@ -29,7 +31,9 @@ require('./services/socket/listener'); // activate socket connection
 
 const authRoute = require('./routes/user');
 const employeeRoute = require('./routes/employee');
+const imageRoute = require('./routes/images');
 // const customerRoute = require('./routes/customer');
+const orderRoute = require('./routes/orders');
 
 const port = process.env.SERVER_PORT || 3000;
 
@@ -52,20 +56,21 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-seqelize.sync({force: true}).then(() => {
-    fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
-});
+// seqelize.sync({force: true}).then(() => {
+//     fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
+// });
 
 app.use(express.json());
 app.use(morgan('dev'))
 app.use(cors());
 
 app.use('/auth', authRoute);
-// app.use('/employee', employeeRoute);
+app.use('/employee', employeeRoute);
 // app.use('/customer', customerRoute);
+app.use('/image', imageRoute)
+app.use('/order', orderRoute);
 
 app.use((err, req, res, next) => {
-    console.log(err)
     res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)
 })
 

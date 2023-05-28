@@ -1,14 +1,24 @@
-const { HTTP_STATUS_CODES } = require('../consts/system-consts');
-const {approveCustomer, getUserById} = require('../database/queries');
-const {sendYourUserApprovedMail} = require('../emails/emails');
+const { HTTP_STATUS_CODE } = require('../consts/http-consts');
+//const {sendYourUserApprovedMail} = require('../emails/emails');
+const {createAndInsertNewEmployee} = require('../utils/utils')
 
-const approveCustomerRequest = async (req, res) => {
-    await approveCustomer(req.params.userId);
-    const user = await getUserById(req.params.userId)
-    sendYourUserApprovedMail(user.firstName, user.Email);
-    res.status(HTTP_STATUS_CODES.SUCCESS).send('Customer approved succesfully');
+const addNewEmployee = async (req, res, next) => {
+    console.log('hi')
+    try {
+        const userData = [
+            req.body.firstName,
+            req.body.lastName,
+            req.body.email,
+            req.body.phone,
+            req.body.role
+        ]
+        await createAndInsertNewEmployee(userData);
+        res.status(HTTP_STATUS_CODE.CREATED).send('employee added successfully');
+    } catch(e) {
+        next(e);
+    }
 }
 
 module.exports = {
-    approveCustomerRequest
+    addNewEmployee
 }

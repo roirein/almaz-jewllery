@@ -1,6 +1,6 @@
 const ROLES = {
     MANAGER: 'manager',
-    DESIGN_MANAGER: 'design manager',
+    DESIGN_MANAGER: 'design_manager',
     PRODUCTION_MANAGER: 'production mangaer',
     EMPLOYEE: 'employee',
 }
@@ -8,6 +8,12 @@ const ROLES = {
 const USER_TYPES = {
     EMPLOYEE: 'employee',
     CUSTOMER: 'customer'
+}
+
+const ORDER_TYPES = {
+    NEW_MODEL: 'new_model',
+    EXISTING_MODEL: 'existing_model',
+    FIX: 'fix'
 }
 
 const ORDER_STATUS = {
@@ -22,7 +28,7 @@ const ORDER_STATUS = {
 }
 
 const DESIGN_STATUS = {
-    created: 'created',
+    CREATED: 'created',
     IN_PROGRESS: 'in_progress',
     MANAGER_REVIEW: 'manager_review',
     APPROVED: 'approved',
@@ -46,5 +52,8 @@ const PRODUCTION_STATUS = {
 
 module.exports = {
     USER_TYPES,
-    ROLES
+    ROLES,
+    ORDER_STATUS,
+    ORDER_TYPES,
+    DESIGN_STATUS
 }

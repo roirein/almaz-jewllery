@@ -19,11 +19,14 @@ const genertaePassword = () => {
 
     let password = ''
 
-    for (let k = 0; k < 2; k++) {
-        for (let l = 0; l < shuffled.length; l++) {
-            password += shuffled[l].charAt(Math.floor(Math.random) * shuffled[l].length);
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < shuffled.length; j++) {
+            const index = Math.floor(Math.random() * shuffled[j].length);
+            const char = shuffled[j].charAt(index);
+            password += char
         }
     }
+
 
     return password;
 
@@ -42,10 +45,10 @@ const createAndInsertNewEmployee = async (record) => {
     }
 
     const employee = {
-        role: record[4]
+        role: record[4],
+        shouldReplacePassword: true
     }
     //sendTemporaryPasswordMail(temporaryPassword, record[2]);
-    console.log(user);
     const newUser = await User.create(user);
     await Employee.create({id: newUser.id, ...employee});
 }

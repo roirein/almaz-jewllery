@@ -21,7 +21,7 @@ const Notification = sequelize.define('Notification', {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     },
-    isRead: {
+    isHandled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     }

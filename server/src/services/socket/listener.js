@@ -28,7 +28,7 @@ try {
             } else {
                 users[userId] = {
                     id: socket.id,
-                    role: USER_TYPES.CUSTOMER
+                    role: USER_TYPES.CUSTOMER,
                 } 
             }
         });

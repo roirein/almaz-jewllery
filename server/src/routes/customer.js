@@ -1,8 +1,9 @@
 const express = require('express');
-const {authorizeUser} = require('../middlewares/authorization');
+const { ROLES } = require('../consts/system-consts');
+const {authorizeUser, checkPermissions} = require('../middlewares/authorization');
 const router = express.Router();
 
-router.patch('/approveCustomer/:customerId', authorizeUser, () => {});
+router.patch('/approveCustomer/:customerId', authorizeUser, checkPermissions(ROLES.MANAGER), () => {});
 
 router.get('/customers', authorizeUser, () => {});
 
