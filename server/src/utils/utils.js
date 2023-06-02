@@ -34,7 +34,7 @@ const genertaePassword = () => {
 
 const createAndInsertNewEmployee = async (record) => {
     const temporaryPassword = genertaePassword();
-
+    console.log(record, 11)
     const user = {
         firstName: record[0],
         lastName: record[1],
@@ -44,9 +44,12 @@ const createAndInsertNewEmployee = async (record) => {
         type: USER_TYPES.EMPLOYEE
     }
 
+    console.log(record, 11)
+
     const employee = {
         role: record[4],
-        shouldReplacePassword: true
+        shouldReplacePassword: true,
+        field: record[5]
     }
     //sendTemporaryPasswordMail(temporaryPassword, record[2]);
     const newUser = await User.create(user);

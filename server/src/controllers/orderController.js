@@ -1,4 +1,4 @@
-const { ORDER_TYPES, ROLES, ORDER_STATUS } = require('../consts/system-consts');
+const { ORDER_TYPES, ROLES, ORDER_STATUS, CASTING_STATUS } = require('../consts/system-consts');
 const Order = require('../models/orders/orderModel');
 const NewModelOrder = require('../models/orders/newModelOrderModel');
 const ExistingModelOrder = require('../models/orders/existingModelOrder');
@@ -10,6 +10,7 @@ const io = require('../services/socket/socket').getIo();
 const users = require('../services/socket/listener');
 const Employee = require('../models/users/employeeModel');
 const OrderInDesign = require('../models/orders/orderInDesignModel');
+const OrderInCasting = require('../models/orders/OrderInCastingModel');
 
 const createNewOrder = async (req, res, next) => {
     try {
@@ -21,6 +22,9 @@ const createNewOrder = async (req, res, next) => {
             isCastingRequired: req.body.isCastingRequired
         }
         const order = await Order.create(orderData);
+        if (isCastingRequired) {
+            await OrderInCasting.create({orderId: order.orderId})
+        }
         if (orderData.type === ORDER_TYPES.NEW_MODEL) {
             const modelData = req.body.modelData;
             await NewModelOrder.create({orderId: order.orderId, ...modelData});
@@ -38,6 +42,14 @@ const createNewOrder = async (req, res, next) => {
             if (users[desginMangerId]) {
                 io.to(users[desginMangerId].id).emit(notification);
             }
+        }
+        if (orderData.type === ORDER_TYPES.EXISTING_MODEL) {
+            await ExistingModelOrder.create({
+                ...orderData, 
+                modelNumber: req.body.modelNumber,
+            })
+            order.price = req.body.price;
+            await order.save()
         }
         res.status(HTTP_STATUS_CODE.CREATED).send();
         
@@ -77,41 +89,65 @@ const setOrderDesignStatus = async (req, res, next) => {
                 }
             }
         );
+        await Order.update(
+            {
+                status: ORDER_STATUS.IN_DESIGN
+            },
+            {
+                where: {
+                    orderId: req.params.id
+                }
+            }
+        )
         res.status(HTTP_STATUS_CODE.SUCCESS).send('status updated successfully');
     } catch (e) {
         next(e);
     }
 }
 
-// const getOrderAfterDesign = async (req, res, next) => {
-//     try {
-//         const orderData = await ExistingModelOrder.findByPk(req.params.id, {
-//             include: [
-//                 {
-//                     model: JewelModel
-//                 },
-//                 {
-//                     model: Order,
-//                     where: {orderId: req.params.id}
-//                 }
-//             ]
-//         })
-//     } catch (e) {
-//         next(e)
-//     }
-// }
+const setOrderPrice = async (req, res, next) => {
+    try {
+        await Order.update({
+            price: req.body.selectedPrice
+        }, {
+            where: {
+                orderId: req.params.orderId
+            }
+        });
+        res.status(HTTP_STATUS_CODE.SUCCESS).send('price updated successfully');
+    } catch(e) {
+        next(e);
+    }
+}
 
-
-// const managerApprovalForOrder = async (req, res, next) => {
-//     try {
-
-//     } catch (e) {
-        
-//     }
-// } 
+const setCastingStatus = async (req, res, next) => {
+    try {
+        await OrderInCasting.update({
+            status: req.body.status
+        }, {
+            where: {
+                orderId: req.params.orderId
+            }
+        })
+        if (req.body.status === CASTING_STATUS.IN_PROGRESS) {
+            await Order.update({
+                status: ORDER_STATUS.IN_CASTINg
+            }, {
+                where: {
+                    orderId: req.body.orderId
+                }
+            })
+        }
+        res.status(HTTP_STATUS_CODE.SUCCESS).send('status updated successfully')
+    } catch(e) {
+        next(e);
+    }
+}
 
 module.exports = {
     createNewOrder,
     getNewModelOrder,
-    setOrderDesignStatus
+    setOrderDesignStatus,
+    setOrderPrice,
+    setCastingStatus
 }

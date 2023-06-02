@@ -13,7 +13,18 @@ const seqelize = require('./database/connection');
 require('./models/users/userModel');
 require('./models/users/customerModel');
 require('./models/users/employeeModel');
-//const Order = require('./models/orders/orderModel');
+const Order = require('./models/orders/orderModel');
+const OrderInDesign = require('./models/orders/orderInDesignModel');
+const NewModelOrder = require('./models/orders/newModelOrderModel');
+const ExistingModelOrder = require('./models/orders/existingModelOrder');
+const JewelModel = require('./models/models/modelModel');
+// Order.sync({force: true}).then(() => {
+//     OrderInDesign.sync({force: true})
+//     NewModelOrder.sync({force: true})
+//     ExistingModelOrder.sync({force: true})
+// });
+// JewelModel.sync({force: true});
+
 //Order.sync({force: true})
 
 const {createAndInsertNewEmployee} = require('./utils/utils')
@@ -34,7 +45,7 @@ const employeeRoute = require('./routes/employee');
 const imageRoute = require('./routes/images');
 // const customerRoute = require('./routes/customer');
 const orderRoute = require('./routes/orders');
-
+const modelRoute = require('./routes/models');
 const port = process.env.SERVER_PORT || 3000;
 
 const parser = parse({
@@ -56,9 +67,9 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-// seqelize.sync({force: true}).then(() => {
-//     fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
-// });
+seqelize.sync({force: true}).then(() => {
+    fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
+});
 
 app.use(express.json());
 app.use(morgan('dev'))
@@ -69,6 +80,7 @@ app.use('/employee', employeeRoute);
 // app.use('/customer', customerRoute);
 app.use('/image', imageRoute)
 app.use('/order', orderRoute);
+app.use('/model', modelRoute)
 
 app.use((err, req, res, next) => {
     res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)

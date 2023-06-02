@@ -57,6 +57,7 @@ const createNewCustomer = async (req, res, next) => {
         io.to('admins').emit('new-user', notification);
         res.status(HTTP_STATUS_CODE.CREATED).send(REGISTERATION_MESSAGES.USER_CREATED_SUCCESS);
     } catch (e) {
+        console.log(e)
         next(e)
     }
 }

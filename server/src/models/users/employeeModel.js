@@ -17,6 +17,10 @@ const Employee = sequlize.define('Employee', {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false
+    },
+    field: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, {
     timestamps: false

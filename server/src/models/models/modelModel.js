@@ -1,4 +1,5 @@
 const {DataTypes, Sequelize, Model} = require('sequelize');
+const { MODEL_STATUS } = require('../../consts/system-consts');
 const sequelize = require('../../database/connection');
 
 class JewelModel extends Model {}
@@ -38,14 +39,10 @@ JewelModel.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    material: {
+    status: {
         type: DataTypes.STRING,
-    },
-    priceWithMaterial: {
-        type: DataTypes.FLOAT
-    },
-    priceWithoutMaterial: {
-        type: DataTypes.FLOAT
+        allowNull: false,
+        defaultValue: MODEL_STATUS.CREATED
     }
 }, {
     timestamps: false,

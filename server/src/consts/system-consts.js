@@ -19,12 +19,19 @@ const ORDER_TYPES = {
 const ORDER_STATUS = {
     CREATED: 'created',
     APPROVED: 'approved',
+    CUSTOMER_APPROVAL: 'customer_approval',
     IN_DESIGN: 'in_design',
     IN_CASTINg: 'in_casting',
     IN_PRODUCTION: 'in_production',
     READY: 'ready',
     DELIVERED: 'delivered',
     COMPLETED: 'completed'
+}
+
+const MODEL_STATUS = {
+    APPROVED: 'approved',
+    NEEDS_WORK: 'needs_work',
+    CREATED: 'created'
 }
 
 const DESIGN_STATUS = {
@@ -35,8 +42,13 @@ const DESIGN_STATUS = {
     COMPLETED: 'completed'
 }
 
+EMPLOYEES_FIELD = {
+    JEWELER: 'jeweler',
+    STUDDER: 'studder'
+}
+
 const CASTING_STATUS = {
-    SENT: 'sent',
+    NOT_SENT: 'not_sent',
     IN_PROGRESS: 'in_progress',
     COMPLETED: 'completed'
 }
@@ -55,5 +67,8 @@ module.exports = {
     ROLES,
     ORDER_STATUS,
     ORDER_TYPES,
-    DESIGN_STATUS
+    DESIGN_STATUS,
+    MODEL_STATUS,
+    CASTING_STATUS,
+    PRODUCTION_STATUS
 }

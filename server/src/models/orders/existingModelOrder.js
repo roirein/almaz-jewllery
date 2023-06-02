@@ -1,7 +1,7 @@
 const {DataTypes, Sequelize, Model} = require('sequelize');
 const sequelize = require('../../database/connection');
-const Order = require('./orderModel');
 const JewelModel = require('../models/modelModel');
+const Order = require('./orderModel');
 
 class ExistingModelOrder extends Model {}
 
@@ -39,7 +39,7 @@ ExistingModelOrder.init({
     }
 }, {
     sequelize,
-    modelName: 'Existing Model Order',
+    modelName: 'Existing Model Orders',
     timestamps: false
 });
 
