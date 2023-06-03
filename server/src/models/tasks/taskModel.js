@@ -30,13 +30,21 @@ TaskModel.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    position: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    stepInOrder: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     completed: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
     },
-    blockerTaskId: {
-        type: DataTypes.UUID,
+    nextTask: {
+        type: DataTypes.UUIDV4,
         allowNull: true
     }
 }, {

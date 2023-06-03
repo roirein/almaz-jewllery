@@ -44,7 +44,7 @@ const DESIGN_STATUS = {
 
 EMPLOYEES_FIELD = {
     JEWELER: 'jeweler',
-    STUDDER: 'studder'
+    SETTER: 'setter'
 }
 
 const CASTING_STATUS = {
@@ -56,10 +56,17 @@ const CASTING_STATUS = {
 const PRODUCTION_STATUS = {
     CREATED: 'created',
     JEWELER: 'jeweler',
-    INLAYING: 'inlaying',
+    SETTING: 'setting',
     FINISHING: 'finishing',
     QUALITY_ASSURANCE: 'quality_assurance',
     COMPLETED: 'completed'
+}
+
+const POSITIONS = {
+    JEWELRY: 'jewelry',
+    SETTING: 'setting',
+    FINISHING: 'finishing',
+    QUALITY_ASSURANCE: 'quality_assurance'
 }
 
 module.exports = {
@@ -70,5 +77,6 @@ module.exports = {
     DESIGN_STATUS,
     MODEL_STATUS,
     CASTING_STATUS,
-    PRODUCTION_STATUS
+    PRODUCTION_STATUS,
+    POSITIONS
 }

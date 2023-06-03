@@ -1,7 +1,7 @@
 const express = require('express');
 const {USER_TYPES, ROLES} = require('../consts/system-consts');
 const {authorizeUser, checkPermissions} = require('../middlewares/authorization');
-const {createNewOrder, getNewModelOrder, setOrderDesignStatus, setOrderPrice} = require('../controllers/orderController')
+const {createNewOrder, getNewModelOrder, setOrderDesignStatus, setOrderPrice, setCastingStatus} = require('../controllers/orderController')
 const router = express.Router();
 
 router.post('/newOrder', authorizeUser, checkPermissions([USER_TYPES.CUSTOMER, ROLES.MANAGER]) ,createNewOrder);
@@ -12,7 +12,7 @@ router.patch('/setOrderStatus/:id', authorizeUser, checkPermissions([ROLES.DESIG
 
 router.patch('/setOrderPrice/orderId', authorizeUser, checkPermissions([ROLES.MANAGER, USER_TYPES.CUSTOMER]), setOrderPrice);
 
-router.patch('/setOrderCastingStatus', authorizeUser, checkPermissions([ROLES.MANAGER]))
+router.patch('/setOrderCastingStatus', authorizeUser, checkPermissions([ROLES.MANAGER]), setCastingStatus);
 
 // router.get('/order/design/:id', authorizeUser, checkPermissions([ROLES.MANAGER]), getOrderAfterDesign);
 
