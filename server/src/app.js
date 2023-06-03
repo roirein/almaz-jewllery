@@ -1,5 +1,6 @@
 // require express related packages
 const express = require('express');
+const next = require('next');
 const {createServer} = require('http');
 // require supported packges
 const cors = require('cors');
@@ -13,11 +14,6 @@ const seqelize = require('./database/connection');
 require('./models/users/userModel');
 require('./models/users/customerModel');
 require('./models/users/employeeModel');
-const Order = require('./models/orders/orderModel');
-const OrderInDesign = require('./models/orders/orderInDesignModel');
-const NewModelOrder = require('./models/orders/newModelOrderModel');
-const ExistingModelOrder = require('./models/orders/existingModelOrder');
-const JewelModel = require('./models/models/modelModel');
 // Order.sync({force: true}).then(() => {
 //     OrderInDesign.sync({force: true})
 //     NewModelOrder.sync({force: true})
@@ -71,21 +67,35 @@ seqelize.sync({force: true}).then(() => {
     fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
 });
 
-app.use(express.json());
-app.use(morgan('dev'))
-app.use(cors());
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = next({dev});
+const handle = nextApp.getRequestHandler();
 
-app.use('/auth', authRoute);
-app.use('/employee', employeeRoute);
-// app.use('/customer', customerRoute);
-app.use('/image', imageRoute)
-app.use('/order', orderRoute);
-app.use('/model', modelRoute)
+nextApp.prepare().then(() => {
+    const app = express();
+    const server = createServer(app);
+    socket.init(server);
 
-app.use((err, req, res, next) => {
-    res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)
-})
+    app.use(express.json());
+    app.use(morgan('dev'));
+    app.use(cors());
 
-server.listen(port, () => {
-    console.log(`server is up and running on port ${port}`)
-})
+    app.use('/auth', authRoute);
+    app.use('/employee', employeeRoute);
+    app.use('/image', imageRoute);
+    app.use('/order', orderRoute);
+    app.use('/model', modelRoute);
+
+    app.use((err, req, res, next) => {
+        res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)
+    })
+
+    app.all('*', (req, res) => {
+        return handle(req, res)
+    });
+
+    server.listen(port, () => {
+        console.log(`server is up and running on port ${port}`)
+    })
+
+});
