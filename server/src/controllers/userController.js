@@ -9,7 +9,7 @@ const Employee = require('../models/users/employeeModel');
 const {Op} = require('sequelize')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const io = require('../services/socket/socket').getIo();
+//const io = require('../services/socket/socket').getIo();
 
 const createNewCustomer = async (req, res, next) => {
     try{
@@ -54,7 +54,7 @@ const createNewCustomer = async (req, res, next) => {
         }
 
         await Notification.create(notification);
-        io.to('admins').emit('new-user', notification);
+        //io.to('admins').emit('new-user', notification);
         res.status(HTTP_STATUS_CODE.CREATED).send(REGISTERATION_MESSAGES.USER_CREATED_SUCCESS);
     } catch (e) {
         console.log(e)
@@ -79,14 +79,17 @@ const loginUser = async (req, res, next) => {
         if (!isPasswordMatch) {
             throw new HttpError(LOGIN_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS_CODE.UNAUTHORIZED); 
         }
+        let role = null
         if (user.type === USER_TYPES.EMPLOYEE) {
             const employee = await Employee.findByPk(user.dataValues.id);
+            role = employee.role
             if (employee.dataValues.shouldReplacePassword) {
                 // redirect to reset password
             }
         }
         if (user.type === USER_TYPES.CUSTOMER) {
             const customer = await Customer.findByPk(user.dataValues.id);
+            role = USER_TYPES.CUSTOMER
             if (!customer.dataValues.isApproved) {
                 throw new HttpError('You must wait for the admin to approve your user', HTTP_STATUS_CODE.FORBIDDEN);
             }  
@@ -94,7 +97,7 @@ const loginUser = async (req, res, next) => {
         const authToken = jwt.sign({_id: user.dataValues.id}, process.env.JWT_SECRET);
         user.token = authToken;
         await user.save();
-        res.status(HTTP_STATUS_CODE.SUCCESS).send(LOGIN_MESSAGES.LOGGED_IN_SUCCESSFULLY);
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({token: user.token, role});
 
     } catch(e) {
         next(e)

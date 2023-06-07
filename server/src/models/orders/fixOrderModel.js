@@ -1,28 +1,30 @@
 const {DataTypes, Sequelize, Model} = require('sequelize');
-const {CASTING_STATUS} = require('../../consts/system-consts');
 const sequelize = require('../../database/connection');
 const Order = require('./orderModel');
 
-class OrderInProduction extends Model {}
+class FixOrder extends Model {}
 
-OrderInProduction.init({
+FixOrder.init({
     orderId: {
         type: DataTypes.UUID,
         defaultValue:  Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false
     },
-    status: {
+    item: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: CASTING_STATUS.NOT_SENT
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     timestamps: false,
-    modelName: 'Orders In Production',
+    modelName: 'Fix Orders',
     sequelize
-})
+});
 
-OrderInProduction.belongsTo(Order, {foreignKey: 'orderId'})
+FixOrder.belongsTo(Order, {foreignKey: 'orderId'});
 
-module.exports = OrderInProduction;
+module.exports = FixOrder;

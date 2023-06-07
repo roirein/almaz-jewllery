@@ -1,12 +1,11 @@
-const socketio = require('socket.io');
+let ioInstance = null;
 
-let io = null;
+const initSocket = (io) => {
+    ioInstance = io;
 
-module.exports = {
-    init: (app) => {
-        io = socketio(app);
-    },
-    getIo: () => {
-        return io;
-    }
-};
+    ioInstance.on('connection', (socket) => {
+        console.log(socket.id, 'connected')
+    })
+}
+
+module.exports = {initSocket}

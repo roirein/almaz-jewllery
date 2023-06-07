@@ -9,20 +9,20 @@ class TaskModel extends Model {}
 
 TaskModel.init({
     taskId: {
-        type: DataTypes.UUIDV4,
-        defaultValue: Sequelize.UUID,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDv4,
         primaryKey: true,
         allowNull: false,
     }, 
     orderId: {
-        type: DataTypes.UUIDV4,
-        defaultValue: Sequelize.UUID,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
     },
     assigneeId: {
-        type: DataTypes.UUIDV4,
-        defaultValue: Sequelize.UUID,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
     },
@@ -44,7 +44,7 @@ TaskModel.init({
         defaultValue: false
     },
     nextTask: {
-        type: DataTypes.UUIDV4,
+        type: DataTypes.UUID,
         allowNull: true
     }
 }, {

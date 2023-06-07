@@ -6,6 +6,7 @@ const {createServer} = require('http');
 const cors = require('cors');
 const morgan = require('morgan');
 const fs = require('fs');
+const path = require('path')
 const {parse} = require('csv-parse');
 const {HTTP_STATUS_CODE} = require('./consts/http-consts')
 require('dotenv').config();
@@ -14,6 +15,11 @@ const seqelize = require('./database/connection');
 require('./models/users/userModel');
 require('./models/users/customerModel');
 require('./models/users/employeeModel');
+require('./models/users/tokenModel');
+require('./models/orders/fixOrderModel');
+require('./models/orders/orderTimelineModel');
+require('./models/tasks/taskModel');
+require('./models/orders/OrderInCastingModel')
 // Order.sync({force: true}).then(() => {
 //     OrderInDesign.sync({force: true})
 //     NewModelOrder.sync({force: true})
@@ -26,14 +32,14 @@ require('./models/users/employeeModel');
 const {createAndInsertNewEmployee} = require('./utils/utils')
 
 // require consts and socket io 
+const socketio = require('socket.io');
+const {initSocket} = require('./services/socket/socket');
 
-const socket = require('./services/socket/socket');
+// const app = express();
+// const server = createServer(app)
+// socket.init(server);
 
-const app = express();
-const server = createServer(app)
-socket.init(server);
-
-require('./services/socket/listener'); // activate socket connection
+//require('./services/socket/listener'); // activate socket connection
 
 
 const authRoute = require('./routes/user');
@@ -63,18 +69,20 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-seqelize.sync({force: true}).then(() => {
-    fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
-});
+// seqelize.sync({force: true}).then(() => {
+//     fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
+// });
 
 const dev = process.env.NODE_ENV !== 'production';
-const nextApp = next({dev});
+const nextApp = next({dev, dir: path.join(__dirname, 'views')});
 const handle = nextApp.getRequestHandler();
 
 nextApp.prepare().then(() => {
     const app = express();
     const server = createServer(app);
-    socket.init(server);
+    const io = socketio(server);
+
+    initSocket(io);
 
     app.use(express.json());
     app.use(morgan('dev'));

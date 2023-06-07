@@ -6,7 +6,7 @@ const User = require('../models/users/userModel');
 const JewelModel = require('../models/models/modelModel');
 const Notification = require('../models/messages/notificationModel')
 const { HTTP_STATUS_CODE } = require('../consts/http-consts');
-const io = require('../services/socket/socket').getIo();
+//const io = require('../services/socket/socket').getIo();
 const users = require('../services/socket/listener');
 const Employee = require('../models/users/employeeModel');
 const OrderInDesign = require('../models/orders/orderInDesignModel');
@@ -39,9 +39,9 @@ const createNewOrder = async (req, res, next) => {
                 content: JSON.stringify({orderId: order.orderId, ...modelData})
             }
             await Notification.create(notification);
-            if (users[desginMangerId]) {
-                io.to(users[desginMangerId].id).emit(notification);
-            }
+            // if (users[desginMangerId]) {
+            //     io.to(users[desginMangerId].id).emit(notification);
+            // }
         }
         if (orderData.type === ORDER_TYPES.EXISTING_MODEL) {
             await ExistingModelOrder.create({
