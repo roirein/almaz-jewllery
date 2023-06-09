@@ -19,13 +19,14 @@ const LoginForm = () => {
 
     const onSubmit = async (data) => {
         try {
-            const response = await axios.post(`${process.env.SERVER_URL}/auth/login`, {
+            const response = await axios.post('/api/users', {
+                action: 'login',
                 email: data.username,
                 password: data.password
             });
             onLogin(response.data.token, response.data.role)
             if (response.status === HTTP_STATUS_CODE.SUCCESS) {
-                router.push('/home')
+                router.push('/order-management')
             }
         } catch(e) {
             if (e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED) {

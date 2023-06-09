@@ -28,5 +28,129 @@ export default defineMessages({
     invalidLogin: {
         id: 'invalidLogin',
         defaultMessage: 'username or password are incorrect'
+    },
+    ordersManagement: {
+        id: 'ordersManagement',
+        defaultMessage: 'orders management'
+    },
+    customers: {
+        id: 'customers',
+        defaultMessage: 'customers'
+    },
+    employess: {
+        id: 'employees',
+        defaultMessage: 'employess'
+    },
+    stock: {
+        id: 'stock',
+        defaultMessage: 'stock'
+    },
+    reportsCreation: {
+        id: 'reportsCreation',
+        defaultMessage: 'reports creation'
+    },
+    settings: {
+        id: 'settings',
+        defaultMessage: 'settings'
+    },
+    createNewOrder: {
+        id: 'createNewOrder',
+        defaultMessage: 'Create New Order'
+    },
+    newModel: {
+        id: 'newModel',
+        defaultMessage: 'New Model',
+    },
+    existingModel: {
+        id: 'existingModel',
+        defaultMessage: 'Existing Model'
+    },
+    fix: {
+        id: 'fix',
+        defaultMessage: 'Fix'
+    },
+    customerName: {
+        id: 'customerName',
+        defaultMessage: 'Customer Name'
+    },
+    item: {
+        id: 'item',
+        defaultMessage: 'item'
+    },
+    metal: {
+        id: 'metal',
+        defaultMessage: 'metal'
+    },
+    size: {
+        id: 'size',
+        defaultMessage: 'size'
+    },
+    setting: {
+        id: 'setting',
+        defaultMessage: 'setting'
+    },
+    sideStoneSize: {
+        id: 'sideStoneSize',
+        defaultMessage: 'Side Stone Size'
+    },
+    mainStoneSize: {
+        id: 'mainStoneSize',
+        defaultMessage: 'Main Stone Size'
+    },
+    coomments: {
+        id: 'comments',
+        defaultMessage: 'comments'
+    },
+    deadline: {
+        id: 'deadline',
+        defaultMessage: 'deadline'
+    },
+    image: {
+        id: 'image',
+        defaultMessage: 'image'
+    },
+    ring: {
+        id: 'ring',
+        defaultMessage: 'ring'
+    },
+    earrings: {
+        id: 'earrings',
+        defaultMessage: 'earrings'
+    },
+    pendant: {
+        id: 'pendant',
+        defaultMessage: 'pendant'
+    },
+    bracelet: {
+        id: 'bracelet',
+        defaultMessage: 'bracelet'
+    },
+    finger: {
+        id: 'finger',
+        defaultMessage: 'finger'
+    },
+    hand: {
+        id: 'hand',
+        defaultMessage: 'hand'
+    },
+    neck: {
+        id: 'neck',
+        defaultMessage: 'neck'
+    }, 
+    yellow: {
+        id: 'yellow',
+        defaultMessage: 'yellow'
+    },
+    white: {
+        id: 'white',
+        defaultMessage: 'white'
+    },
+    rose: {
+        id: 'rose',
+        defaultMessage: 'rose'
+    },
+    platinum: {
+        id: 'platinum',
+        defaultMessage: 'platinum'
     }
 })
