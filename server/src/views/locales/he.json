@@ -35,6 +35,9 @@
     "yellow": "צהוב",
     "white": "לבן",
     "rose": "רוז",
-    "platinum": "פלטינום"
+    "platinum": "פלטינום",
+    "isCastingRequired": "?האם נדרשת יציקה",
+    "cancel": "ביטול",
+    "send": "שלח"
 
 }

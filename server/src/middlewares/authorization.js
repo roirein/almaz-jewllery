@@ -17,7 +17,6 @@ const authorizeUser = async (req, res, next) => {
             throw new HttpError(NOT_AUTHORIZED.UNAUTHORIZED, HTTP_STATUS_CODE.UNAUTHORIZED)
         }
         req.userId = userId;
-        console.log(userId)
         next()
     } catch (e) {
         next(e)

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router'
 import AppTemplateComponent from '../../components/template/AppTemplate';
 import AddIcon from '@mui/icons-material/Add';
-import { ORDER_TYPES } from '../../../consts/system-consts';
+import {ORDER_TYPES} from '../../../consts/system-consts';
 import NewOrderModalComponent from '../../components/modals/NewOrderModal';
 
 const OrderManagementPage= () => {

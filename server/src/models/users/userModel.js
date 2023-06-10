@@ -20,10 +20,14 @@ User.init({
     firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     lastName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     email: {
         type: DataTypes.STRING,

@@ -13,34 +13,48 @@ NewModelOrder.init({
     },
     item: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     metal: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     size: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     inlay: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     mainStone: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     sideStone: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
     image: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,  
     },
     comments: {
         type: DataTypes.STRING,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     }
 }, {
     timestamps: false,

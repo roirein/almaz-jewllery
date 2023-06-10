@@ -152,5 +152,18 @@ export default defineMessages({
     platinum: {
         id: 'platinum',
         defaultMessage: 'platinum'
+    },
+    isCastingRequired: {
+        id: 'isCastingRequired',
+        defaultMessage: 'Is Casting Required?'
+    }, 
+    cancel: {
+        id: 'cancel',
+        defaultMessage: 'cancel'
+    },
+    send: {
+        id: 'send',
+        defaultMessage: 'send'
     }
+
 })
