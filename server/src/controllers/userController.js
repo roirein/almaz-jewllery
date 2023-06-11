@@ -97,7 +97,7 @@ const loginUser = async (req, res, next) => {
         const authToken = jwt.sign({_id: user.dataValues.id}, process.env.JWT_SECRET);
         user.token = authToken;
         await user.save();
-        res.status(HTTP_STATUS_CODE.SUCCESS).send({token: user.token, role});
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({token: user.token, role, id: user.dataValues.id});
 
     } catch(e) {
         next(e)

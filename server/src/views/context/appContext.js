@@ -4,7 +4,12 @@ const appContextValue = {
     token: '',
     role: '',
     socket: null,
-    onLogin: () => {}
+    userId: null,
+    onLogin: () => {},
+    notifications: [],
+    showAlert: false,
+    setShowAlert: () => {},
+    unreadNotifications: 0
 }
 
 const AppContext = createContext(appContextValue);

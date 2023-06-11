@@ -9,6 +9,10 @@ const Notification = sequelize.define('Notification', {
         primaryKey: true,
         allowNull: false
     },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     recipient: {
         type: DataTypes.STRING,
         allowNull: false

@@ -69,6 +69,11 @@ const POSITIONS = {
     QUALITY_ASSURANCE: 'quality_assurance'
 }
 
+const NOTIFICATIONS_TYPES = {
+    NEW_ORDER: 'new_order',
+    NEW_CUSTOMER: 'new_customer',
+}
+
 module.exports = {
     USER_TYPES,
     ROLES,
@@ -78,5 +83,6 @@ module.exports = {
     MODEL_STATUS,
     CASTING_STATUS,
     PRODUCTION_STATUS,
-    POSITIONS
+    POSITIONS,
+    NOTIFICATIONS_TYPES
 }

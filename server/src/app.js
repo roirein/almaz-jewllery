@@ -20,6 +20,8 @@ require('./models/orders/fixOrderModel');
 require('./models/orders/orderTimelineModel');
 require('./models/tasks/taskModel');
 require('./models/orders/OrderInCastingModel')
+// const Notification = require('./models/messages/notificationModel')
+// Notification.sync({force: true})
 // Order.sync({force: true}).then(() => {
 //     OrderInDesign.sync({force: true})
 //     NewModelOrder.sync({force: true})
@@ -48,6 +50,7 @@ const imageRoute = require('./routes/images');
 // const customerRoute = require('./routes/customer');
 const orderRoute = require('./routes/orders');
 const modelRoute = require('./routes/models');
+const notificationsRoute = require('./routes/notifications');
 const port = process.env.SERVER_PORT || 3000;
 
 const parser = parse({
@@ -84,7 +87,7 @@ nextApp.prepare().then(() => {
 
     initSocket(io);
 
-    app.use(express.json());
+    app.use(express.json({limit: '50mb', extended: true}));
     app.use(morgan('dev'));
     app.use(cors());
 
@@ -93,6 +96,7 @@ nextApp.prepare().then(() => {
     app.use('/image', imageRoute);
     app.use('/order', orderRoute);
     app.use('/model', modelRoute);
+    app.use('/notifications', notificationsRoute)
 
     app.use((err, req, res, next) => {
         res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)

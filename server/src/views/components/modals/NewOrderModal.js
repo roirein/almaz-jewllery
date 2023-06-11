@@ -7,6 +7,7 @@ import {useIntl} from 'react-intl';
 import messages from '../../i18n';
 import {useForm, FormProvider} from 'react-hook-form';
 import axios from 'axios'
+import { HTTP_STATUS_CODE } from '../../../consts/http-consts';
 
 const NewOrderModalComponent = (props) => {
 
@@ -15,16 +16,9 @@ const NewOrderModalComponent = (props) => {
 
     const intl = useIntl();
     const methods = useForm();
-    const onSubmit = async (data) => {
-        const imageData = new FormData();
-        imageData.append("model", data.image[0])
-        const imageResponse = await axios.post(`${process.env.SERVER_URL}/image/upload`, imageData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${contextValue.token}`
-            }
-        })
-        console.log(imageResponse)
+    const onSubmit = (data) => {
+        props.onSubmit(data)
+        props.onClose()
     }
 
     return (

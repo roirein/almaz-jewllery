@@ -164,6 +164,17 @@ export default defineMessages({
     send: {
         id: 'send',
         defaultMessage: 'send'
+    },
+    newOrderSuccess: {
+        id: 'newOrderSuccess',
+        defaultMessage: 'Order Created Successfully'
+    },
+    models: {
+        id: 'models',
+        defaultMessage: 'models'
+    },
+    newOrderMessage: {
+        id: 'newOrderMessage',
+        defaultMessage: 'You received new order'
     }
-
 })

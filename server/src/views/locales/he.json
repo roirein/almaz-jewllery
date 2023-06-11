@@ -38,6 +38,9 @@
     "platinum": "פלטינום",
     "isCastingRequired": "?האם נדרשת יציקה",
     "cancel": "ביטול",
-    "send": "שלח"
+    "send": "שלח",
+    "newOrderSuccess": "ההזמנה נוצרה בהצלחה",
+    "models": "מודלים",
+    "newOrderMessage": "קיבלת הזמנה חדשה"
 
 }

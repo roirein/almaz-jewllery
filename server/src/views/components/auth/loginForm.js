@@ -24,7 +24,7 @@ const LoginForm = () => {
                 email: data.username,
                 password: data.password
             });
-            onLogin(response.data.token, response.data.role)
+            onLogin(response.data.token, response.data.role, response.data.id)
             if (response.status === HTTP_STATUS_CODE.SUCCESS) {
                 router.push('/order-management')
             }

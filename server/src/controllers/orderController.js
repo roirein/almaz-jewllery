@@ -1,4 +1,4 @@
-const { ORDER_TYPES, ROLES, ORDER_STATUS, CASTING_STATUS } = require('../consts/system-consts');
+const { ORDER_TYPES, ROLES, ORDER_STATUS, CASTING_STATUS, NOTIFICATIONS_TYPES } = require('../consts/system-consts');
 const Order = require('../models/orders/orderModel');
 const NewModelOrder = require('../models/orders/newModelOrderModel');
 const ExistingModelOrder = require('../models/orders/existingModelOrder');
@@ -11,6 +11,7 @@ const users = require('../services/socket/listener');
 const Employee = require('../models/users/employeeModel');
 const OrderInDesign = require('../models/orders/orderInDesignModel');
 const OrderInCasting = require('../models/orders/OrderInCastingModel');
+const { sendNotification } = require('../services/socket/socket');
 
 const createNewOrder = async (req, res, next) => {
     try {
@@ -19,10 +20,10 @@ const createNewOrder = async (req, res, next) => {
             customerName: req.body.customerName ? req.body.customerName : User.getUserFullName(req.userId),
             type: req.body.type,
             deadline: new Date(req.body.deadline),
-            isCastingRequired: req.body.isCastingRequired
+            isCastingRequired: req.body.isCastingRequired ? req.body.isCastingRequired : false
         }
         const order = await Order.create(orderData);
-        if (isCastingRequired) {
+        if (orderData.isCastingRequired) {
             await OrderInCasting.create({orderId: order.orderId})
         }
         if (orderData.type === ORDER_TYPES.NEW_MODEL) {
@@ -34,14 +35,13 @@ const createNewOrder = async (req, res, next) => {
                     role: ROLES.DESIGN_MANAGER
                 }
             })
-            const notification = {
+            const notificationData = {
                 recipient: desginMangerId.dataValues.id,
-                content: JSON.stringify({orderId: order.orderId, ...modelData})
+                content: JSON.stringify({orderId: order.orderId, ...modelData}),
+                type: NOTIFICATIONS_TYPES.NEW_ORDER
             }
-            await Notification.create(notification);
-            // if (users[desginMangerId]) {
-            //     io.to(users[desginMangerId].id).emit(notification);
-            // }
+            const notification = await Notification.create(notificationData);
+            sendNotification(notification)
         }
         if (orderData.type === ORDER_TYPES.EXISTING_MODEL) {
             await ExistingModelOrder.create({
