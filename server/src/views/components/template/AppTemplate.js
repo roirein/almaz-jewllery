@@ -9,6 +9,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router'
 import { ROLES } from '../../../consts/system-consts';
 import { DESIGN_MANAGER_TABS, MANAGER_TABS } from '../../const/TabDefinitions';
+import NotificationPopoverComponet from '../notifications/NotificationsPopover';
 
 const AppTemplateComponent = (ChildComponent) => {
     return (props) => {
@@ -16,6 +17,7 @@ const AppTemplateComponent = (ChildComponent) => {
         const router = useRouter()
 
         const [tabs, setTabs] = useState([]);
+        const [showNotifications, setShowNotifications] = useState(false);
 
         const contextValue = useContext(AppContext);
 
@@ -73,7 +75,9 @@ const AppTemplateComponent = (ChildComponent) => {
                             marginRight: 'auto'
                         }}
                     >
-                        <IconButton>
+                        <IconButton
+                            onClick={() => setShowNotifications(true)}
+                        >
                             <Badge
                                 color="primary"
                                 badgeContent={contextValue.unreadNotifications}
@@ -81,6 +85,11 @@ const AppTemplateComponent = (ChildComponent) => {
                                 <NotificationsIcon/>
                             </Badge>
                         </IconButton>
+                        <NotificationPopoverComponet
+                            notifications={contextValue.notifications}
+                            open={showNotifications}
+                            onClose={() => setShowNotifications(false)}
+                        />
                     </Stack>
                 </Stack>
             </AppBar>

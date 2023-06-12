@@ -7,6 +7,7 @@ const appContextValue = {
     userId: null,
     onLogin: () => {},
     notifications: [],
+    setNotifications: () => {},
     showAlert: false,
     setShowAlert: () => {},
     unreadNotifications: 0

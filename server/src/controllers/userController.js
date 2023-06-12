@@ -97,6 +97,15 @@ const loginUser = async (req, res, next) => {
         const authToken = jwt.sign({_id: user.dataValues.id}, process.env.JWT_SECRET);
         user.token = authToken;
         await user.save();
+        res.cookie('token', authToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production'
+        });
+        res.cookie('role', role ? role : USER_TYPES.CUSTOMER, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+          });
+        
         res.status(HTTP_STATUS_CODE.SUCCESS).send({token: user.token, role, id: user.dataValues.id});
 
     } catch(e) {

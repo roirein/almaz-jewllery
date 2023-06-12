@@ -10,6 +10,7 @@ const path = require('path')
 const {parse} = require('csv-parse');
 const {HTTP_STATUS_CODE} = require('./consts/http-consts')
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 // require db related files 
 const seqelize = require('./database/connection');
 require('./models/users/userModel');
@@ -88,6 +89,9 @@ nextApp.prepare().then(() => {
     initSocket(io);
 
     app.use(express.json({limit: '50mb', extended: true}));
+    console.log(path.join(__dirname, '..', '/images' ))
+    app.use(express.static(path.join(__dirname, '..', '/images' )))
+    app.use(cookieParser());
     app.use(morgan('dev'));
     app.use(cors());
 
@@ -99,6 +103,7 @@ nextApp.prepare().then(() => {
     app.use('/notifications', notificationsRoute)
 
     app.use((err, req, res, next) => {
+        console.log(err)
         res.status(err.code || HTTP_STATUS_CODE.SERVER_ERROR).send(err.message)
     })
 

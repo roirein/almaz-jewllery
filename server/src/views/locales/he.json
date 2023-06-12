@@ -41,6 +41,13 @@
     "send": "שלח",
     "newOrderSuccess": "ההזמנה נוצרה בהצלחה",
     "models": "מודלים",
-    "newOrderMessage": "קיבלת הזמנה חדשה"
-
+    "newOrderMessage": "קיבלת הזמנה חדשה",
+    "seeMore": "ראה עוד",
+    "status": "סטאטוס",
+    "created": "נוצר",
+    "inProgress": "בעבודה",
+    "managerReview": "בדיקת מנהל",
+    "approved": "אושר",
+    "completed": "הושלם",
+    "modelNumber": "מספר מודל"
 }

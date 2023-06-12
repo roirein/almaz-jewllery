@@ -1,10 +1,14 @@
 const express = require('express');
 const {USER_TYPES, ROLES} = require('../consts/system-consts');
 const {authorizeUser, checkPermissions} = require('../middlewares/authorization');
-const {createNewOrder, getNewModelOrder, setOrderDesignStatus, setOrderPrice, setCastingStatus} = require('../controllers/orderController')
+const {createNewOrder, getNewModelOrder, setOrderDesignStatus, setOrderPrice, setCastingStatus, getOrdersInDesign, getOrderById} = require('../controllers/orderController')
 const router = express.Router();
 
 router.post('/newOrder', authorizeUser, checkPermissions([USER_TYPES.CUSTOMER, ROLES.MANAGER]) ,createNewOrder);
+
+router.get('/ordersInDesign', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), getOrdersInDesign);
+
+router.get('/getOrder/:orderId', authorizeUser, getOrderById);
 
 router.get('/getCreatedNewModelOrder', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), getNewModelOrder);
 

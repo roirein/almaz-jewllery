@@ -176,5 +176,37 @@ export default defineMessages({
     newOrderMessage: {
         id: 'newOrderMessage',
         defaultMessage: 'You received new order'
+    },
+    seeMore: {
+        id: 'seeMore',
+        defaultMessage: 'see more'
+    },
+    status: {
+        id: 'status',
+        defaultMessage: 'status'
+    }, 
+    created: {
+        id: 'created',
+        defaultMessage: 'created'
+    },
+    inProgress: {
+        id: 'inProgress',
+        defaultMessage: 'In progress'
+    },
+    managerReview: {
+        id: 'managerReview', 
+        defaultMessage: 'Manager Review'
+    },
+    approved: {
+        id: 'approved',
+        defaultMessage: 'Approved'
+    },
+    completed: {
+        id: 'completed',
+        defaultMessage: 'Completed'
+    },
+    modelNumber: {
+        id: 'modelNumber',
+        defaultMessage: 'model number'
     }
 })

@@ -50,6 +50,11 @@ const ContextProvider = (props) => {
         setToken(userToken)
         setRole(userRole)
         setUserId(userId)
+        const userFields = {
+            userToken, userRole
+        }
+        document.cookie = `userFields=${JSON.stringify(userFields)}`;
+
         const userSocket = io(process.env.SERVER_URL);
         userSocket.emit('login', {
             userId
@@ -73,6 +78,7 @@ const ContextProvider = (props) => {
         onLogin,
         userId,
         notifications,
+        setNotifications,
         showAlert,
         setShowAlert,
         unreadNotifications

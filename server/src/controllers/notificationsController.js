@@ -17,4 +17,22 @@ const getNotifications = async (req, res, next) => {
     }
 }
 
-module.exports = {getNotifications}
+const markNotificationAsHandled = async (req, res, next) => {
+    try {
+        const notification = await Notification.findOne({
+            where: {
+                id: req.params.notificationId
+            }
+        })
+        notification.isHandled = true
+        await notification.save()
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({notification});
+    } catch(e) {
+        next(e)
+    }
+}
+
+module.exports = {
+    getNotifications,
+    markNotificationAsHandled
+}

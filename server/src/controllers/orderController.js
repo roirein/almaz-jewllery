@@ -1,4 +1,4 @@
-const { ORDER_TYPES, ROLES, ORDER_STATUS, CASTING_STATUS, NOTIFICATIONS_TYPES } = require('../consts/system-consts');
+const { ORDER_TYPES, ROLES, ORDER_STATUS, CASTING_STATUS, NOTIFICATIONS_TYPES, DESIGN_STATUS } = require('../consts/system-consts');
 const Order = require('../models/orders/orderModel');
 const NewModelOrder = require('../models/orders/newModelOrderModel');
 const ExistingModelOrder = require('../models/orders/existingModelOrder');
@@ -12,6 +12,7 @@ const Employee = require('../models/users/employeeModel');
 const OrderInDesign = require('../models/orders/orderInDesignModel');
 const OrderInCasting = require('../models/orders/OrderInCastingModel');
 const { sendNotification } = require('../services/socket/socket');
+const { Op } = require("sequelize");
 
 const createNewOrder = async (req, res, next) => {
     try {
@@ -56,6 +57,97 @@ const createNewOrder = async (req, res, next) => {
     } catch(e) {
         console.log(e)
         next(e)
+    }
+}
+
+const getOrdersInDesign = async (req, res, next) => {
+    try {
+        const orders = await Order.findAll({
+            where: {
+                type: ORDER_TYPES.NEW_MODEL,
+                status: {
+                    [Op.or] : [ORDER_STATUS.CREATED, ORDER_STATUS.IN_DESIGN]
+                }
+            }
+        })
+        const ordersInDesign = await OrderInDesign.findAll({
+            where: {
+                status: {
+                    [Op.notILike]: DESIGN_STATUS.COMPLETED
+                }
+            }
+        })
+        const newModelOrders = await NewModelOrder.findAll();
+        const existingModelOrders = await ExistingModelOrder.findAll();
+        const models = await JewelModel.findAll();
+        const result = orders.map((order) => {
+            const designOrder = ordersInDesign.find((ord) => order.dataValues.orderId === ord.dataValues.orderId);
+            const newModelOrder = newModelOrders.find((ord2) => order.dataValues.orderId === ord2.dataValues.orderId);
+            const exisitingModelOrder = existingModelOrders.find((ord3) => order.dataValues.orderId === ord3.dataValues.orderId);
+            let model = null;
+            if (exisitingModelOrder) {
+                model = models.find((model) => model.modelNumber === exisitingModelOrder.dataValues.orderId);
+            }
+            return {
+                id: order.dataValues.orderId,
+                item: exisitingModelOrder ? model.dataValues.item : newModelOrder.dataValues.item,
+                setting: exisitingModelOrder ? model.dataValues.inlay : newModelOrder.dataValues.inlay,
+                sideStone: exisitingModelOrder ? model.dataValues.sideStone : newModelOrder.dataValues.sideStone,
+                mainStone: exisitingModelOrder ? model.dataValues.mainStone : newModelOrder.dataValues.mainStone,
+                modelNumber: model ? model.dataValues.modelNumber : null,
+                status: designOrder.dataValues.status
+            }
+        })
+        console.log(result)
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({orders: result});
+    } catch(e) {
+        console.log(e)
+        next(e)
+    }
+}
+
+const getOrderById = async (req, res, next) => {
+    try {
+        const orderId = req.params.orderId;
+        const order = await Order.findOne({
+            where: {
+                orderId
+            }
+        })
+        let result = {
+            id: orderId,
+            customer: order.dataValues.customerName,
+            status: order.dataValues.status,
+            deadline: order.dataValues.deadline,
+            casting: !!order.dataValues.isCastingRequired
+        }
+        if (order.type === ORDER_TYPES.NEW_MODEL) {
+            const newModelOrder = await NewModelOrder.findOne({
+                where: {
+                    orderId: orderId
+                }
+            })
+            const designStatus = await OrderInDesign.findOne({
+                where: {
+                    orderId: orderId
+                }
+            })
+            console.log(newModelOrder)
+            modelData = {
+                item: newModelOrder.dataValues.item,
+                inlay: newModelOrder.dataValues.inlay,
+                comments: newModelOrder.dataValues.comments,
+                mainStone: newModelOrder.dataValues.mainStone,
+                sideStone: newModelOrder.dataValues.sideStone,
+                image: newModelOrder.dataValues.image,
+                designStatus: designStatus.dataValues.status
+            }
+            result = {...result, ...modelData}
+        }
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({order: result})
+    } catch(e) {
+        console.log(e)
+        next(e);
     }
 }
 
@@ -146,6 +238,8 @@ const setCastingStatus = async (req, res, next) => {
 
 module.exports = {
     createNewOrder,
+    getOrdersInDesign,
+    getOrderById,
     getNewModelOrder,
     setOrderDesignStatus,
     setOrderPrice,
