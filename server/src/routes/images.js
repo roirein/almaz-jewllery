@@ -9,7 +9,7 @@ router.post('/upload', authorizeUser, upload.single('model'), (req, res) => {
     res.status(HTTP_STATUS_CODE.CREATED).send({path: req.file.filename});
 });
 
-router.get('/getImage/:imagePath',authorizeUser,  async (req, res) => {
+router.get('/getImage/:imagePath',  async (req, res) => {
     try{
         const imagePath = req.params.imagePath;
         console.log(imagePath)

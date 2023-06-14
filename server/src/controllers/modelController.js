@@ -9,50 +9,70 @@ const {HTTP_STATUS_CODE} = require('../consts/http-consts');
 const Order = require('../models/orders/orderModel');
 
 const createNewModel = async (req, res, next) => {
-    console.log(req.body)
     try {
         const modelData = {
             modelNumber: req.body.modelNumber,
             item: req.body.item,
             mainStone: req.body.mainStone,
             sideStone: req.body.sideStone,
-            inlay: req.body.inlay,
-            initiallDesign: req.body.initialDesgin,
-            finalDesign: req.body.finalDesgin,
+            inlay: req.body.setting,
+            initiallDesign: req.body.image,
+            finalDesign: req.body.image,
             description: req.body.description
         }
-        const model = await JewelModel.create(modelData);
-        const existingModelOrderData = {
-            orderId: req.body.orderId,
-            item: req.body.item,
-            metal: req.body.metal,
-            size: req.body.size,
-            comments: req.body.comments,
-            modelNumber: model.modelNumber,
-            wasOriginallyNewModelOrder: true
-        }
-        await ExistingModelOrder.create(existingModelOrderData);
-        await NewModelOrder.destroy({
-            where: {
-                orderId: req.body.orderId,
-            }
-        })
-        await OrderInDesign.update(
-            {
-                status: DESIGN_STATUS.MANAGER_REVIEW,
-            },
-            {
-                where: {
-                    orderId: req.body.orderId
-                }
-            }
-        )
+        await JewelModel.create(modelData);
+        // const existingModelOrderData = {
+        //     orderId: req.body.orderId,
+        //     item: req.body.item,
+        //     metal: req.body.metal,
+        //     size: req.body.size,
+        //     comments: req.body.comments,
+        //     modelNumber: model.modelNumber,
+        //     wasOriginallyNewModelOrder: true
+        // }
+        // await ExistingModelOrder.create(existingModelOrderData);
+        // await NewModelOrder.destroy({
+        //     where: {
+        //         orderId: req.body.orderId,
+        //     }
+        // })
+        // await OrderInDesign.update(
+        //     {
+        //         status: DESIGN_STATUS.MANAGER_REVIEW,
+        //     },
+        //     {
+        //         where: {
+        //             orderId: req.body.orderId
+        //         }
+        //     }
+        // )
         res.status(HTTP_STATUS_CODE.CREATED).send('model created successfully')
     } catch (e) {
         console.log(e)
         next(e);
     }
 };
+
+const getAllModels = async (req, res, next) => {
+    try {
+        const modelsRes = await JewelModel.findAll();
+
+        const result = modelsRes.map((model) => {
+            return {
+                modelNumber: model.dataValues.modelNumber,
+                item: model.dataValues.item,
+                setting: model.dataValues.inlay,
+                sideStone: model.dataValues.sideStone,
+                mainStone: model.dataValues.mainStone,
+                description: model.dataValues.description,
+                status: model.dataValues.status
+            }
+        })
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({models: result});
+    } catch (e) {
+        next(e)
+    }
+}
 
 const approveOrRejectModel = async (req, res, next) => {
     try {
@@ -74,7 +94,7 @@ const approveOrRejectModel = async (req, res, next) => {
             await ModelComments.create(modelComments);
             req.status(HTTP_STATUS_CODE.CREATED).send('comment published');
         } else {
-            req.status(HTTP_STATUS_CODE.SUCCESS).send();
+            req.status(HTTP_STATUS_CODE.SUCCESS).send({status: req.body.modelStatus});
         }
     } catch (e) {
         next(e)
@@ -102,13 +122,26 @@ const updateModelData = async (req, res, next) => { //for updating
 
 const getModelById = async (req, res, next) => {
     try {
-        const model = await JewelModel.findOne({
+        const modelData = await JewelModel.findOne({
             where: {
                 modelNumber: req.params.modelId
             }
         })
 
-        res.status(HTTP_STATUS_CODE.CREATED).send(model);
+        console.log(modelData)
+
+        const model = {
+            id: modelData.dataValues.modelNumber,
+            item: modelData.dataValues.item,
+            setting: modelData.dataValues.inlay,
+            sideStone: modelData.dataValues.sideStone,
+            mainStone: modelData.dataValues.mainStone,
+            description: modelData.dataValues.description,
+            status: modelData.dataValues.status,
+            image: modelData.dataValues.finalDesign
+        }
+
+        res.status(HTTP_STATUS_CODE.CREATED).send({model});
     } catch (e) {
         next(e)
     }
@@ -148,6 +181,7 @@ const setModelPriceAndMaterials = async (req, res, next) => {
 
 module.exports = {
     createNewModel,
+    getAllModels,
     approveOrRejectModel, 
     updateModelData,
     getModelById,

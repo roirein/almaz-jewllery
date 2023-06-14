@@ -24,6 +24,10 @@ export const MANAGER_TABS = [
     {
         label: messages.settings,
         value: '/settings'
+    },
+    {
+        label: messages.models,
+        value: '/model-management'
     }
 ]
 
@@ -34,6 +38,6 @@ export const DESIGN_MANAGER_TABS = [
     },
     {
         label: messages.models,
-        value: '/models'
+        value: '/model-management'
     }
 ]

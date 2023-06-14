@@ -49,5 +49,9 @@
     "managerReview": "בדיקת מנהל",
     "approved": "אושר",
     "completed": "הושלם",
-    "modelNumber": "מספר מודל"
+    "modelNumber": "מספר מודל",
+    "createNewModel": "הוסף מודל חדש",
+    "description": "תיאור",
+    "confirm": "אשר",
+    "reject": "דחה"
 }

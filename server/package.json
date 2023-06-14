@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "create-db": "node src/database/db.js"
+    "create-db": "node src/database/db.js",
+    "dev": "nodemone src/app.js",
+    "start": "node src/app.js"
   },
   "keywords": [],
   "author": "",

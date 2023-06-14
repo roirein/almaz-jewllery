@@ -208,5 +208,21 @@ export default defineMessages({
     modelNumber: {
         id: 'modelNumber',
         defaultMessage: 'model number'
+    },
+    createNewModel: {
+        id: 'createNewModel',
+        defaultMessage: 'Create New Model'
+    },
+    description: {
+        id: 'description',
+        defaultMessage: 'description'
+    },
+    confirm: {
+        id: 'confirm',
+        defaultMessage: 'confirm'
+    },
+    reject: {
+        id: 'reject',
+        defaultMessage: 'reject'
     }
 })

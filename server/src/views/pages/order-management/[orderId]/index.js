@@ -31,14 +31,11 @@ export const getServerSideProps = async (context) => {
         }
     })
 
-    console.log(orderDataResponse.data)
-
     const imageResponse = await axios.get(`${process.env.SERVER_URL}/image/getImage/${orderDataResponse.data.order.image}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
-    console.log(imageResponse.data);
 
     return {
         props: {
