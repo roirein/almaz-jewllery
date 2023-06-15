@@ -53,5 +53,8 @@
     "createNewModel": "הוסף מודל חדש",
     "description": "תיאור",
     "confirm": "אשר",
-    "reject": "דחה"
+    "reject": "דחה",
+    "modelComments": "הערות למודל",
+    "needs_work": "לא אושר",
+    "updated": "עודכן"
 }

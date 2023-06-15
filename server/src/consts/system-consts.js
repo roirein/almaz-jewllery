@@ -31,7 +31,9 @@ const ORDER_STATUS = {
 const MODEL_STATUS = {
     APPROVED: 'approved',
     NEEDS_WORK: 'needs_work',
-    CREATED: 'created'
+    UPDATED: 'updated',
+    CREATED: 'created',
+    COMPLETED: 'completed'
 }
 
 const DESIGN_STATUS = {

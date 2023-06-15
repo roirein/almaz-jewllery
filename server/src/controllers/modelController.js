@@ -4,7 +4,7 @@ const OrderInDesign = require('../models/orders/orderInDesignModel');
 const NewModelOrder = require('../models/orders/newModelOrderModel');
 const ModelComments = require('../models/models/commentsModel');
 const PriceModel = require('../models/models/modelPriceModel');
-const {DESIGN_STATUS, ORDER_STATUS} = require('../consts/system-consts');
+const {DESIGN_STATUS, ORDER_STATUS, MODEL_STATUS} = require('../consts/system-consts');
 const {HTTP_STATUS_CODE} = require('../consts/http-consts');
 const Order = require('../models/orders/orderModel');
 
@@ -91,32 +91,58 @@ const approveOrRejectModel = async (req, res, next) => {
                 comments: req.body.comments
             }
 
-            await ModelComments.create(modelComments);
-            req.status(HTTP_STATUS_CODE.CREATED).send('comment published');
+            const comments =  await ModelComments.findOne({
+                where: {
+                    modelNumber: req.body.modelNumber 
+                }
+            })
+
+            if (comments) {
+                await ModelComments.update({
+                    comments: req.body.comments,
+                    commentId: comments.dataValues.commentId
+                }, {
+                    where: {
+                        modelNumber: req.body.modelNumber
+                    }
+                })
+            } else {
+                await ModelComments.create(modelComments)
+            }
+            res.status(HTTP_STATUS_CODE.CREATED).send('comment published');
         } else {
-            req.status(HTTP_STATUS_CODE.SUCCESS).send({status: req.body.modelStatus});
+            await ModelComments.destroy({
+                where: {
+                    modelNumber: req.body.modelNumber
+                }
+            })
+            res.status(HTTP_STATUS_CODE.SUCCESS).send({status: req.body.modelStatus});
         }
     } catch (e) {
         next(e)
     }
 }
 
-const updateModelData = async (req, res, next) => { //for updating 
+const updateModel = async (req, res, next) => {
     try {
-        const model = await JewelModel.findOne({
+        const updatedModel = await JewelModel.update({
+            item: req.body.item,
+            mainStone: req.body.mainStone,
+            sideStone: req.body.sideStone,
+            inlay: req.body.setting,
+            initiallDesign: req.body.image,
+            finalDesign: req.body.image,
+            description: req.body.description,
+            status: MODEL_STATUS.UPDATED
+        }, {
             where: {
-                modelNumber: req.params.modelId
+                modelNumber: req.params.id
             }
         })
 
-        Object.entries(req.body).forEach((entry) => {
-            model[entry[0]] = entry[1];
-        })
-
-        await model.save();
-        res.status(HTTP_STATUS_CODE.SUCCESS).send('model updated succesfully');
-    } catch(e) {
-        next(e)
+        res.status(HTTP_STATUS_CODE.SUCCESS).send(updatedModel)
+    } catch (e) {
+        next (e)
     }
 }
 
@@ -128,9 +154,20 @@ const getModelById = async (req, res, next) => {
             }
         })
 
-        console.log(modelData)
+        const comments = await ModelComments.findOne({
+            where: {
+                modelNumber: req.params.modelId
+            }
+        })
 
-        const model = {
+        const priceAndMaterials = await PriceModel.findOne({
+            where: {
+                modelNumber: req.params.modelId
+            }
+        })
+
+
+        let model = {
             id: modelData.dataValues.modelNumber,
             item: modelData.dataValues.item,
             setting: modelData.dataValues.inlay,
@@ -139,6 +176,20 @@ const getModelById = async (req, res, next) => {
             description: modelData.dataValues.description,
             status: modelData.dataValues.status,
             image: modelData.dataValues.finalDesign
+        }
+
+        if (comments) {
+            model = {
+                ...model,
+                comments: comments.dataValues.comments
+            }
+        }
+
+        if (priceAndMaterials) {
+            model = {
+                ...model, 
+                priceData: priceAndMaterials.dataValues
+            }
         }
 
         res.status(HTTP_STATUS_CODE.CREATED).send({model});
@@ -150,31 +201,40 @@ const getModelById = async (req, res, next) => {
 const setModelPriceAndMaterials = async (req, res, next) => {
     try {
         const priceData = {
-            modelId: req.params.modelId,
+            modelNumber: req.params.id,
             materials: req.body.materials,
             priceWithMaterials: req.body.priceWithMaterials,
             priceWithoutMaterials: req.body.priceWithoutMaterials
         }
 
         const modelPriceData = await PriceModel.create(priceData);
-        const existingOrder = await ExistingModelOrder.findOne({
+
+        await JewelModel.update({
+            status: MODEL_STATUS.COMPLETED
+        }, {
             where: {
-                modelNumber: req.params.modelId
-            }, 
-        });
-        await Order.update({
-            status: ORDER_STATUS.CUSTOMER_APPROVAL
-        }, {
-            where: existingOrder.orderId
-        });
-        await OrderInDesign.update({
-            status: DESIGN_STATUS.COMPLETED
-        }, {
-            where: existingOrder.orderId
+                modelNumber: req.params.id
+            }
         })
-        req.status(HTTP_STATUS_CODE.CREATED).send(modelPriceData);
+        // const existingOrder = await ExistingModelOrder.findOne({
+        //     where: {
+        //         modelNumber: req.params.modelId
+        //     }, 
+        // });
+        // await Order.update({
+        //     status: ORDER_STATUS.CUSTOMER_APPROVAL
+        // }, {
+        //     where: existingOrder.orderId
+        // });
+        // await OrderInDesign.update({
+        //     status: DESIGN_STATUS.COMPLETED
+        // }, {
+        //     where: existingOrder.orderId
+        // })
+        res.status(HTTP_STATUS_CODE.CREATED).send(modelPriceData);
 
     } catch(e) {
+        console.log(e)
         next(e)
     }
 }
@@ -183,7 +243,7 @@ module.exports = {
     createNewModel,
     getAllModels,
     approveOrRejectModel, 
-    updateModelData,
+    updateModel,
     getModelById,
     setModelPriceAndMaterials,
     setModelPriceAndMaterials

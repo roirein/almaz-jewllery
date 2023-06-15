@@ -16,7 +16,9 @@ const NewModelModalComponent = (props) => {
     const contextValue = useContext(AppContext) 
 
     const intl = useIntl();
-    const methods = useForm();
+    const methods = useForm({
+        defaultValues: props.modelData ? props.modelData : {}
+    });
     const onSubmit = (data) => {
         props.onSubmit(data)
         props.onClose()

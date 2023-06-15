@@ -62,6 +62,7 @@ const ModelForm = () => {
                 >
                     <Controller
                         name="item"
+                        defaultValue={getValues('item')}
                         control={control}
                         rules={{required: true}}
                         render={({field}) => (
@@ -112,6 +113,7 @@ const ModelForm = () => {
                 <Stack>
                     <Controller
                         name="setting"
+                        defaultValue={getValues('setting')}
                         control={control}
                         rules={{required: true}}
                         render={({field}) => (
@@ -142,6 +144,7 @@ const ModelForm = () => {
                 <Stack>
                     <Controller
                         name="sideStoneSize"
+                        defaultValue={getValues('sideStoneSize')}
                         control={control}
                         rules={{required: true}}
                         render={({field}) => (
@@ -173,6 +176,7 @@ const ModelForm = () => {
                     <Controller
                         name="mainStoneSize"
                         control={control}
+                        defaultValue={getValues('mainStoneSize')}
                         rules={{required: true}}
                         render={({field}) => (
                             <Stack
@@ -202,6 +206,7 @@ const ModelForm = () => {
                 <Stack>
                     <Controller
                         name="description"
+                        defaultValue={getValues('description')}
                         control={control}
                         rules={{required: true}}
                         render={({field}) => (

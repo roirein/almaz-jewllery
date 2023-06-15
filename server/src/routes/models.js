@@ -1,6 +1,6 @@
 const express = require('express');
 const {authorizeUser, checkPermissions} = require('../middlewares/authorization');
-const {createNewModel, approveOrRejectModel, setModelPriceAndMaterials, getModelById, updateModelData, getAllModels} = require('../controllers/modelController');
+const {createNewModel, approveOrRejectModel, setModelPriceAndMaterials, getModelById, updateModelData, getAllModels, updateModel} = require('../controllers/modelController');
 const { ROLES } = require('../consts/system-consts');
 const router = express.Router();
 
@@ -10,11 +10,13 @@ router.get('/getAllModels', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGE
 
 router.get('/getModelById/:modelId', authorizeUser, getModelById);
 
-router.post('/reviewModel', authorizeUser, checkPermissions([ROLES.MANAGER]), approveOrRejectModel);
+router.put('/updateModel/:id', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER]), updateModel)
 
-router.patch('/updateModelData/:modelId', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), updateModelData);
+router.patch('/reviewModel', authorizeUser, checkPermissions([ROLES.MANAGER]), approveOrRejectModel);
 
-router.patch('/setModelPrice', authorizeUser, checkPermissions([ROLES.MANAGER]), setModelPriceAndMaterials);
+//router.patch('/updateModelData/:modelId', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), updateModelData);
+
+router.post('/setModelPrice/:id', authorizeUser, checkPermissions([ROLES.MANAGER]), setModelPriceAndMaterials);
 
 router.delete('/model/:modelId', authorizeUser, () => {});
 

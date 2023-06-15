@@ -224,5 +224,17 @@ export default defineMessages({
     reject: {
         id: 'reject',
         defaultMessage: 'reject'
+    },
+    modelComments: {
+        id: 'modelComments',
+        defaultMessage: 'Model Comments'
+    },
+    needs_work: {
+        id: 'needs_work',
+        defaultMessage: 'not Approved'
+    },
+    updated: {
+        id: 'updated',
+        defaultMessage: 'updated'
     }
 })
