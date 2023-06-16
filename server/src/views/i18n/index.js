@@ -1,240 +1,343 @@
 import {defineMessages} from 'react-intl';
 
-export default defineMessages({
-    greeting: {
-        id: 'helloWorld',
-        defaultMessage: 'hello world'
-    },
+export const homePageMessages = defineMessages({
     welcome: {
-        id: "welcome",
-        defaultMessage: "welcome"
-    }, 
-    username: {
-        id: 'username',
-        defaultMessage: 'username'
+        id: 'welcome',
+        defaultMessage: 'welcome'
+    },
+    email: {
+        id: "email",
+        defaultMessage: "email",
     },
     password: {
-        id: 'password',
-        defaultMessage: 'password'
-    },
+        id: "password",
+        defaultMessage: "password"
+    }, 
     entry: {
-        id: 'entry',
-        defaultMessage: 'enter'
+        id: "entry",
+        defaultMessage: "enter"
     },
-    emptyField: {
-        id: 'emptyField',
-        defaultMessage: 'field cannot be empty'
+    login: {
+        id: "login",
+        defaultMessage: "login"
     },
-    invalidLogin: {
-        id: 'invalidLogin',
-        defaultMessage: 'username or password are incorrect'
+    clickForSignUp: {
+        id: 'clickForSignUp',
+        defaultMessage: 'click here to move for sigining up'
     },
-    ordersManagement: {
-        id: 'ordersManagement',
-        defaultMessage: 'orders management'
+    loginError: {
+        id: 'loginError',
+        defaultMessage: 'email or password are incorrent'
     },
-    customers: {
-        id: 'customers',
-        defaultMessage: 'customers'
+    emptyFieldError: {
+        id: 'emptyFieldError',
+        default: 'field cannot be empty'
     },
-    employess: {
-        id: 'employees',
-        defaultMessage: 'employess'
+    emailError: {
+        id: 'emailError',
+        defaultValue: 'Invalid email address'
     },
-    stock: {
-        id: 'stock',
-        defaultMessage: 'stock'
+    registration: {
+        id: 'registration',
+        defaultMessage: 'registeration'
     },
-    reportsCreation: {
-        id: 'reportsCreation',
-        defaultMessage: 'reports creation'
+    firstName: {
+        id: 'firstName',
+        defaultMessage: 'First Name'
     },
-    settings: {
-        id: 'settings',
-        defaultMessage: 'settings'
-    },
-    createNewOrder: {
-        id: 'createNewOrder',
-        defaultMessage: 'Create New Order'
-    },
-    newModel: {
-        id: 'newModel',
-        defaultMessage: 'New Model',
-    },
-    existingModel: {
-        id: 'existingModel',
-        defaultMessage: 'Existing Model'
-    },
-    fix: {
-        id: 'fix',
-        defaultMessage: 'Fix'
-    },
-    customerName: {
-        id: 'customerName',
-        defaultMessage: 'Customer Name'
-    },
-    item: {
-        id: 'item',
-        defaultMessage: 'item'
-    },
-    metal: {
-        id: 'metal',
-        defaultMessage: 'metal'
-    },
-    size: {
-        id: 'size',
-        defaultMessage: 'size'
-    },
-    setting: {
-        id: 'setting',
-        defaultMessage: 'setting'
-    },
-    sideStoneSize: {
-        id: 'sideStoneSize',
-        defaultMessage: 'Side Stone Size'
-    },
-    mainStoneSize: {
-        id: 'mainStoneSize',
-        defaultMessage: 'Main Stone Size'
-    },
-    coomments: {
-        id: 'comments',
-        defaultMessage: 'comments'
-    },
-    deadline: {
-        id: 'deadline',
-        defaultMessage: 'deadline'
-    },
-    image: {
-        id: 'image',
-        defaultMessage: 'image'
-    },
-    ring: {
-        id: 'ring',
-        defaultMessage: 'ring'
-    },
-    earrings: {
-        id: 'earrings',
-        defaultMessage: 'earrings'
-    },
-    pendant: {
-        id: 'pendant',
-        defaultMessage: 'pendant'
-    },
-    bracelet: {
-        id: 'bracelet',
-        defaultMessage: 'bracelet'
-    },
-    finger: {
-        id: 'finger',
-        defaultMessage: 'finger'
-    },
-    hand: {
-        id: 'hand',
-        defaultMessage: 'hand'
-    },
-    neck: {
-        id: 'neck',
-        defaultMessage: 'neck'
+    lastName: {
+        id: 'lastName',
+        defaultMessage: 'Last Name'
     }, 
-    yellow: {
-        id: 'yellow',
-        defaultMessage: 'yellow'
+    businessName: {
+        id: 'businessName',
+        defaultMessage: 'businessName'
     },
-    white: {
-        id: 'white',
-        defaultMessage: 'white'
+    phoneNumber: {
+        id: 'phoneNumber',
+        defaultMessage: 'Phone Number'
     },
-    rose: {
-        id: 'rose',
-        defaultMessage: 'rose'
+    additionalPhoneNumber: {
+        id: 'additionalPhoneNumber',
+        defaultMessage: 'Additional Phone Number(Optional)'
     },
-    platinum: {
-        id: 'platinum',
-        defaultMessage: 'platinum'
+    verifyPassword: {
+        id: 'verifyPassword',
+        defaultMessage: 'Repeat Password'
     },
-    isCastingRequired: {
-        id: 'isCastingRequired',
-        defaultMessage: 'Is Casting Required?'
-    }, 
-    cancel: {
-        id: 'cancel',
-        defaultMessage: 'cancel'
+    toRegister: {
+        id: 'toRegister',
+        defaultMessage: 'click here to move to login'
     },
-    send: {
-        id: 'send',
-        defaultMessage: 'send'
+    phoneError: {
+        id: 'phoneError',
+        defaultMessage: 'Invalid phone number'
     },
-    newOrderSuccess: {
-        id: 'newOrderSuccess',
-        defaultMessage: 'Order Created Successfully'
+    passwordLengthError: {
+        id: 'passwordLengthError',
+        defaultMessage: 'Password must be atleast 8 character'
     },
-    models: {
-        id: 'models',
-        defaultMessage: 'models'
+    passwordPatternError: {
+        id: 'passwordPatternError',
+        defaultMessage: 'Password must include Upper and lower case, numbers and special character'
     },
-    newOrderMessage: {
-        id: 'newOrderMessage',
-        defaultMessage: 'You received new order'
+    verifyPasswordError: {
+        id: 'verifyPasswordError',
+        defaultMessage: 'Password not equal to password field'
     },
-    seeMore: {
-        id: 'seeMore',
-        defaultMessage: 'see more'
+    register: {
+        id: 'register',
+        defaultMessage: 'register'
     },
-    status: {
-        id: 'status',
-        defaultMessage: 'status'
-    }, 
-    created: {
-        id: 'created',
-        defaultMessage: 'created'
+    userExistError: {
+        id: 'userExistError',
+        defaultMessage: 'User with one of those email, phone number or business name already exists'
     },
-    inProgress: {
-        id: 'inProgress',
-        defaultMessage: 'In progress'
+    thankForRegister: {
+        id: 'thankForRegister',
+        defaultMessage: 'Thank you for your registration'
     },
-    managerReview: {
-        id: 'managerReview', 
-        defaultMessage: 'Manager Review'
-    },
-    approved: {
-        id: 'approved',
-        defaultMessage: 'Approved'
-    },
-    completed: {
-        id: 'completed',
-        defaultMessage: 'Completed'
-    },
-    modelNumber: {
-        id: 'modelNumber',
-        defaultMessage: 'model number'
-    },
-    createNewModel: {
-        id: 'createNewModel',
-        defaultMessage: 'Create New Model'
-    },
-    description: {
-        id: 'description',
-        defaultMessage: 'description'
-    },
-    confirm: {
-        id: 'confirm',
-        defaultMessage: 'confirm'
-    },
-    reject: {
-        id: 'reject',
-        defaultMessage: 'reject'
-    },
-    modelComments: {
-        id: 'modelComments',
-        defaultMessage: 'Model Comments'
-    },
-    needs_work: {
-        id: 'needs_work',
-        defaultMessage: 'not Approved'
-    },
-    updated: {
-        id: 'updated',
-        defaultMessage: 'updated'
+    postRegisterMessage: {
+        id: 'postRegisterMessage',
+        defaultMessage: 'Your details will be reviewd by manager and once it approved you"ll be updated by mail'
     }
 })
+
+// export default defineMessages({
+//     greeting: {
+//         id: 'helloWorld',
+//         defaultMessage: 'hello world'
+//     },
+//     welcome: {
+//         id: "welcome",
+//         defaultMessage: "welcome"
+//     }, 
+//     username: {
+//         id: 'username',
+//         defaultMessage: 'username'
+//     },
+//     password: {
+//         id: 'password',
+//         defaultMessage: 'password'
+//     },
+//     entry: {
+//         id: 'entry',
+//         defaultMessage: 'enter'
+//     },
+//     emptyField: {
+//         id: 'emptyField',
+//         defaultMessage: 'field cannot be empty'
+//     },
+//     invalidLogin: {
+//         id: 'invalidLogin',
+//         defaultMessage: 'username or password are incorrect'
+//     },
+//     ordersManagement: {
+//         id: 'ordersManagement',
+//         defaultMessage: 'orders management'
+//     },
+//     customers: {
+//         id: 'customers',
+//         defaultMessage: 'customers'
+//     },
+//     employess: {
+//         id: 'employees',
+//         defaultMessage: 'employess'
+//     },
+//     stock: {
+//         id: 'stock',
+//         defaultMessage: 'stock'
+//     },
+//     reportsCreation: {
+//         id: 'reportsCreation',
+//         defaultMessage: 'reports creation'
+//     },
+//     settings: {
+//         id: 'settings',
+//         defaultMessage: 'settings'
+//     },
+//     createNewOrder: {
+//         id: 'createNewOrder',
+//         defaultMessage: 'Create New Order'
+//     },
+//     newModel: {
+//         id: 'newModel',
+//         defaultMessage: 'New Model',
+//     },
+//     existingModel: {
+//         id: 'existingModel',
+//         defaultMessage: 'Existing Model'
+//     },
+//     fix: {
+//         id: 'fix',
+//         defaultMessage: 'Fix'
+//     },
+//     customerName: {
+//         id: 'customerName',
+//         defaultMessage: 'Customer Name'
+//     },
+//     item: {
+//         id: 'item',
+//         defaultMessage: 'item'
+//     },
+//     metal: {
+//         id: 'metal',
+//         defaultMessage: 'metal'
+//     },
+//     size: {
+//         id: 'size',
+//         defaultMessage: 'size'
+//     },
+//     setting: {
+//         id: 'setting',
+//         defaultMessage: 'setting'
+//     },
+//     sideStoneSize: {
+//         id: 'sideStoneSize',
+//         defaultMessage: 'Side Stone Size'
+//     },
+//     mainStoneSize: {
+//         id: 'mainStoneSize',
+//         defaultMessage: 'Main Stone Size'
+//     },
+//     coomments: {
+//         id: 'comments',
+//         defaultMessage: 'comments'
+//     },
+//     deadline: {
+//         id: 'deadline',
+//         defaultMessage: 'deadline'
+//     },
+//     image: {
+//         id: 'image',
+//         defaultMessage: 'image'
+//     },
+//     ring: {
+//         id: 'ring',
+//         defaultMessage: 'ring'
+//     },
+//     earrings: {
+//         id: 'earrings',
+//         defaultMessage: 'earrings'
+//     },
+//     pendant: {
+//         id: 'pendant',
+//         defaultMessage: 'pendant'
+//     },
+//     bracelet: {
+//         id: 'bracelet',
+//         defaultMessage: 'bracelet'
+//     },
+//     finger: {
+//         id: 'finger',
+//         defaultMessage: 'finger'
+//     },
+//     hand: {
+//         id: 'hand',
+//         defaultMessage: 'hand'
+//     },
+//     neck: {
+//         id: 'neck',
+//         defaultMessage: 'neck'
+//     }, 
+//     yellow: {
+//         id: 'yellow',
+//         defaultMessage: 'yellow'
+//     },
+//     white: {
+//         id: 'white',
+//         defaultMessage: 'white'
+//     },
+//     rose: {
+//         id: 'rose',
+//         defaultMessage: 'rose'
+//     },
+//     platinum: {
+//         id: 'platinum',
+//         defaultMessage: 'platinum'
+//     },
+//     isCastingRequired: {
+//         id: 'isCastingRequired',
+//         defaultMessage: 'Is Casting Required?'
+//     }, 
+//     cancel: {
+//         id: 'cancel',
+//         defaultMessage: 'cancel'
+//     },
+//     send: {
+//         id: 'send',
+//         defaultMessage: 'send'
+//     },
+//     newOrderSuccess: {
+//         id: 'newOrderSuccess',
+//         defaultMessage: 'Order Created Successfully'
+//     },
+//     models: {
+//         id: 'models',
+//         defaultMessage: 'models'
+//     },
+//     newOrderMessage: {
+//         id: 'newOrderMessage',
+//         defaultMessage: 'You received new order'
+//     },
+//     seeMore: {
+//         id: 'seeMore',
+//         defaultMessage: 'see more'
+//     },
+//     status: {
+//         id: 'status',
+//         defaultMessage: 'status'
+//     }, 
+//     created: {
+//         id: 'created',
+//         defaultMessage: 'created'
+//     },
+//     inProgress: {
+//         id: 'inProgress',
+//         defaultMessage: 'In progress'
+//     },
+//     managerReview: {
+//         id: 'managerReview', 
+//         defaultMessage: 'Manager Review'
+//     },
+//     approved: {
+//         id: 'approved',
+//         defaultMessage: 'Approved'
+//     },
+//     completed: {
+//         id: 'completed',
+//         defaultMessage: 'Completed'
+//     },
+//     modelNumber: {
+//         id: 'modelNumber',
+//         defaultMessage: 'model number'
+//     },
+//     createNewModel: {
+//         id: 'createNewModel',
+//         defaultMessage: 'Create New Model'
+//     },
+//     description: {
+//         id: 'description',
+//         defaultMessage: 'description'
+//     },
+//     confirm: {
+//         id: 'confirm',
+//         defaultMessage: 'confirm'
+//     },
+//     reject: {
+//         id: 'reject',
+//         defaultMessage: 'reject'
+//     },
+//     modelComments: {
+//         id: 'modelComments',
+//         defaultMessage: 'Model Comments'
+//     },
+//     needs_work: {
+//         id: 'needs_work',
+//         defaultMessage: 'not Approved'
+//     },
+//     updated: {
+//         id: 'updated',
+//         defaultMessage: 'updated'
+//     }
+// })

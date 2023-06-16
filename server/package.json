@@ -37,6 +37,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
     "react-intl": "^6.4.2",
+    "react-material-ui-carousel": "^3.4.2",
     "sequelize": "^6.31.1",
     "sequelize-cli": "^6.6.0",
     "socket.io": "^4.6.1",

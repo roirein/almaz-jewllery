@@ -45,7 +45,7 @@ const {initSocket} = require('./services/socket/socket');
 //require('./services/socket/listener'); // activate socket connection
 
 
-const authRoute = require('./routes/user');
+const userRoute = require('./routes/user');
 const employeeRoute = require('./routes/employee');
 const imageRoute = require('./routes/images');
 // const customerRoute = require('./routes/customer');
@@ -73,9 +73,9 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-// seqelize.sync({force: true}).then(() => {
-//     fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
-// });
+seqelize.sync({force: true}).then(() => {
+    fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
+});
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev, dir: path.join(__dirname, 'views')});
@@ -89,13 +89,12 @@ nextApp.prepare().then(() => {
     initSocket(io);
 
     app.use(express.json({limit: '50mb', extended: true}));
-    console.log(path.join(__dirname, '..', '/images' ))
     app.use(express.static(path.join(__dirname, '..', '/images' )))
     app.use(cookieParser());
     app.use(morgan('dev'));
     app.use(cors());
 
-    app.use('/auth', authRoute);
+    app.use('/user', userRoute);
     app.use('/employee', employeeRoute);
     app.use('/image', imageRoute);
     app.use('/order', orderRoute);

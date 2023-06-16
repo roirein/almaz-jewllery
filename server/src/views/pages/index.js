@@ -1,24 +1,17 @@
-import Link from 'next/link';
-import {useIntl} from 'react-intl';
-import LoginForm from '../components/auth/loginForm';
-import messages from '../i18n/index'
-import {Box} from '@mui/material'
+import {useEffect} from 'react'
+import {useRouter} from 'next/router'
 
-const App = () => {
-    const intl = useIntl();
+const DefaultPage = () => {
+
+    const router = useRouter()
+
+    useEffect(() => {
+        router.push('/home')
+    }, [])
+
     return (
-        <Box
-            sx={{
-                width: '100%',
-                height: '95vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}
-        >
-            <LoginForm/>
-        </Box>
+        <div></div>
     )
 }
 
-export default App
+export default DefaultPage

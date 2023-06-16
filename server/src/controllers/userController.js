@@ -17,13 +17,12 @@ const createNewCustomer = async (req, res, next) => {
             throw new HttpError(REGISTERATION_MESSAGES.INCORRECT_PASSWORD_CONFIRMATION, HTTP_STATUS_CODE.BAD_REQUEST);
         }
 
-        const cust = await Customer.findOne({
-            include: User,
+        const cust = await User.findOne({
             where: {
                 [Op.or]: [
-                    {businessName: req.body.businessName},
-                    {'$User.email$': req.body.email},
-                    {'$User.phone$': req.body.phone}
+                    //{businessName: req.body.businessName},
+                    {email: req.body.email},
+                    {phone: req.body.phone}
                 ]
             }
         })
@@ -48,12 +47,12 @@ const createNewCustomer = async (req, res, next) => {
         const user = await User.create(newUser);
         await Customer.create({id: user.id, ...newCustomer});
 
-        const notification = {
-            recipient: 'admins',
-            content: `${firstName} ${lastName} asked to join the system, please approve or decline his/her request`
-        }
+        // const notification = {
+        //     recipient: 'admins',
+        //     content: `${firstName} ${lastName} asked to join the system, please approve or decline his/her request`
+        // }
 
-        await Notification.create(notification);
+        // await Notification.create(notification);
         //io.to('admins').emit('new-user', notification);
         res.status(HTTP_STATUS_CODE.CREATED).send(REGISTERATION_MESSAGES.USER_CREATED_SUCCESS);
     } catch (e) {

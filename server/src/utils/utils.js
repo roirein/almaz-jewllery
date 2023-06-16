@@ -1,4 +1,4 @@
-//const {sendTemporaryPasswordMail} = require('../emails/emails');
+const {sendTemporaryPasswordMail} = require('../services/emails/emails')
 const {USER_TYPES} = require('../consts/system-consts');
 const User = require('../models/users/userModel');
 const Employee = require('../models/users/employeeModel');
