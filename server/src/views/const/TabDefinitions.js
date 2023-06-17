@@ -1,43 +1,44 @@
-import messages from '../i18n'
+import messages, { headerMessages } from '../i18n'
+import ROUTES from '../routes/client-routes'
 
 export const MANAGER_TABS = [
     {
-        label: messages.ordersManagement,
-        value: '/order-management'
+        label: headerMessages.orders,
+        value: ROUTES.ORDER_MANAGEMENT
     }, 
     {
-        label: messages.customers,
-        value: '/customers'
+        label: headerMessages.customers,
+        value: ROUTES.CUSTOMERS
     },
     {
-        label: messages.employess,
-        value: '/employees'
+        label: headerMessages.employees,
+        value: ROUTES.EMPLOYEES
     },
     {
-        label: messages.stock,
-        value: '/stock'
+        label: headerMessages.stock,
+        value: ROUTES.STOCK
     },
     {
-        label: messages.reportsCreation,
-        value: '/reports'
+        label: headerMessages.reports,
+        value: ROUTES.REPORTS
     },
     {
-        label: messages.settings,
-        value: '/settings'
+        label: headerMessages.settings,
+        value: ROUTES.SETTINGS
     },
     {
-        label: messages.models,
-        value: '/model-management'
+        label: headerMessages.models,
+        value: ROUTES.MODELS
     }
 ]
 
-export const DESIGN_MANAGER_TABS = [
-    {
-        label: messages.ordersManagement,
-        value: '/order-management'
-    },
-    {
-        label: messages.models,
-        value: '/model-management'
-    }
-]
+// export const DESIGN_MANAGER_TABS = [
+//     {
+//         label: messages.ordersManagement,
+//         value: '/order-management'
+//     },
+//     {
+//         label: messages.models,
+//         value: '/model-management'
+//     }
+// ]

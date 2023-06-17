@@ -100,6 +100,98 @@ export const homePageMessages = defineMessages({
     postRegisterMessage: {
         id: 'postRegisterMessage',
         defaultMessage: 'Your details will be reviewd by manager and once it approved you"ll be updated by mail'
+    },
+    customerLoginError: {
+        id: 'customerLoginError',
+        defaultMessage: 'You must wait for manager approval before you"ll be able to login'
+    },
+    forgotPassword: {
+        id: 'forgotPassword',
+        defaultMessage: 'Forgot Password'
+    },
+    resetPassword: {
+        id: 'resetPassword',
+        defaultMessage: 'Reset Password'
+    },
+    sendCode: {
+        id: 'sendCode',
+        defaultMessage: 'Send Code'
+    },
+    emailNotExistError: {
+        id: 'emailNotExistError',
+        defaultMessage: 'the email is not exist'
+    },
+    codeSent: {
+        id: 'codeSent',
+        defaultMessage: 'a code sent to your email and it will be valid for 5 minutes'
+    },
+    requireChangePassword: {
+        id: 'requireChangePassword',
+        defaultMessage: 'you must change your password before you wiil be able to login'
+    }, 
+    code: {
+        id: 'code',
+        defaultMessage: 'code'
+    },
+    dontHaveCode: {
+        id: 'dontHaveCode',
+        defaultMessage: 'Dont have code, send again'
+    },
+    changePassword: {
+        id: 'changePassword',
+        defaultMessage: 'change password'
+    },
+    codeError: {
+        id: 'codeError',
+        defaultMessage: 'The code you enter is incorrect'
+    },
+    codeExpired: {
+        id: 'codeExpired',
+        defaultMessage: 'The code expired'
+    },
+    passwordChanged: {
+        id: 'passwordChanged',
+        defaultMessage: 'password changed successfully'
+    },
+    toLogin: {
+        id: 'toLogin',
+        defaultMessage: 'to login'
+    },
+})
+
+
+export const headerMessages = defineMessages({
+    orders: {
+        id: 'orders',
+        defaultMessage: 'orders'
+    },
+    customers: {
+        id: 'customers',
+        defaultMessage: 'customers'
+    },
+    employees: {
+        id: 'employees',
+        defaultMessage: 'employees'
+    },
+    stock: {
+        id: 'stock',
+        defaultMessage: 'stock'
+    },
+    reports: {
+        id: 'reports',
+        defaultMessage: 'reports'
+    },
+    settings: {
+        id: 'settings',
+        defaultMessage: 'settings'
+    },
+    models: {
+        id: 'models',
+        defaultMessage: 'models'
+    },
+    logout: {
+        id: 'logout',
+        defaultMessage: 'Logout'
     }
 })
 

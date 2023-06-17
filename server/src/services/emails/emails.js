@@ -13,7 +13,6 @@ const sendTemporaryPasswordMail = (password, recipent) => {
 
 
 const sendYourUserApprovedMail = (firstName, recipient) => {
-    console.log(process.env.EMAIL_USER, recipient)
     mailer.sendMail(
         {
             from: process.env.EMAIL_USER,
@@ -24,8 +23,20 @@ const sendYourUserApprovedMail = (firstName, recipient) => {
     )
 }
 
+const sendResetPasswordCode = (firstName, lastName, recipient, code) => {
+    mailer.sendMail(
+        {
+            from: process.env.EMAIL_USER,
+            to: recipient,
+            subject: 'Password Reset Code',
+            text: `Dear ${firstName} ${lastName}, your verification code is ${code}`
+        }
+    )
+}
+
 
 module.exports = {
     sendTemporaryPasswordMail,
-    sendYourUserApprovedMail
+    sendYourUserApprovedMail,
+    sendResetPasswordCode
 }

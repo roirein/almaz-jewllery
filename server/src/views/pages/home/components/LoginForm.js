@@ -33,6 +33,13 @@ const LoginFormComponent = (props) => {
             console.log(e)
             if (e.response.status === HTTP_STATUS_CODE.UNAUTHORIZED) {
                 setError(intl.formatMessage(homePageMessages.loginError))
+            } if (e.response.status === HTTP_STATUS_CODE.FORBIDDEN) {
+                if (e.response.data === 'customer-error') {
+                    setError(intl.formatMessage(homePageMessages.customerLoginError))
+                }
+                if (e.response.data === 'employee-error') {
+                    props.onRequiredChangePassword()
+                }
             }
         }
     }
@@ -90,7 +97,7 @@ const LoginFormComponent = (props) => {
                         type="submit"
                         variant="contained"
                         sx={{
-                            width: '50%',
+                            width: '70%',
                             backgroundColor: '#a05444'
                         }}
                     >
@@ -98,24 +105,47 @@ const LoginFormComponent = (props) => {
                     </Button>
                     <Stack
                         direction="row"
+                        sx={{
+                            width: '100%'
+                        }}
                     >
                         <Stack
                             sx={{
-                                alignItems: "flex-start"
+                                alignItems: "flex-start",
+                                mt: '4px',
+                                width: '100%'
                             }}
+                            direction="row"
+                            
                         >
                             <Link 
                                 underline="none"
                                 onClick={() => props.onSwitchToRegister()}
                                 sx={{
                                     color: '#a05444',
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        textDecoration: 'underline',
+                                        fontWeight: 'bold',
+                                    }
+                                }}
+                            >
+                                {intl.formatMessage(homePageMessages.toRegister)}
+                            </Link>
+                            <Link 
+                                underline="none"
+                                onClick={() => props.onForgotPassword()}
+                                sx={{
+                                    color: '#a05444',
+                                    marginRight: 'auto',
+                                    cursor: 'pointer',
                                     '&:hover': {
                                         textDecoration: 'underline',
                                         fontWeight: 'bold'
                                     }
                                 }}
                             >
-                                {intl.formatMessage(homePageMessages.toRegister)}
+                                {intl.formatMessage(homePageMessages.forgotPassword)}
                             </Link>
                         </Stack>
                     </Stack>

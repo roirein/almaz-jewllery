@@ -20,16 +20,12 @@ const Customer = sequelize.define('Customer', {
         validate: {
             is: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
         }
-    },
-    isApproved: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
     }
 }, {
     timestamps: false
 });
 
+User.hasOne(Customer, {foreignKey: 'id'})
 Customer.belongsTo(User, {foreignKey: 'id'});
 
 module.exports = Customer

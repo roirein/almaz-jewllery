@@ -1,6 +1,7 @@
 const express = require('express');
 const {authorizeUser} = require('../middlewares/authorization');
-const {createNewCustomer, loginUser, logoutUser} = require('../controllers/userController');
+const {createNewCustomer, loginUser, logoutUser, sendResetPasswordMail, verifyChangePassword, updatePassword} = require('../controllers/userController');
+const { sendResetPasswordCode } = require('../services/emails/emails');
 
 const router = express.Router();
 
@@ -10,10 +11,10 @@ router.post('/login', loginUser);
 
 router.post('/logout', authorizeUser, logoutUser);
 
-router.post('/resetPasswordMail', () => {});
+router.post('/sendResetPasswordCode', sendResetPasswordMail);
 
-router.post('/resetPasswordCode', () => {});
+router.post('/verifyPasswordCode', verifyChangePassword);
 
-router.patch('/resetPassword', () => {});
+router.patch('/resetPassword', updatePassword);
 
 module.exports = router;

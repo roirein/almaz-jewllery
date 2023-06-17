@@ -76,132 +76,135 @@ const OrderManagementPage= (props) => {
     }
 
     return (
-        <Box
-            sx={{
-                padding: '12px'
-            }}
-        >
-            {isAllowedToCreateNewOrder && (
-                <Stack
-                    direction="column"
-                    sx={{
-                        height: "10%"
-                    }}
-                >
-                    <Button
-                        onClick={() => setShowMenu(true)}
-                        sx={{
-                            width: 'fit-content'
-                        }}
-                    >
-                        <AddIcon/>
-                        <Typography
-                            variant="body1"
-                        >
-                            {intl.formatMessage(messages.createNewOrder)}
-                        </Typography>
-                    </Button>
-                    <Menu
-                        open={showMenu}
-                        anchorOrigin={{
-                            horizontal: 'right',
-                            vertical: 'bottom'
-                        }}
-                    >
-                        <MenuItem onClick={() => handleOpenModal(ORDER_TYPES.NEW_MODEL)}>
-                            {intl.formatMessage(messages.newModel)}
-                        </MenuItem>
-                        <MenuItem onClick={() => setShowMenu(false)}>
-                            {intl.formatMessage(messages.existingModel)}
-                        </MenuItem>
-                        <MenuItem onClick={() => setShowMenu(false)}>
-                            {intl.formatMessage(messages.fix)}
-                        </MenuItem>
-                    </Menu>
-                </Stack>
-            )}
-            <Stack
-                sx={{
-                    width: '100%',
-                    height: '80%',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <TableContainer component={Paper}>
-                    <Table sx={{maxWidth: '70%'}}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>{intl.formatMessage(messages.item)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.setting)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.sideStoneSize)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.mainStoneSize)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.modelNumber)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.status)}</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {props.orderList.map((order) => (
-                            <TableRow
-                                key={order.id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {intl.formatMessage(messages[order.item])}
-                                </TableCell>
-                                <TableCell>{order.setting}</TableCell>
-                                <TableCell>{order.sideStone}</TableCell>
-                                <TableCell>{order.mainStone}</TableCell>
-                                <TableCell>{order.modelNumber}</TableCell>
-                                <TableCell>{intl.formatMessage(messages[order.status])}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        onClick={() => onClickOrder(order.id)}
-                                    >
-                                        {intl.formatMessage(messages.seeMore)}
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Stack>
-            {showModal && (
-                <NewOrderModalComponent
-                    orderType={modalType}
-                    onClose={() => setShowModal(false)}
-                    onSubmit={(data) => createNewOrder(data)}
-                />
-            )}
-            {notificationData && (
-                <NotificationComponent
-                    color={notificationData.color}
-                    message={notificationData.message}
-                    onClose={() => notificationData.onClose()}
-                />
-            )}
-        </Box>
+        <AppTemplateComponent>
+            <h1>Orders</h1>
+        </AppTemplateComponent>
+        // <Box
+        //     sx={{
+        //         padding: '12px'
+        //     }}
+        // >
+        //     {isAllowedToCreateNewOrder && (
+        //         <Stack
+        //             direction="column"
+        //             sx={{
+        //                 height: "10%"
+        //             }}
+        //         >
+        //             <Button
+        //                 onClick={() => setShowMenu(true)}
+        //                 sx={{
+        //                     width: 'fit-content'
+        //                 }}
+        //             >
+        //                 <AddIcon/>
+        //                 <Typography
+        //                     variant="body1"
+        //                 >
+        //                     {intl.formatMessage(messages.createNewOrder)}
+        //                 </Typography>
+        //             </Button>
+        //             <Menu
+        //                 open={showMenu}
+        //                 anchorOrigin={{
+        //                     horizontal: 'right',
+        //                     vertical: 'bottom'
+        //                 }}
+        //             >
+        //                 <MenuItem onClick={() => handleOpenModal(ORDER_TYPES.NEW_MODEL)}>
+        //                     {intl.formatMessage(messages.newModel)}
+        //                 </MenuItem>
+        //                 <MenuItem onClick={() => setShowMenu(false)}>
+        //                     {intl.formatMessage(messages.existingModel)}
+        //                 </MenuItem>
+        //                 <MenuItem onClick={() => setShowMenu(false)}>
+        //                     {intl.formatMessage(messages.fix)}
+        //                 </MenuItem>
+        //             </Menu>
+        //         </Stack>
+        //     )}
+        //     <Stack
+        //         sx={{
+        //             width: '100%',
+        //             height: '80%',
+        //             alignItems: 'center',
+        //             justifyContent: 'center'
+        //         }}
+        //     >
+        //         <TableContainer component={Paper}>
+        //             <Table sx={{maxWidth: '70%'}}>
+        //                 <TableHead>
+        //                     <TableRow>
+        //                         <TableCell>{intl.formatMessage(messages.item)}</TableCell>
+        //                         <TableCell>{intl.formatMessage(messages.setting)}</TableCell>
+        //                         <TableCell>{intl.formatMessage(messages.sideStoneSize)}</TableCell>
+        //                         <TableCell>{intl.formatMessage(messages.mainStoneSize)}</TableCell>
+        //                         <TableCell>{intl.formatMessage(messages.modelNumber)}</TableCell>
+        //                         <TableCell>{intl.formatMessage(messages.status)}</TableCell>
+        //                         <TableCell></TableCell>
+        //                     </TableRow>
+        //                 </TableHead>
+        //                 <TableBody>
+        //                 {props.orderList.map((order) => (
+        //                     <TableRow
+        //                         key={order.id}
+        //                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+        //                     >
+        //                         <TableCell component="th" scope="row">
+        //                             {intl.formatMessage(messages[order.item])}
+        //                         </TableCell>
+        //                         <TableCell>{order.setting}</TableCell>
+        //                         <TableCell>{order.sideStone}</TableCell>
+        //                         <TableCell>{order.mainStone}</TableCell>
+        //                         <TableCell>{order.modelNumber}</TableCell>
+        //                         <TableCell>{intl.formatMessage(messages[order.status])}</TableCell>
+        //                         <TableCell>
+        //                             <Button
+        //                                 onClick={() => onClickOrder(order.id)}
+        //                             >
+        //                                 {intl.formatMessage(messages.seeMore)}
+        //                             </Button>
+        //                         </TableCell>
+        //                     </TableRow>
+        //                 ))}
+        //                 </TableBody>
+        //             </Table>
+        //         </TableContainer>
+        //     </Stack>
+        //     {showModal && (
+        //         <NewOrderModalComponent
+        //             orderType={modalType}
+        //             onClose={() => setShowModal(false)}
+        //             onSubmit={(data) => createNewOrder(data)}
+        //         />
+        //     )}
+        //     {notificationData && (
+        //         <NotificationComponent
+        //             color={notificationData.color}
+        //             message={notificationData.message}
+        //             onClose={() => notificationData.onClose()}
+        //         />
+        //     )}
+        // </Box>
     )
 }
 
-export const getServerSideProps = async (context) => {
-    const cookie = parse(context.req.headers.cookie);
-    const userField = JSON.parse(cookie.userFields);
-    const response = await axios.get(`${process.env.SERVER_URL}/order/ordersInDesign`, {
-        headers: {
-            Authorization: `Bearer ${userField.userToken}`
-        }
-    })
+// export const getServerSideProps = async (context) => {
+//     const cookie = parse(context.req.headers.cookie);
+//     const userField = JSON.parse(cookie.userFields);
+//     const response = await axios.get(`${process.env.SERVER_URL}/order/ordersInDesign`, {
+//         headers: {
+//             Authorization: `Bearer ${userField.userToken}`
+//         }
+//     })
 
    
     
-    return {
-        props: {
-            orderList: response.data.orders
-        }
-    }
-}
+//     return {
+//         props: {
+//             orderList: response.data.orders
+//         }
+//     }
+// }
 
-export default AppTemplateComponent(OrderManagementPage)
+export default OrderManagementPage

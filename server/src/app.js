@@ -73,9 +73,9 @@ parser.on('end', async () => {
     console.log('end')
 })
 
-seqelize.sync({force: true}).then(() => {
-    fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
-});
+// seqelize.sync({force: true}).then(() => {
+//     fs.createReadStream(process.env.INITIAL_USERS_DATA_FILE).pipe(parser);
+// });
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev, dir: path.join(__dirname, 'views')});

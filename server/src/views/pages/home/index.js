@@ -8,11 +8,13 @@ import LoginFormComponent from './components/LoginForm';
 import {useState} from 'react';
 import { AUTHENTICATION_OPTION } from '../../const/authentication-consts';
 import RegisterFormComponent from './components/RegisterForm';
+import ResetPasswordFormComponent from './components/ResetPasswordForm';
 
 const App = () => {
     const intl = useIntl();
 
     const [authType, setAuthType] = useState(AUTHENTICATION_OPTION.LOGIN);
+    const [changePasswordMessage, setChangePasswordMessage] = useState(null);
     
     return (
         <Box
@@ -81,6 +83,11 @@ const App = () => {
                             >
                                 <LoginFormComponent
                                     onSwitchToRegister={() => setAuthType(AUTHENTICATION_OPTION.REGISTER)}
+                                    onForgotPassword={() => setAuthType(AUTHENTICATION_OPTION.RESET_PASSWORD)}
+                                    onRequiredChangePassword={() => {
+                                        setAuthType(AUTHENTICATION_OPTION.RESET_PASSWORD)
+                                        setChangePasswordMessage(intl.formatMessage(homePageMessages.requireChangePassword))
+                                    }}
                                 />
                             </Stack>
                         )}
@@ -94,6 +101,19 @@ const App = () => {
                                 <RegisterFormComponent/>
                             </Stack>
                         )}
+                        {authType === AUTHENTICATION_OPTION.RESET_PASSWORD && (
+                            <Stack
+                                sx={{
+                                    width: '70%',
+                                    pb: '200px'
+                                }}
+                            >
+                                <ResetPasswordFormComponent
+                                    message={changePasswordMessage}
+                                    switchToLogin={() => setAuthType(AUTHENTICATION_OPTION.LOGIN)}
+                                />
+                            </Stack>
+                        )} 
                     </Stack>
                 </Stack>
                 <Stack

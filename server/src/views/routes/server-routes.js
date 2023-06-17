@@ -7,3 +7,15 @@ export const getLoginUrl = () => {
 export const getRegisterUrl = () => {
     return `${serverUrl}/user/register`
 }
+
+export const getResetPasswordCodeURL = () => {
+    return `${serverUrl}/user/sendResetPasswordCode`
+}
+
+export const getCodeVerificationUrl = () => {
+    return `${serverUrl}/user/verifyPasswordCode`
+}
+
+export const getUpdatePasswordUrl = () => {
+    return `${serverUrl}/user/resetPassword`
+}

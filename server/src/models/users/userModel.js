@@ -8,6 +8,17 @@ class User extends Model{
         const user = await User.findByPk(userId)
         return `${user.dataValues.firstName} ${user.dataValues.lastName}`
     }
+
+    static async validateUserPassword(password){
+        const isPasswordLengthValid = password.length >= 8 && password.length <= 24;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!])[A-Za-z\d@#$%&*!]{8,}$/;
+        const isValidPassword = passwordRegex.test(password)
+        if (!isPasswordLengthValid || !isValidPassword) {
+            throw new Error('invalid password')
+        }
+        const hashedPassword = await bcrypt.hash(password, Number(process.env.HASH_SALT));
+        return hashedPassword
+    }
 }
 
 User.init({
@@ -66,16 +77,14 @@ User.init({
 
 User.beforeCreate(async (user) => {
     user.id = uuidv4();
+    user.password = await User.validateUserPassword(user.password)
+})
 
-    const isPasswordLengthValid = user.password.length >= 8 && user.password.length <= 24;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%&*!])[A-Za-z\d@#$%&*!]{8,}$/;
 
-    const isValidPassword = passwordRegex.test(user.password)
-    console.log(isValidPassword, user.password, user.firstName)
-    if (!isPasswordLengthValid || !isValidPassword) {
-        throw new Error('invalid password')
+User.beforeUpdate(async (user, options) => {
+    if (user.changed('password')) {
+        user.password = await User.validateUserPassword(user.password)
     }
-    user.password = await bcrypt.hash(user.password, Number(process.env.HASH_SALT));
 })
 
 module.exports = User

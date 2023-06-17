@@ -27,5 +27,6 @@ const Employee = sequlize.define('Employee', {
 })
 
 Employee.belongsTo(User, {foreignKey: 'id'})
+User.hasOne(Employee, {foreignKey: 'id'})
 
 module.exports = Employee;

@@ -25,6 +25,7 @@ TokenModel.init({
     sequelize
 })
 
+User.hasOne(TokenModel, {foreignKey: 'id'})
 TokenModel.belongsTo(User, {foreignKey: 'id'});
 
 module.exports = TokenModel

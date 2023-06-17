@@ -76,6 +76,12 @@ const NOTIFICATIONS_TYPES = {
     NEW_CUSTOMER: 'new_customer',
 }
 
+const REQUESTS_STATUS = {
+    PENDING: 'pending',
+    APPROVED: 'approved',
+    REJECTED: 'rejected'
+}
+
 module.exports = {
     USER_TYPES,
     ROLES,
@@ -86,5 +92,6 @@ module.exports = {
     CASTING_STATUS,
     PRODUCTION_STATUS,
     POSITIONS,
-    NOTIFICATIONS_TYPES
+    NOTIFICATIONS_TYPES,
+    REQUESTS_STATUS
 }
