@@ -10,13 +10,8 @@ const ContextProvider = (props) => {
     const [socket, setSocket] = useState(null);
     const [notifications, setNotifications] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState(0);
+    const [currentNotification, setCurrentNotification] = useState(null)
     const [showAlert, setShowAlert] = useState(false)
-
-    const handleAddNewOrder = (notificationData) => {
-        const newNotificationsArray = [...notifications, notificationData]
-        setNotifications(newNotificationsArray)
-        setShowAlert(true)
-    }
 
     useEffect(() => {
         if (socket){
@@ -28,15 +23,17 @@ const ContextProvider = (props) => {
                 console.log('Socket disconnected');
               });
         
-              socket.on('newOrder', (notificationData) => {
+              socket.on('notification', (notificationData) => {
+                console.log(notificationData)
                 const newNotificationsArray = [...notifications, notificationData];
                 setNotifications(newNotificationsArray);
+                setCurrentNotification(notificationData)
                 setShowAlert(true);
               });
               return () => {
                 socket.off('connect');
                 socket.off('disconnect');
-                socket.off('newOrder');
+                socket.off('notification');
               };
         }
     }, [socket, notifications])
@@ -81,7 +78,8 @@ const ContextProvider = (props) => {
         setNotifications,
         showAlert,
         setShowAlert,
-        unreadNotifications
+        unreadNotifications,
+        currentNotification
     }
 
     return (

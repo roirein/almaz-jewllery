@@ -7,7 +7,7 @@ export const CUSTOMER_TABLE_COLUMN = [
 ]
 
 export const REQUEST_TABLE_COLUMN = [
-    'requestNumber',
     'customerName',
+    'email',
     'status'
 ]

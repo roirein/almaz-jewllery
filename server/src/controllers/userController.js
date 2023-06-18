@@ -1,4 +1,4 @@
-const {USER_TYPES, REQUESTS_STATUS} = require('../consts/system-consts');
+const {USER_TYPES, REQUESTS_STATUS, ROLES} = require('../consts/system-consts');
 const HttpError = require('../utils/classes/http-error');
 const {HTTP_STATUS_CODE} = require('../consts/http-consts');
 const {REGISTERATION_MESSAGES, LOGIN_MESSAGES} = require('../consts/messages');
@@ -13,6 +13,7 @@ const Requests = require('../models/users/requestsModel');
 const { genertaeResetPasswordCode } = require('../utils/utils');
 const { sendResetPasswordCode } = require('../services/emails/emails');
 const TokenModel = require('../models/users/tokenModel');
+const {sendNotification} = require('../services/socket/socket')
 
 const createNewCustomer = async (req, res, next) => {
     try{
@@ -51,13 +52,21 @@ const createNewCustomer = async (req, res, next) => {
         await Customer.create({id: user.id, ...newCustomer});
         await Requests.create({id: user.id})
 
-        // const notification = {
-        //     recipient: 'admins',
-        //     content: `${firstName} ${lastName} asked to join the system, please approve or decline his/her request`
-        // }
+        const manager = await Employee.findOne({
+            where: {
+                role: ROLES.MANAGER
+            }
+        })
 
-        // await Notification.create(notification);
-        //io.to('admins').emit('new-user', notification);
+        const notification = {
+            type: 'newCustomer',
+            recipient: manager.dataValues.id,
+            resource: 'customer',
+            resourceId: `${newUser.firstName} ${newUser.lastName}`
+        }
+
+        await Notification.create(notification);
+        sendNotification(notification)
         res.status(HTTP_STATUS_CODE.CREATED).send(REGISTERATION_MESSAGES.USER_CREATED_SUCCESS);
     } catch (e) {
         console.log(e)

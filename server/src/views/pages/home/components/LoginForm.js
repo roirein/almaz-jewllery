@@ -11,11 +11,14 @@ import {useRouter} from 'next/router'
 import { HTTP_STATUS_CODE } from "../../../../consts/http-consts";
 import ROUTES from "../../../routes/client-routes";
 import ErrorLabelComponent from "../../../components/form/Labels/ErrorLabel";
+import {useContext} from 'react';
+import AppContext from "../../../context/appContext";
 
 const LoginFormComponent = (props) => {
     const intl = useIntl();
     const [error, setError] = useState(null);
     const router = useRouter();
+    const contextValue = useContext(AppContext)
 
     const onLogin = async (data) => {
         const url = getLoginUrl();
@@ -26,6 +29,7 @@ const LoginFormComponent = (props) => {
             })
 
             if (response.status === HTTP_STATUS_CODE.SUCCESS) {
+                contextValue.onLogin(response.data.token, response.data.role, response.data.id);
                 router.push(ROUTES.ORDER_MANAGEMENT)
             }
 

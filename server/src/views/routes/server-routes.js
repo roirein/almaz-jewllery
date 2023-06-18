@@ -19,3 +19,7 @@ export const getCodeVerificationUrl = () => {
 export const getUpdatePasswordUrl = () => {
     return `${serverUrl}/user/resetPassword`
 }
+
+export const getRequestUrl = () => {
+    return `${serverUrl}/customer/getCustomerRequests`
+}

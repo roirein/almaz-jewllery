@@ -17,13 +17,17 @@ const Notification = sequelize.define('Notification', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    content: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     created: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    resource: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    resourceId: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
     isHandled: {
         type: DataTypes.BOOLEAN,

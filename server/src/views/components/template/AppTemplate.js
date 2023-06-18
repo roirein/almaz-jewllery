@@ -4,12 +4,12 @@ import NotificationComponent from '../feedbacks/notification';
 import {useState, useEffect, useContext} from 'react';
 import AppContext from '../../context/appContext';
 import {useIntl} from 'react-intl';
-import messages from '../../i18n'
 import Link from 'next/link';
 import {useRouter} from 'next/router'
 import { ROLES } from '../../../consts/system-consts';
 import { DESIGN_MANAGER_TABS, MANAGER_TABS } from '../../const/TabDefinitions';
 import NotificationPopoverComponet from '../notifications/NotificationsPopover';
+import NotificationSnackbarComponent from '../notifications/NotificicationSnackBar';
 
 const AppTemplateComponent = (props) => {
     const intl = useIntl();
@@ -27,8 +27,6 @@ const AppTemplateComponent = (props) => {
             setTabs(DESIGN_MANAGER_TABS)
         }
     }, [tabs])
-
-    console.log(MANAGER_TABS)
 
     return (
         <Box
@@ -71,7 +69,7 @@ const AppTemplateComponent = (props) => {
                     >
                         <Tabs 
                             value={router.pathname}
-                            indicatorColor="secondary"
+                            indicatorColor="transparent"
                             sx={{
                                 transform: 'translateX(0)',
                                 transition: 'transform 0.3s ease in out'
@@ -81,8 +79,18 @@ const AppTemplateComponent = (props) => {
                                 console.log(tab)
                                 return (
                                     <Tab
+                                        sx={{
+                                            border: router.pathname === tab.value ? `1px solid #a05444` : 'none'
+                                        }}
                                         label={(
-                                            <Link href={tab.value}>
+                                            <Link 
+                                                href={tab.value}
+                                                style={{
+                                                    textDecoration: 'none',
+                                                    color: '#a05444',
+                                                    fontWeight: router.pathname === tab.value ? 'bold' : 'normal'
+                                                }}
+                                            >
                                                 {intl.formatMessage(tab.label)}
                                             </Link>
                                         )}
@@ -98,7 +106,9 @@ const AppTemplateComponent = (props) => {
                             marginRight: 'auto'
                         }}
                     >
-                        <IconButton>
+                        <IconButton
+                            onClick={() => setShowNotifications(true)}
+                        >
                             <Badge
                                 color="primary"
                                 badgeContent={contextValue.unreadNotifications}
@@ -110,6 +120,19 @@ const AppTemplateComponent = (props) => {
                 </Stack>
             </AppBar>
             {props.children}
+            {contextValue.showAlert && (
+                <NotificationSnackbarComponent
+                    onClose={() => contextValue.setShowAlert(false)}
+                    type={contextValue.currentNotification.type}
+                />
+            )}
+            {showNotifications && (
+                <NotificationPopoverComponet
+                    open={showNotifications}
+                    onClose={() => setShowNotifications(false)}
+                    notifications={contextValue.notifications}
+                />
+            )}
         </Box>
     )
 }

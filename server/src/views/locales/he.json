@@ -39,12 +39,20 @@
     "codeExpired": "הקוד שהזנת אינו בתוקףת אנא בקש קוד חדש",
     "passwordChanged": "הסיסמה שונתה בהצלחה",
     "toLogin": "להתחברות",
-    "order": "הזמנות",
+    "orders": "הזמנות",
     "customers": "לקוחות",
-    "employess": "עובדים",
+    "employees": "עובדים",
     "stock": "מלאי",
     "reports": "דוחות",
     "settings": "הגדרות",
     "models": "מודלים",
-    "logout": "התנתק"
+    "logout": "התנתק",
+    "newCustomerNotification": "לקוח חדש ביקש להירשם למערכת",
+    "newCustomerNotificationMessage": "לקוח חדש בשם {name} ביקש להירשם למערכתת לחץ כאן לצפות בפרטים",
+    "status": "סטטוס",
+    "approved": "אושר",
+    "rejected": "נדחה",
+    "pending": "ממתין",
+    "customerName": "שם לקוח",
+    "seeMore": "ראה עוד"
 }

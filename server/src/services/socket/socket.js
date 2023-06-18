@@ -15,10 +15,8 @@ const initSocket = (io) => {
 
 const sendNotification = (notification) => {
     const socketId = users[notification.recipient];
-    console.log(notification)
     if (socketId) {
-        console.log(1)
-        ioInstance.to(socketId).emit('newOrder', notification);
+        ioInstance.to(socketId).emit('notification', notification);
     }
 }
 

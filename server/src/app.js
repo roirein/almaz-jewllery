@@ -48,7 +48,7 @@ const {initSocket} = require('./services/socket/socket');
 const userRoute = require('./routes/user');
 const employeeRoute = require('./routes/employee');
 const imageRoute = require('./routes/images');
-// const customerRoute = require('./routes/customer');
+const customerRoute = require('./routes/customer');
 const orderRoute = require('./routes/orders');
 const modelRoute = require('./routes/models');
 const notificationsRoute = require('./routes/notifications');
@@ -96,6 +96,7 @@ nextApp.prepare().then(() => {
 
     app.use('/user', userRoute);
     app.use('/employee', employeeRoute);
+    app.use('/customer', customerRoute)
     app.use('/image', imageRoute);
     app.use('/order', orderRoute);
     app.use('/model', modelRoute);

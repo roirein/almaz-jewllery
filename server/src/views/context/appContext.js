@@ -10,7 +10,8 @@ const appContextValue = {
     setNotifications: () => {},
     showAlert: false,
     setShowAlert: () => {},
-    unreadNotifications: 0
+    unreadNotifications: 0,
+    currentNotification: null
 }
 
 const AppContext = createContext(appContextValue);
