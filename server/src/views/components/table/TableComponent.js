@@ -36,14 +36,18 @@ const TableComponent = (props) => {
                                 </TableCell>
                             ))}
                             {props.showMoreButton && (
-                                <Button
-                                    varinat="contained"
-                                    sx={{
-                                        backgroundColor: '#a05444'
-                                    }}
-                                >
-                                    {intl.formatMessage(tableColumnsMessages.seeMore)}
-                                </Button>
+                                <TableCell>
+                                    <Button
+                                        varinat="outlined"
+                                        onClick={() => props.onShowMoreClick(row)}
+                                        sx={{
+                                            borderColor: '#a05444',
+                                            color: '#a05444'
+                                        }}
+                                    >
+                                        {intl.formatMessage(tableColumnsMessages.seeMore)}
+                                    </Button>
+                                </TableCell>
                             )}
                         </TableRow>
                     ))}

@@ -234,5 +234,37 @@ export const tableColumnsMessages = defineMessages({
     seeMore: {
         id: 'seeMore',
         defaultMessage: 'see more'
+    },
+})
+
+
+export const customerPageMessages = defineMessages({
+    newRequestFrom: {
+        id: 'newRequestFrom',
+        defaultMessage: 'new join request from {name}'
+    },
+    customerName: {
+        id: 'customerName',
+        defaultMessage: 'customerName'
+    },
+    contactDetails: {
+        id: 'contactDetails',
+        defaultMessage: 'contact details'
+    },
+    phoneNumber: {
+        id: 'phoneNumber',
+        defaultMessage: 'phone number'
+    },
+    businessPhone: {
+        id: 'businessPhone',
+        defaultMessage: 'business phone'
+    },
+    email: {
+        id: 'email',
+        defaultMessage: 'email'
+    },
+    businessName: {
+        id: 'businessName',
+        defaultMessage: 'business name'
     }
 })

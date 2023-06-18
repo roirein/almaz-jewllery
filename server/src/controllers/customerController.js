@@ -48,8 +48,24 @@ const getCustomerRequestById = async (req, res, next) => {
             where: {
                 id: req.params.id
             },
-            include: Cus
+            include: {
+                model: Customer,
+                include: {
+                    model: User,
+                    attributes: ['firstName', 'lastName', 'email', 'phone']
+                }
+            }
         })
+
+        const customerData = {
+            name: `${customerRequest.Customer.User.firstName} ${customerRequest.Customer.User.lastName}`,
+            phoneNumber: customerRequest.Customer.User.phone,
+            email: customerRequest.Customer.User.email,
+            businessName: customerRequest.Customer.businessName,
+            businessPhone: customerRequest.Customer.secondaryPhone,
+            status: customerRequest.status
+        }
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({customer: customerData})
     } catch(e) {
         next(e)
     }
@@ -65,5 +81,6 @@ const getCustomers = async (req, res, next) => {
 
 module.exports = {
     approveCustomerRequest,
-    getCustomerRequests
+    getCustomerRequests,
+    getCustomerRequestById
 }

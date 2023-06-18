@@ -23,3 +23,7 @@ export const getUpdatePasswordUrl = () => {
 export const getRequestUrl = () => {
     return `${serverUrl}/customer/getCustomerRequests`
 }
+
+export const getUserRequestUrl = (id) => {
+    return `${serverUrl}/customer/getCustomerRequestById/${id}`
+}

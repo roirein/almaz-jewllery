@@ -54,5 +54,8 @@
     "rejected": "נדחה",
     "pending": "ממתין",
     "customerName": "שם לקוח",
-    "seeMore": "ראה עוד"
+    "seeMore": "ראה עוד",
+    "newRequestFrom": "בקשת הצטרפות חדשה מ{name}",
+    "contactDetails": "פרטים ליצירת קשר",
+    "businessPhone": "מספר טלפון של העסק"
 }

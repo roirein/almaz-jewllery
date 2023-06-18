@@ -8,11 +8,20 @@ import {Stack} from '@mui/material'
 import {useIntl} from 'react-intl'
 import {useState, useEffect} from 'react'
 import { tableColumnsMessages } from "../../i18n";
+import RequestModalComponent from "./components/RequestModalComponent";
 
 const CustomersPage = (props) => {
 
-    const [data, setData] = useState([])
-    const intl = useIntl()
+    const [data, setData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const intl = useIntl();
+
+    const handleSeeMoreClick = (email) => {
+        const user = props.data.find((user) => user.email === email)
+        setSelectedUserId(user.id)
+        setShowModal(true)
+    }
 
     useEffect(() => {
         const tableData = [];
@@ -41,9 +50,20 @@ const CustomersPage = (props) => {
                         columns={props.tableColumns}
                         data={data}
                         showMoreButton={true}
+                        onShowMoreClick={(dataRow) => handleSeeMoreClick(dataRow[1])}
                     />
                 </Stack>
             </Stack>
+            {showModal && (
+                <RequestModalComponent
+                    open={showModal}
+                    onClose={() => {
+                        setShowModal(true)
+                        setSelectedUserId(null)
+                    }}
+                    id={selectedUserId}
+                />
+            )}
         </AppTemplateComponent>
     )
 }

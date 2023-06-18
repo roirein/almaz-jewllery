@@ -7,8 +7,20 @@ const ModalComponent = (props) => {
             onClose={() => props.onClose()}
             fullWidth
             maxWidth="sm"
+            PaperProps={{
+                sx: {
+                    border: '5px solid #a05444',
+                    borderTop: '15px solid #a05444'
+                }
+            }}
         >
-            <DialogTitle>
+            <DialogTitle
+                variant='h6'
+                sx={{
+                    textAlign: 'right',
+                    fontWeight: 'bold',
+                }}
+            >
                 {props.title}
             </DialogTitle>
             <DialogContent>
