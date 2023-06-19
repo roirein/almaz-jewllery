@@ -80,7 +80,7 @@ const AppTemplateComponent = (props) => {
                                 return (
                                     <Tab
                                         sx={{
-                                            border: router.pathname === tab.value ? `1px solid #a05444` : 'none'
+                                            border: router.pathname.startsWith(tab.value) ? `1px solid #a05444` : 'none'
                                         }}
                                         label={(
                                             <Link 

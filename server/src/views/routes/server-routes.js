@@ -27,3 +27,11 @@ export const getRequestUrl = () => {
 export const getUserRequestUrl = (id) => {
     return `${serverUrl}/customer/getCustomerRequestById/${id}`
 }
+
+export const getApproveUserUrl = (id) => {
+    return `${serverUrl}/customer/approveCustomer/${id}`
+}
+
+export const getCustomersUrl = () => {
+    return `${serverUrl}/customer/getCustomers`
+}

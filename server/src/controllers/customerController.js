@@ -1,16 +1,29 @@
 const { HTTP_STATUS_CODE } = require('../consts/http-consts');
-//const {sendYourUserApprovedMail} = require('../emails/emails');
+const { REQUESTS_STATUS } = require('../consts/system-consts');
+const {sendYourUserApprovedMail} = require('../services/emails/emails')
 const Customer = require('../models/users/customerModel');
 const Request = require('../models/users/requestsModel');
 const User = require('../models/users/userModel');
 
 const approveCustomerRequest = async (req, res, next) => {
     try {
-        await approveCustomer(req.params.userId);
-        const user = await getUserById(req.params.userId)
-        //sendYourUserApprovedMail(user.firstName, user.Email);
-        res.status(HTTP_STATUS_CODE.SUCCESS).send('Customer approved succesfully');
+
+        const requestStatus = req.body.isApproved ? REQUESTS_STATUS.APPROVED : REQUESTS_STATUS.REJECTED;
+        if (requestStatus === REQUESTS_STATUS.APPROVED) {
+            sendYourUserApprovedMail(req.body.firstName, req.body.email)
+        }
+        await Request.update(
+            {
+                status: requestStatus
+            }, {
+                where: {
+                    id: req.params.customerId
+                }
+            }
+        )
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({status: requestStatus});
     } catch(e) {
+        console.log(e)
         next(e)
     }
 }
@@ -58,6 +71,7 @@ const getCustomerRequestById = async (req, res, next) => {
         })
 
         const customerData = {
+            id: req.params.id,
             name: `${customerRequest.Customer.User.firstName} ${customerRequest.Customer.User.lastName}`,
             phoneNumber: customerRequest.Customer.User.phone,
             email: customerRequest.Customer.User.email,
@@ -73,14 +87,37 @@ const getCustomerRequestById = async (req, res, next) => {
 
 const getCustomers = async (req, res, next) => {
     try {
+        const results = await Customer.findAll({
+            include: [{
+                model: Request,
+                where: {
+                    status: REQUESTS_STATUS.APPROVED
+                }
+            }, {
+                model: User,
+                attributes: ['firstName', 'lastName', 'phone', 'email']
+            }]
+        })
 
+        const customers = results.map((customer) => {
+            return {
+                id: customer.id,
+                customerName: `${customer.User.firstName} ${customer.User.lastName}`,
+                email: customer.User.email,
+                phoneNumber: customer.User.phone,
+                businessName: customer.businessName,
+                businessPhone: customer.secondaryPhone
+            }
+        })
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({customers})
     } catch (e) {
-
+        next(e)
     }
 }
 
 module.exports = {
     approveCustomerRequest,
     getCustomerRequests,
-    getCustomerRequestById
+    getCustomerRequestById,
+    getCustomers
 }

@@ -26,7 +26,11 @@ const ModalComponent = (props) => {
             <DialogContent>
                 {props.children}
             </DialogContent>
-            <DialogActions>
+            <DialogActions
+                sx={{
+                    justifyContent: 'flex-start'
+                }}
+            >
                 {props.actions}
             </DialogActions>
         </Dialog>

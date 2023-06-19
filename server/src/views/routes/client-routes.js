@@ -5,7 +5,8 @@ const ROUTES = {
     STOCK: '/stock',
     REPORTS: '/reports',
     MODELS: '/model-management',
-    SETTINGS: '/settings'
+    SETTINGS: '/settings',
+    REQUESTS: '/customers/requests'
 }
 
 export default ROUTES

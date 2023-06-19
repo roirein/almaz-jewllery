@@ -1,9 +1,9 @@
 export const CUSTOMER_TABLE_COLUMN = [
-    'customrName',
-    'businessName',
+    'customerName',
     'email',
     'phoneNumber',
-    'secondPhoneNumber'
+    'businessName',
+    'businessPhone'
 ]
 
 export const REQUEST_TABLE_COLUMN = [

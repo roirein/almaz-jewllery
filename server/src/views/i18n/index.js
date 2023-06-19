@@ -215,6 +215,18 @@ export const tableColumnsMessages = defineMessages({
         id: 'status',
         defaultMessage: 'status'
     },
+    businessName: {
+        id: 'businessName',
+        defaultMessage: 'business name'
+    },
+    businessPhone: {
+        id: 'businessPhone',
+        defaultMessage: 'business phone'
+    },
+    phoneNumber: {
+        id: 'phoneNumber',
+        defaultMessage: 'phone number'
+    },
     customerName: {
         id: 'customerName',
         defaultMessage: 'customerName'
@@ -266,5 +278,28 @@ export const customerPageMessages = defineMessages({
     businessName: {
         id: 'businessName',
         defaultMessage: 'business name'
+    },
+    customers: {
+        id: 'customers',
+        defaultMessage: 'customers'
+    },
+    requests: {
+        id: 'requests',
+        defaultMessage: 'requests'
+    }
+})
+
+export const generalMessages = defineMessages({
+    close: {
+        id: 'close',
+        defaultMessage: 'close'
+    },
+    approve: {
+        id: 'approve',
+        defaultMessage: 'approve'
+    },
+    reject: {
+        id: 'reject',
+        defaultMessage: 'reject'
     }
 })

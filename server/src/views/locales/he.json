@@ -57,5 +57,9 @@
     "seeMore": "ראה עוד",
     "newRequestFrom": "בקשת הצטרפות חדשה מ{name}",
     "contactDetails": "פרטים ליצירת קשר",
-    "businessPhone": "מספר טלפון של העסק"
+    "businessPhone": "מספר טלפון של העסק",
+    "close": "סגור",
+    "approve": "אשר",
+    "reject": "דחה",
+    "requests": "בקשות"
 }

@@ -12,16 +12,21 @@ const TableComponent = (props) => {
         setPage(value)
     }
 
+    console.log(props.data)
+
     return (
         <>
             <Table>
                 <TableHead>
                     <TableRow>
-                        {props.columns.map((column, index) => (
-                            <TableCell key={index} sx={{textAlign: 'right', fontWeight: 'bold'}}>
-                                {intl.formatMessage(tableColumnsMessages[column])}
-                            </TableCell>
-                        ))}
+                        {props.columns.map((column, index) => {
+                            console.log(column)
+                            return (
+                                <TableCell key={index} sx={{textAlign: 'right', fontWeight: 'bold'}}>
+                                    {intl.formatMessage(tableColumnsMessages[column])}
+                                </TableCell>
+                            )
+                        })}
                         {props.showMoreButton && (
                             <TableCell/>
                         )}
