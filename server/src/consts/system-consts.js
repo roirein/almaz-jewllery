@@ -73,6 +73,7 @@ const POSITIONS = {
 
 const NOTIFICATIONS_TYPES = {
     NEW_ORDER: 'new_order',
+    NEW_MODEL_REQUEST: 'new_model_request',
     NEW_CUSTOMER: 'new_customer',
 }
 

@@ -11,27 +11,11 @@ JewelModel.init({
         primaryKey: true,
         unique: true
     },
-    item: {
+    title: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    mainStone: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    sideStone: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    inlay: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }, 
-    initiallDesign: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    finalDesign: {
+    design: {
         type: DataTypes.STRING,
         allowNull: false
     },

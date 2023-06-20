@@ -4,20 +4,22 @@ const {createNewModel, approveOrRejectModel, setModelPriceAndMaterials, getModel
 const { ROLES } = require('../consts/system-consts');
 const router = express.Router();
 
-router.post('/newModel', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), createNewModel);
+router.get('/getModelsMetadata', authorizeUser, checkPermissions([ROLES.MANAGER, ROLES.DESIGN_MANAGER]))
 
-router.get('/getAllModels', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), getAllModels)
+// router.post('/newModel', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), createNewModel);
 
-router.get('/getModelById/:modelId', authorizeUser, getModelById);
+// router.get('/getAllModels', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), getAllModels)
 
-router.put('/updateModel/:id', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER]), updateModel)
+// router.get('/getModelById/:modelId', authorizeUser, getModelById);
 
-router.patch('/reviewModel', authorizeUser, checkPermissions([ROLES.MANAGER]), approveOrRejectModel);
+// router.put('/updateModel/:id', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER]), updateModel)
 
-//router.patch('/updateModelData/:modelId', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), updateModelData);
+// router.patch('/reviewModel', authorizeUser, checkPermissions([ROLES.MANAGER]), approveOrRejectModel);
 
-router.post('/setModelPrice/:id', authorizeUser, checkPermissions([ROLES.MANAGER]), setModelPriceAndMaterials);
+// //router.patch('/updateModelData/:modelId', authorizeUser, checkPermissions([ROLES.DESIGN_MANAGER, ROLES.MANAGER]), updateModelData);
 
-router.delete('/model/:modelId', authorizeUser, () => {});
+// router.post('/setModelPrice/:id', authorizeUser, checkPermissions([ROLES.MANAGER]), setModelPriceAndMaterials);
+
+// router.delete('/model/:modelId', authorizeUser, () => {});
 
 module.exports = router
