@@ -289,6 +289,70 @@ export const customerPageMessages = defineMessages({
     }
 })
 
+export const orderPageMessages = defineMessages({
+    createNewOrder: {
+        id: 'createNewOrder',
+        defaultMessage: 'Create New Order'
+    },
+    personalDesign: {
+        id: 'personalDesign',
+        defaultMessage: 'Jewel By Personal Design'
+    },
+    existingModel: {
+        id: 'existingModel',
+        defaultMessage: 'Jewel From exisiting model'
+    },
+    fix: {
+        id: 'fix',
+        defaultMessage: 'fix'
+    },
+    newOrder: {
+        id: 'newOrder',
+        defaultMessage: 'new order'
+    },
+    chooseOrderType: {
+        id: 'chooseOrderType',
+        defaultMessage: 'choose order type'
+    },
+    orderTypeSelection: {
+        id: 'orderTypeSelection',
+        defaultMessage: 'Order Type Selection'
+    },
+    orderDetails: {
+        id: 'orderDetails',
+        defaultMessage: 'Order Details'
+    },
+    orderSummary: {
+        id: 'orderSummary',
+        defaultMessage: 'order summary'
+    },
+    commentsAndImageUpload: {
+        id: 'commentsAndImageUpload',
+        defaultMessage: 'comments and image upload'
+    },
+    orderNumber: {
+        id: 'orderNumber',
+        defaultMessage: 'order number'
+    }, 
+    orderType: {
+        id: 'orderType',
+        defaultMessage: 'order type'
+    },
+    customerName: {
+        id: 'customerName',
+        defaultMessage: 'customer name'
+    },
+    deadline: {
+        id: 'deadline',
+        defaultMessage: 'deadline'
+    },
+    orderStatus: {
+        id: 'orderStatus',
+        defaultMessage: 'order status'
+    }
+
+})
+
 export const generalMessages = defineMessages({
     close: {
         id: 'close',
@@ -301,5 +365,117 @@ export const generalMessages = defineMessages({
     reject: {
         id: 'reject',
         defaultMessage: 'reject'
+    },
+    item: {
+        id: 'item',
+        defaultMessage: 'item'
+    },
+    earrings: {
+        id: 'earrings',
+        defaultMessage: 'earrings'
+    }, 
+    ring: {
+        id: 'ring',
+        defaultMessage: 'ring'
+    },
+    bracelet: {
+        id: 'bracelet',
+        defaultMessage: 'bracelet'
+    },
+    pendant: {
+        id: 'pendant',
+        defaultMessage: 'pendant'
+    }, 
+    metal: {
+        id: 'metal',
+        defaultMessage: 'metal'
+    },
+    yellow: {
+        id: 'yellow',
+        defaultMessage: 'yellow'
+    },
+    white: {
+        id: 'white',
+        defaultMessage: 'white'
+    }, 
+    rose: {
+        id: 'rose',
+        defaultMessage: 'rose'
+    },
+    platinum: {
+        id: 'platinum',
+        defaultMessage: 'platinum'
+    }, 
+    size: {
+        id: 'size',
+        defaultMessage: 'size'
+    },
+    finger: {
+        id: 'finger',
+        defaultMessage: 'finger'
+    },
+    hand: {
+        id: 'hand',
+        defaultMessage: 'hand'
+    },
+    neck: {
+        id: 'neck',
+        defaultMessage: 'neck'
+    },
+    setting: {
+        id: 'setting',
+        defaultMessage: 'setting'
+    },
+    sideStoneSize: {
+        id: 'sideStoneSize',
+        defaultMessage: 'side stone size'
+    },
+    mainStoneSize: {
+        id: 'mainStoneSize',
+        defaultMessage: 'main stone size'
+    },
+    rangeError: {
+        id: 'rangeError',
+        defaultMessage: 'field value must be greater than {value}'
+    },
+    goBack: {
+        id: 'goBack',
+        defaultMessage: 'go back'
+    },
+    continue: {
+        id: 'continue',
+        defaultMessage: 'continue'
+    },
+    comments: {
+        id: 'comments',
+        defaultMessage: 'comments'
+    },
+    fileUploaderMessage: {
+        id: 'fileUploaderMessage',
+        defaultMessage: 'click or drag an image'
+    },
+    deadline: {
+        id: 'deadline',
+        defaultMessage: 'deadline'
+    },
+    casting: {
+        id: 'casting',
+        defaultMessage: 'casting'
+    },
+    modelDetails: {
+        id: 'modelDetails',
+        defaultMessage: 'modelDetails'
+    },
+    required: {
+        id: 'required',
+        defaultMessage: 'required'
+    },
+    notRequired: {
+        id: 'not required',
+        defaultMessage: 'not required'
+    },
+    send: {
+        id: 'send',
+        defaultMessage: 'send'
     }
 })

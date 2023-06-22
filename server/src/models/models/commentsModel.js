@@ -19,7 +19,7 @@ ModelComments.init({
         primaryKey: true,
     },
     comments: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false
     },
 }, {

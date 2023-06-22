@@ -6,7 +6,7 @@ const ModalComponent = (props) => {
             open={props.open}
             onClose={() => props.onClose()}
             fullWidth
-            maxWidth="sm"
+            maxWidth={props.width}
             PaperProps={{
                 sx: {
                     border: '5px solid #a05444',

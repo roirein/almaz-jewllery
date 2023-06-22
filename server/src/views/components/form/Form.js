@@ -19,6 +19,7 @@ const FormComponent = (props) => {
             <FormProvider {...methods}>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
+                    id={props.id}
                 >
                     {props.children}
                 </form>

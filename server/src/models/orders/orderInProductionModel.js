@@ -7,8 +7,7 @@ class OrderInProduction extends Model {}
 
 OrderInProduction.init({
     orderId: {
-        type: DataTypes.UUID,
-        defaultValue:  Sequelize.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false
     },

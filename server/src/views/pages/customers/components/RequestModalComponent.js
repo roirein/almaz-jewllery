@@ -47,6 +47,7 @@ const RequestModalComponent = (props) => {
             onClose={() => props.onClose()}
             title={customer ? intl.formatMessage(customerPageMessages.newRequestFrom, {name: customer.name}) : ''}
             actions={props.actions}
+            width="sm"
         >
             <Stack
                 sx={{
@@ -121,7 +122,7 @@ const RequestModalComponent = (props) => {
                             </Button>
                         </Stack>
                     )}
-            </Stack>
+                </Stack>
             </Stack>
         </ModalComponent>
     )

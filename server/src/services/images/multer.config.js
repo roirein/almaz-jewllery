@@ -3,7 +3,7 @@ const path = require('path')
 const crypto = require('crypto');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './images');
+        cb(null, './resources/design');
     },
     filename: (req, file, cb) => {
         const randomString = crypto.randomBytes(16).toString('hex');

@@ -11,6 +11,12 @@ JewelModel.init({
         primaryKey: true,
         unique: true
     },
+    metadataId: {
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false

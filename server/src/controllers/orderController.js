@@ -1,7 +1,5 @@
 const { ORDER_TYPES, ROLES, ORDER_STATUS, CASTING_STATUS, NOTIFICATIONS_TYPES, DESIGN_STATUS } = require('../consts/system-consts');
 const Order = require('../models/orders/orderModel');
-const NewModelOrder = require('../models/orders/newModelOrderModel');
-const ExistingModelOrder = require('../models/orders/existingModelOrder');
 const User = require('../models/users/userModel');
 const JewelModel = require('../models/models/modelModel');
 const Notification = require('../models/messages/notificationModel')
@@ -9,7 +7,6 @@ const { HTTP_STATUS_CODE } = require('../consts/http-consts');
 //const io = require('../services/socket/socket').getIo();
 const users = require('../services/socket/listener');
 const Employee = require('../models/users/employeeModel');
-const OrderInDesign = require('../models/orders/orderInDesignModel');
 const OrderInCasting = require('../models/orders/OrderInCastingModel');
 const { sendNotification } = require('../services/socket/socket');
 const { Op } = require("sequelize");
@@ -33,8 +30,7 @@ const createNewOrder = async (req, res, next) => {
                 orderId: order.orderId,
                 item: req.body.item,
                 metal: req.body.metal,
-                size: req.body.csize,
-                color: req.body.color,
+                size: req.body.size,
                 casting: req.body.casting,
                 comments: req.body.comments
             }
@@ -45,12 +41,12 @@ const createNewOrder = async (req, res, next) => {
                     setting: req.body.setting,
                     sideStoneSize: req.body.sideStoneSize,
                     mainStoneSize: req.body.mainStoneSize,
-                    initialDesign: req.file.filename,
+                    initialImage: req.file.filename,
                     comments: req.body.comments,
                     orderId: order.orderId
                 }
-
-                createNewModelOrder(jewelData, modelData)
+                console.log(modelData)
+                await createNewModelOrder(jewelData, modelData)
             }
         }
         res.status(HTTP_STATUS_CODE.CREATED).send();
@@ -76,14 +72,14 @@ const getActiveOrders = async (req, res, next) => {
 
         const orders = orderData.map((order) => {
             return {
-                id: order.orderId,
-                type: order.type,
-                customer: order.customerName,
+                orderNumber: order.orderId,
+                orderType: order.type,
+                customerName: order.customerName,
                 deadline: order.deadline,
-                status: order.status
+                orderStatus: order.status
             }
         })
-        res.send(HTTP_STATUS_CODE.SUCCESS).send({orders})
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({orders})
     } catch(e) {
         next(e)
     }
@@ -252,12 +248,12 @@ const sendOrderToDesign = async (req, res, next) => {
 
 module.exports = {
     createNewOrder,
-    getOrdersInDesign,
+    //getOrdersInDesign,
     getActiveOrders,
     sendOrderToDesign,
-    getOrderById,
-    getNewModelOrder,
-    setOrderDesignStatus,
-    setOrderPrice,
-    setCastingStatus
+    // getOrderById,
+    // getNewModelOrder,
+    // setOrderDesignStatus,
+    // setOrderPrice,
+    // setCastingStatus
 }

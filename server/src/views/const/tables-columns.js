@@ -11,3 +11,11 @@ export const REQUEST_TABLE_COLUMN = [
     'email',
     'status'
 ]
+
+export const ORDERS_TABLE_COLUMNS = [
+    'orderNumber',
+    'orderType',
+    'customerName',
+    'orderStatus',
+    'deadline'
+]

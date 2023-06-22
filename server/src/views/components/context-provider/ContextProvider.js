@@ -12,6 +12,7 @@ const ContextProvider = (props) => {
     const [unreadNotifications, setUnreadNotifications] = useState(0);
     const [currentNotification, setCurrentNotification] = useState(null)
     const [showAlert, setShowAlert] = useState(false)
+    const [name, setName] = useState('')
 
     useEffect(() => {
         if (socket){
@@ -43,10 +44,11 @@ const ContextProvider = (props) => {
         setUnreadNotifications(unreadNotificationsArray.length)
     }, [notifications])
 
-    const onLogin = (userToken, userRole, userId) => {
+    const onLogin = (userToken, userRole, userId, name) => {
         setToken(userToken)
         setRole(userRole)
         setUserId(userId)
+        setName(name)
         const userFields = {
             userToken, userRole
         }
@@ -74,6 +76,7 @@ const ContextProvider = (props) => {
         socket,
         onLogin,
         userId,
+        name,
         notifications,
         setNotifications,
         showAlert,

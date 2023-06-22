@@ -22,10 +22,6 @@ NewJewelOrder.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    color: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     casting: {
         type: DataTypes.BOOLEAN,
     },

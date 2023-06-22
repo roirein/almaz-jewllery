@@ -124,7 +124,7 @@ const loginUser = async (req, res, next) => {
             secure: process.env.NODE_ENV === 'production',
           });
         
-        res.status(HTTP_STATUS_CODE.SUCCESS).send({token: user.token, role, id: user.dataValues.id});
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({token: user.token, role, id: user.dataValues.id, name: `${user.dataValues.firstName} ${user.dataValues.lastName}`});
 
     } catch(e) {
         next(e)

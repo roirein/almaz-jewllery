@@ -5,7 +5,7 @@ const {createNewOrder, getNewModelOrder, setOrderDesignStatus, setOrderPrice, se
 const upload = require('../services/images/multer.config')
 const router = express.Router();
 
-router.post('/newOrder', authorizeUser, checkPermissions([USER_TYPES.CUSTOMER, ROLES.MANAGER]), upload.single('design'), createNewOrder);
+router.post('/newOrder', authorizeUser, checkPermissions([USER_TYPES.CUSTOMER, ROLES.MANAGER]), upload.single('image'), createNewOrder);
 
 router.get('/activeOrders', authorizeUser, getActiveOrders)
 

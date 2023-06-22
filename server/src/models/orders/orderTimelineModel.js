@@ -6,8 +6,7 @@ class OrderTimeline extends Model {}
 
 OrderTimeline.init({
     orderId: {
-        type: DataTypes.UUID,
-        defaultValue:  Sequelize.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false
     },

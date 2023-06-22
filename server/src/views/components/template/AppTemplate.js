@@ -14,19 +14,9 @@ import NotificationSnackbarComponent from '../notifications/NotificicationSnackB
 const AppTemplateComponent = (props) => {
     const intl = useIntl();
     const router = useRouter()
-
-    const [tabs, setTabs] = useState([]);
     const [showNotifications, setShowNotifications] = useState(false);
 
     const contextValue = useContext(AppContext);
-
-    useEffect(() => {
-        if (contextValue.role === ROLES.MANAGER) {
-            setTabs(MANAGER_TABS)
-        } else {
-            setTabs(DESIGN_MANAGER_TABS)
-        }
-    }, [tabs])
 
     return (
         <Box
@@ -67,38 +57,40 @@ const AppTemplateComponent = (props) => {
                             justifyContent: 'center'
                         }}
                     >
-                        <Tabs 
-                            value={router.pathname}
-                            indicatorColor="transparent"
-                            sx={{
-                                transform: 'translateX(0)',
-                                transition: 'transform 0.3s ease in out'
-                            }}
-                        >
-                            {MANAGER_TABS.map((tab) => {
-                                console.log(tab)
-                                return (
-                                    <Tab
-                                        sx={{
-                                            border: router.pathname.startsWith(tab.value) ? `1px solid #a05444` : 'none'
-                                        }}
-                                        label={(
-                                            <Link 
-                                                href={tab.value}
-                                                style={{
-                                                    textDecoration: 'none',
-                                                    color: '#a05444',
-                                                    fontWeight: router.pathname === tab.value ? 'bold' : 'normal'
-                                                }}
-                                            >
-                                                {intl.formatMessage(tab.label)}
-                                            </Link>
-                                        )}
-                                        value={tab.value}
-                                    />
-                                )
-                            })}
-                        </Tabs>
+                        {contextValue.role === ROLES.MANAGER && (
+                            <Tabs 
+                                value={router.pathname}
+                                indicatorColor="transparent"
+                                sx={{
+                                    transform: 'translateX(0)',
+                                    transition: 'transform 0.3s ease in out'
+                                }}
+                            >
+                                {MANAGER_TABS.map((tab) => {
+                                    console.log(tab)
+                                    return (
+                                        <Tab
+                                            sx={{
+                                                border: router.pathname.startsWith(tab.value) ? `1px solid #a05444` : 'none'
+                                            }}
+                                            label={(
+                                                <Link 
+                                                    href={tab.value}
+                                                    style={{
+                                                        textDecoration: 'none',
+                                                        color: '#a05444',
+                                                        fontWeight: router.pathname === tab.value ? 'bold' : 'normal'
+                                                    }}
+                                                >
+                                                    {intl.formatMessage(tab.label)}
+                                                </Link>
+                                            )}
+                                            value={tab.value}
+                                        />
+                                    )
+                                })}
+                            </Tabs>
+                        )}
                     </Stack>
                     <Stack
                         direction="row"

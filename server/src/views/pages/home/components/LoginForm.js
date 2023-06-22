@@ -29,7 +29,7 @@ const LoginFormComponent = (props) => {
             })
 
             if (response.status === HTTP_STATUS_CODE.SUCCESS) {
-                contextValue.onLogin(response.data.token, response.data.role, response.data.id);
+                contextValue.onLogin(response.data.token, response.data.role, response.data.id, response.data.name);
                 router.push(ROUTES.ORDER_MANAGEMENT)
             }
 

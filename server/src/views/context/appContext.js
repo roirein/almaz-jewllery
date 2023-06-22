@@ -5,6 +5,7 @@ const appContextValue = {
     role: '',
     socket: null,
     userId: null,
+    name: '',
     onLogin: () => {},
     notifications: [],
     setNotifications: () => {},

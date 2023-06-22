@@ -1,8 +1,8 @@
 import {Box, Stack, Menu, MenuItem, Button, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Paper} from '@mui/material';
-import {useState, useContext} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import AppContext from '../../context/appContext';
 import {useIntl} from 'react-intl';
-import messages from '../../i18n'
+import {orderPageMessages} from '../../i18n'
 import AppTemplateComponent from '../../components/template/AppTemplate';
 import AddIcon from '@mui/icons-material/Add';
 import {ORDER_TYPES, ROLES, USER_TYPES} from '../../../consts/system-consts';
@@ -12,72 +12,97 @@ import axios from 'axios'
 import NotificationComponent from '../../components/feedbacks/notification';
 import {parse} from 'cookie'
 import {useRouter} from 'next/router'
+import CreateOrderModal from './components/CreateOrderModal';
+import { ORDERS_TABLE_COLUMNS } from '../../const/tables-columns';
+import { getActiveOrdersUrl } from '../../routes/server-routes';
 
 const OrderManagementPage= (props) => {
 
-    const [showMenu, setShowMenu] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [notificationData, setNotificationData] = useState(null);
-    const [modalType, setModalType] = useState();
-    const contextValue = useContext(AppContext)
+    const contextValue = useContext(AppContext);
     const intl = useIntl();
     const router = useRouter();
 
+
     const isAllowedToCreateNewOrder = contextValue.role === ROLES.MANAGER || contextValue.role === USER_TYPES.CUSTOMER
 
-    const handleOpenModal = (type) => {
-        setShowMenu(false)
-        setShowModal(true)
-        setModalType(type)
-    }
+    useEffect(() => {
 
-    const onClickOrder = (orderId) => {
-        router.push(`/order-management/${orderId}`)
-    }
+    }, [])
+    // const handleOpenModal = (type) => {
+    //     setShowMenu(false)
+    //     setShowModal(true)
+    //     setModalType(type)
+    // }
 
-    const createNewOrder = async (data) => {
-        const imageData = new FormData();
-        imageData.append("model", data.image[0])
-        const imageResponse = await axios.post(`${process.env.SERVER_URL}/image/upload`, imageData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${contextValue.token}`
-            }
-        })
-        const newModelOrderData = {
-            type: ORDER_TYPES.NEW_MODEL,
-            customerName: data.customerName,
-            deadline: data.deadline,
-            isCatingRequired: !!data.isCatingRequired,
-            action: 'newOrder',
-            modelData: {
-                item: data.item,
-                size: data.size,
-                metal: data.metal,
-                inlay: data.setting,
-                mainStone: data.mainStoneSize,
-                sideStone: data.sideStoneSize,
-                image: imageResponse.data.path,
-                comments: data.comments
-            }
-        }
-        const response = await axios.post('/api/order', newModelOrderData, {
-            headers: {
-                'Authorization': `Bearer ${contextValue.token}`
-            }
-        })
-        if (response.status === HTTP_STATUS_CODE.CREATED){
-            setNotificationData({
-                color: 'success',
-                message: intl.formatMessage(messages.newOrderSuccess),
-                onClose: () => setNotificationData(null)
-            })
-        }
-    }
+    // const onClickOrder = (orderId) => {
+    //     router.push(`/order-management/${orderId}`)
+    // }
+
+    // const createNewOrder = async (data) => {
+    //     const imageData = new FormData();
+    //     imageData.append("model", data.image[0])
+    //     const imageResponse = await axios.post(`${process.env.SERVER_URL}/image/upload`, imageData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //             'Authorization': `Bearer ${contextValue.token}`
+    //         }
+    //     })
+    //     const newModelOrderData = {
+    //         type: ORDER_TYPES.NEW_MODEL,
+    //         customerName: data.customerName,
+    //         deadline: data.deadline,
+    //         isCatingRequired: !!data.isCatingRequired,
+    //         action: 'newOrder',
+    //         modelData: {
+    //             item: data.item,
+    //             size: data.size,
+    //             metal: data.metal,
+    //             inlay: data.setting,
+    //             mainStone: data.mainStoneSize,
+    //             sideStone: data.sideStoneSize,
+    //             image: imageResponse.data.path,
+    //             comments: data.comments
+    //         }
+    //     }
+    //     const response = await axios.post('/api/order', newModelOrderData, {
+    //         headers: {
+    //             'Authorization': `Bearer ${contextValue.token}`
+    //         }
+    //     })
+    //     if (response.status === HTTP_STATUS_CODE.CREATED){
+    //         setNotificationData({
+    //             color: 'success',
+    //             message: intl.formatMessage(messages.newOrderSuccess),
+    //             onClose: () => setNotificationData(null)
+    //         })
+    //     }
+    // }
 
     return (
         <AppTemplateComponent>
-            <h1>Orders</h1>
+            <Stack
+                sx={{
+                    width: '10%',
+                }}
+            >   
+                <Button
+                    variant="outlined"
+                    sx={{
+                        color: '#a05444'
+                    }}
+                    onClick={() => setShowModal(true)}
+                >
+                    <AddIcon/>
+                    <Typography>
+                        {intl.formatMessage(orderPageMessages.createNewOrder)}
+                    </Typography>
+                </Button>
+            </Stack>
+                <CreateOrderModal
+                    open={showModal}
+                    onClose={() => setShowModal(false)}
+                />
         </AppTemplateComponent>
         // <Box
         //     sx={{
@@ -208,3 +233,26 @@ const OrderManagementPage= (props) => {
 // }
 
 export default OrderManagementPage
+
+
+export const getServerSideProps = async (context) => {
+    const url = getActiveOrdersUrl()
+    const cookie = parse(context.req.headers.cookie);
+    const userField = JSON.parse(cookie.userFields);
+
+    const response = await axios.get(url, {
+        headers: {
+            Authorization: `Bearer ${userField.userToken}`
+        }
+    })
+
+    console.log(response.data)
+
+
+    return {
+        props: {
+            tableColumns: ORDERS_TABLE_COLUMNS,
+            data: response.data.orders
+        }
+    }
+}

@@ -35,3 +35,11 @@ export const getApproveUserUrl = (id) => {
 export const getCustomersUrl = () => {
     return `${serverUrl}/customer/getCustomers`
 }
+
+export const getCreateNewOrderUrl = () => {
+    return `${serverUrl}/order/newOrder`
+}
+
+export const getActiveOrdersUrl = () => {
+    return `${serverUrl}/order/activeOrders`
+}

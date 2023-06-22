@@ -2,7 +2,11 @@ import {InputLabel} from '@mui/material'
 
 const InputLabelComponent = (props) => {
     return (
-        <InputLabel>
+        <InputLabel
+            sx={{
+                direction: 'rtl'
+            }}
+        >
             {props.label}
         </InputLabel>
     )
