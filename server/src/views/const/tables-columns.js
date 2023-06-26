@@ -19,3 +19,28 @@ export const ORDERS_TABLE_COLUMNS = [
     'orderStatus',
     'deadline'
 ]
+
+export const MODEL_METADATA_TABLE_COLUMNS = [
+    'item',
+    'setting',
+    'sideStoneSize',
+    'mainStoneSize',
+    'orderNumber',
+    'modelNumber'
+]
+
+export const MODEL_TABLE_COLUMS = [
+    'modelNumber',
+    'title',
+    'modelStatus'
+]
+
+export const MANAGER_MODELS_TABLE = [
+    'modelNumber',
+    'title',
+    'item',
+    'setting',
+    'sideStoneSize',
+    'mainStoneSize',
+    'modelStatus'
+]

@@ -20,10 +20,9 @@ const TableComponent = (props) => {
                 <TableHead>
                     <TableRow>
                         {props.columns.map((column, index) => {
-                            console.log(column)
                             return (
                                 <TableCell key={index} sx={{textAlign: 'right', fontWeight: 'bold'}}>
-                                    {intl.formatMessage(tableColumnsMessages[column])}
+                                    {column}
                                 </TableCell>
                             )
                         })}

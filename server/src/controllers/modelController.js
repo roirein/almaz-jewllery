@@ -6,21 +6,29 @@ const {HTTP_STATUS_CODE} = require('../consts/http-consts');
 const Order = require('../models/orders/orderModel');
 const ModelMetadata = require('../models/models/modelMetadataModel');
 const Employee = require('../models/users/employeeModel');
+const Notification = require('../models/messages/notificationModel')
 const { sendNotification } = require('../services/socket/socket');
 
 
 const getModelsMetadata = async (req, res, next) => {
     try {
-        const modelsMetadata = await ModelMetadata.findAll();
+        const modelsMetadata = await ModelMetadata.findAll({
+            include: [{
+                model: JewelModel,
+                attributes: ['status', 'title']
+            }]
+        });
+        console.log(modelsMetadata)
         const modelsData = modelsMetadata.map((model) => {
             return {
-                metadataId: metadataId.id,
+                metadataId: model.metadataId,
                 item: model.item,
                 setting: model.setting,
                 sideStoneSize: model.sideStoneSize,
                 mainStoneSize: model.mainStoneSize,
                 modelNumber: model.modelNumber,
-                orderId: model.orderId
+                orderId: model.orderId,
+                modelData: model.Model
             }
         })
 
@@ -30,24 +38,36 @@ const getModelsMetadata = async (req, res, next) => {
     }
 }
 
+
 const createNewModel = async (req, res, next) => {
     try {
+
+
         const model = {
             modelNumber: req.body.modelNumber,
-            matadataId: req.params.id,
-            image: req.file.filename,
+            metadataId: req.params.id,
+            design: req.file.filename,
             title: req.body.title,
             description: req.body.description 
         }
         const newModel = await JewelModel.create(model);
-        const designManager = await Employee.findOne({
+
+        await ModelMetadata.update({
+            modelNumber: req.body.modelNumber
+        }, {
             where: {
-                role: ROLES.DESIGN_MANAGER
+                metadataId: req.params.id
+            }
+        })
+
+        const manager = await Employee.findOne({
+            where: {
+                role: ROLES.MANAGER
             }
         })
         const notification = {
             type: NOTIFICATIONS_TYPES.NEW_MODEL,
-            recipient: designManager.dataValues.id,
+            recipient: manager.dataValues.id,
             resource: 'model',
             resourceId: newModel.modelNumber
         }
@@ -70,16 +90,19 @@ const getModelById = async (req, res, next) => {
             }]
         })
 
+        console.log(modelData.dataValues['Model Metadatum'])
+
         const model = {
             id: modelData.dataValues.modelNumber,
             title: modelData.dataValues.title,
-            image: modelData.dataValues.image,
+            image: modelData.dataValues.design,
             description: modelData.dataValues.description,
-            item: modelData.dataValues.ModelMetadata.item,
-            setting: modelData.dataValues.ModelMetadata.dataValues.setting,
-            sideStoneSize: modelData.dataValues.ModelMetadata.dataValues.sideStoneSize,
-            mainStoneSize: modelData.dataValues.ModelMetadata.dataValues.mainStoneSize,
-            initialDesign: modelData.dataValues.ModelMetadata.dataValues.initialImage
+            status: modelData.dataValues.status,
+            item: modelData.dataValues['Model Metadatum'].dataValues.item,
+            setting: modelData.dataValues['Model Metadatum'].dataValues.setting,
+            sideStoneSize: modelData.dataValues['Model Metadatum'].dataValues.sideStoneSize,
+            mainStoneSize: modelData.dataValues['Model Metadatum'].dataValues.mainStoneSize,
+            initialDesign: modelData.dataValues['Model Metadatum'].dataValues.initialImage
         }
         res.status(HTTP_STATUS_CODE.SUCCESS).send({model})
     } catch (e) {
@@ -165,6 +188,16 @@ const setModelPriceAndMaterial = async (req, res, next) => {
     }
 }
 
+const getModelDesign = async (req, res, next) => {
+    try {
+        const file = req.params.imagePath
+        const image = path.join(__dirname, '../../resources/model', file);
+        res.status(HTTP_STATUS_CODE.SUCCESS).sendFile(image)
+    } catch (e) {
+        next(e)
+    }
+}
+
 
 module.exports = {
     getModelsMetadata,
@@ -173,5 +206,6 @@ module.exports = {
     setModelPriceAndMaterial,
     reviewModel,
     updateModel,
-    getModelById
+    getModelById,
+    getModelDesign
 }

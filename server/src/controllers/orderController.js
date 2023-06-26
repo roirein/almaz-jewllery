@@ -4,14 +4,15 @@ const User = require('../models/users/userModel');
 const JewelModel = require('../models/models/modelModel');
 const Notification = require('../models/messages/notificationModel')
 const { HTTP_STATUS_CODE } = require('../consts/http-consts');
-//const io = require('../services/socket/socket').getIo();
-const users = require('../services/socket/listener');
 const Employee = require('../models/users/employeeModel');
 const OrderInCasting = require('../models/orders/OrderInCastingModel');
 const { sendNotification } = require('../services/socket/socket');
 const { Op } = require("sequelize");
 const { createNewModelOrder } = require('../utils/orderUtils');
 const NewJewelOrder = require('../models/orders/NewJewelOrderModel');
+const FixOrder = require('../models/orders/fixOrderModel');
+const ModelMetadata = require('../models/models/modelMetadataModel');
+const path = require('path')
 
 const createNewOrder = async (req, res, next) => {
     try {
@@ -26,12 +27,13 @@ const createNewOrder = async (req, res, next) => {
         if (order.type === ORDER_TYPES.FIX) {
 
         } else {
+            const castingValue = req.body.casting === 'undefined' ? false : req.body.casting
             const jewelData = {
                 orderId: order.orderId,
                 item: req.body.item,
                 metal: req.body.metal,
                 size: req.body.size,
-                casting: req.body.casting,
+                casting: castingValue,
                 comments: req.body.comments
             }
 
@@ -86,13 +88,54 @@ const getActiveOrders = async (req, res, next) => {
 }
 
 
+const getOrderById = async (req, res, next) => {
+    try {
+        const order = await Order.findOne({
+            where: {
+                orderId: req.params.orderId
+            },
+        })
+        const orderData = await NewJewelOrder.findOne({
+            where: {
+                orderId: req.params.orderId
+            }
+        })
+
+        const modelData = await ModelMetadata.findOne({
+            where: {
+                orderId: req.params.orderId
+            }
+        })
+        const result = {
+            orderNumber: order.dataValues.orderId,
+            orderType: order.dataValues.type,
+            customerName: order.dataValues.customerName,
+            orderStatus: order.dataValues.status,
+            deadline: order.dataValues.deadline,
+            item: modelData.dataValues.item,
+            setting: modelData.dataValues.setting,
+            sideStoneSize: modelData.dataValues.sideStoneSize,
+            mainStoneSize: modelData.dataValues.mainStoneSize,
+            imagePath: modelData.dataValues.initialImage,
+            comments: orderData.dataValues.comments,
+            metal: orderData.dataValues.metal,
+            size: orderData.dataValues.size,
+            casting: orderData.dataValues.casting
+        }
+        res.status(HTTP_STATUS_CODE.SUCCESS).send({order: result})
+    } catch (e) {
+        next(e)
+    }
+}
+
+
 const sendOrderToDesign = async (req, res, next) => {
     try {
         await Order.update({
             status: ORDER_STATUS.IN_DESIGN
         }, {
             where: {
-                orderId: req.params.id
+                orderId: req.params.orderId
             }
         })
 
@@ -114,6 +157,16 @@ const sendOrderToDesign = async (req, res, next) => {
         res.status(HTTP_STATUS_CODE.SUCCESS).send()
     } catch (e) {
         next (e)
+    }
+}
+
+const getOrderDesign = async (req, res, next) => {
+    try {
+        const file = req.params.imagePath
+        const image = path.join(__dirname, '../../resources/design', file);
+        res.status(HTTP_STATUS_CODE.SUCCESS).sendFile(image)
+    } catch (e) {
+        next(e)
     }
 }
 // const getOrderById = async (req, res, next) => {
@@ -251,6 +304,8 @@ module.exports = {
     //getOrdersInDesign,
     getActiveOrders,
     sendOrderToDesign,
+    getOrderById,
+    getOrderDesign
     // getOrderById,
     // getNewModelOrder,
     // setOrderDesignStatus,

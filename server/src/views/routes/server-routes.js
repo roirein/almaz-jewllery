@@ -43,3 +43,27 @@ export const getCreateNewOrderUrl = () => {
 export const getActiveOrdersUrl = () => {
     return `${serverUrl}/order/activeOrders`
 }
+
+export const getOrderByIdUrl = (id) => {
+    return `${serverUrl}/order/getOrderById/${id}`
+}
+
+export const getOrderDesignUrl = (imagePath) => {
+    return `${serverUrl}/order/getOrderDesign/${imagePath}`
+}
+
+export const getModelsMetadataUrl = () => {
+    return `${serverUrl}/model/getModelsMetadata`
+} 
+
+export const sendToDesignManagerUrl = (id) => {
+    return `${serverUrl}/order/sendOrderToDesign/${id}`
+}
+
+export const getCreateNewModelUrl = (id) => {
+    return `${serverUrl}/model/newModel/${id}`
+}
+
+export const getModelImageUrl = (imagePath) => {
+    return `${serverUrl}/model/getModelDesign/${imagePath}`
+}

@@ -1,13 +1,17 @@
 const express = require('express');
 const {USER_TYPES, ROLES} = require('../consts/system-consts');
 const {authorizeUser, checkPermissions} = require('../middlewares/authorization');
-const {createNewOrder, getNewModelOrder, setOrderDesignStatus, setOrderPrice, setCastingStatus, getOrdersInDesign, getOrderById, getActiveOrders, sendOrderToDesign} = require('../controllers/orderController')
-const upload = require('../services/images/multer.config')
+const {createNewOrder, getOrderById, getActiveOrders, sendOrderToDesign, getOrderDesign} = require('../controllers/orderController')
+const {desingUpload} = require('../services/images/multer.config')
 const router = express.Router();
 
-router.post('/newOrder', authorizeUser, checkPermissions([USER_TYPES.CUSTOMER, ROLES.MANAGER]), upload.single('image'), createNewOrder);
+router.post('/newOrder', authorizeUser, checkPermissions([USER_TYPES.CUSTOMER, ROLES.MANAGER]), desingUpload.single('image'), createNewOrder);
 
 router.get('/activeOrders', authorizeUser, getActiveOrders)
+
+router.get('/getOrderById/:orderId', authorizeUser, getOrderById);
+
+router.get('/getOrderDesign/:imagePath', authorizeUser, getOrderDesign)
 
 router.patch('/sendOrderToDesign/:orderId', authorizeUser, checkPermissions([ROLES.MANAGER]), sendOrderToDesign)
 

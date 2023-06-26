@@ -5,9 +5,9 @@ const upload = require('../services/images/multer.config')
 const router = express.Router();
 const path = require('path')
 
-router.post('/upload', authorizeUser, upload.single('model'), (req, res) => {
-    res.status(HTTP_STATUS_CODE.CREATED).send({path: req.file.filename});
-});
+// router.post('/upload', authorizeUser, upload.single('model'), (req, res) => {
+//     res.status(HTTP_STATUS_CODE.CREATED).send({path: req.file.filename});
+// });
 
 router.get('/getImage/:imagePath',  async (req, res) => {
     try{

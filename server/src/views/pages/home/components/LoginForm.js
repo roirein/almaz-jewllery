@@ -13,6 +13,7 @@ import ROUTES from "../../../routes/client-routes";
 import ErrorLabelComponent from "../../../components/form/Labels/ErrorLabel";
 import {useContext} from 'react';
 import AppContext from "../../../context/appContext";
+import { ROLES } from "../../../../consts/system-consts";
 
 const LoginFormComponent = (props) => {
     const intl = useIntl();
@@ -30,7 +31,11 @@ const LoginFormComponent = (props) => {
 
             if (response.status === HTTP_STATUS_CODE.SUCCESS) {
                 contextValue.onLogin(response.data.token, response.data.role, response.data.id, response.data.name);
-                router.push(ROUTES.ORDER_MANAGEMENT)
+                if (response.data.role === ROLES.DESIGN_MANAGER) {
+                    router.push(ROUTES.MODELS)
+                } else {
+                    router.push(ROUTES.ORDER_MANAGEMENT)
+                }
             }
 
         } catch (e) {

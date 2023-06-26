@@ -29,6 +29,7 @@ const FormTextAreaComponent =  (props) => {
                         inputRef={null}
                         errors={errors && errors[props.name]}
                         onBlur={() => props.onBlur()}
+                        readonly={props.readonly || false}
                     />
                     {errors && errors[props.name] && (
                         <ErrorLabelComponent

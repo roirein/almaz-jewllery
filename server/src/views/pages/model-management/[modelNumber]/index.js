@@ -1,9 +1,9 @@
 import AppTemplateComponent from "../../../components/template/AppTemplate"
 import {parse} from 'cookie'
 import axios from 'axios'
-import {Box, Stack, Typography, Button} from '@mui/material'
+import {Box, Stack, Button, Typography} from '@mui/material'
 import {useIntl} from 'react-intl';
-import messages from '../../../i18n'
+import {modelsPageMessages, generalMessages} from '../../../i18n'
 import AppContext from "../../../context/appContext";
 import {useContext, useState} from 'react';
 import { MODEL_STATUS, ROLES } from "../../../../consts/system-consts";
@@ -11,10 +11,14 @@ import ModelReviewModalComponent from "../../../components/modals/ModelReviewMod
 import NewModelModalComponent from "../../../components/modals/NewModelModal";
 import {useRouter} from 'next/router'
 import ModelPriceComponent from "../../../components/modals/UpdateModelPriceModal";
+import { getModelImageUrl } from "../../../routes/server-routes";
 
 const ModelPage = (props) => {
     const intl = useIntl();
     const contextValue = useContext(AppContext);
+    const [designUrl, setDesignUrl] = useState()
+    const [imageUrl, setImageUrl] = useState();
+
     const [modelStatus, setModelStatus] = useState(props.status)
     const [comments, setComments] = useState(props.comments)
     const [showCommentsModal, setShowCommentsModal] = useState(false);
@@ -22,6 +26,29 @@ const ModelPage = (props) => {
     const [showPriceModal, setShowPriceModal] = useState(false)
     const [modalPriceData, setModalPriceData] = useState(props.modalPriceData)
     const router = useRouter() 
+
+    const getImageUrl = (url, isDesign) => {
+        axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${contextValue.token}`
+            },
+            responseType: 'blob'
+        }).then((res) => {
+            const image = URL.createObjectURL(res.data);
+            if (isDesign) {
+                setDesignUrl(image)
+            } else {
+                setImageUrl(image)
+            }
+        }).catch(e => console.log(e))
+    }
+
+    useEffect(() => {
+        const designUrl = getOrderDesignUrl(props.initialDesign);
+        const modelUrl = getModelImageUrl(props.image)
+        getImageUrl(designUrl, true);
+        getImageUrl(modelUrl, false)
+    }, [])
 
     const onConfirmModel = async () => {
         const response = await axios.patch(`${process.env.SERVER_URL}/model/reviewModel`, {
@@ -94,159 +121,66 @@ const ModelPage = (props) => {
     }
 
     return (
-        <Box
-            sx={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-        >
-            <Stack
-                direction='row'
+        <AppTemplateComponent>
+            <Box
                 sx={{
-                    width: '60%',
-                    height: '70%',
-                    border: '2px solid black'
+                    display: 'flex',
+                    width: '100%',
+                    height: '95vh',
+                    alignnItems: 'center',
+                    justifyContent: 'center'
                 }}
             >
                 <Stack
                     sx={{
                         width: '50%',
-                        padding: '16px'
-                    }}
-                >
-                    <Stack
-                        sx={{
-                            width: '100%',
-                            height: '10%'
-                        }}
-                    >
-                        <Typography
-                            variant="h4"
-                            fontWeight="bold"
-                        >
-                            {`${intl.formatMessage(messages.modelNumber)} ${props.id}`}
-                        </Typography>
-                    </Stack>
-                    <Stack
-                        sx={{
-                            width: '100%',
-                            height: '70%',
-                            padding: '16px'
-                        }}
-                    >
-                        <img
-                            width="300px"
-                            height="300px"
-                            src={`http://localhost:3001/image/getImage/${props.image}`}
-                        />
-                    </Stack>
-                    <Stack>
-                        <Typography>
-                            {props.description}
-                        </Typography>
-                    </Stack>
-                </Stack>
-                <Stack
-                    rowGap="12px"
-                    sx={{
+                        height: '50%',
                         padding: '16px',
-                        width: '50%'
+                        border: '1px solid black'
                     }}
                 >
-                    <Typography>
-                        {`${intl.formatMessage(messages.item)}: ${intl.formatMessage(messages[props.item])}`}
+                    <Typography
+                        variant="h3"
+                        fontWeight="bold"
+                    >
+                        {`${intl.formatMessage(modelsPageMessages.numberOdModel, {value: props.id})} - ${props.title}`}
                     </Typography>
-                    <Typography>
-                        {`${intl.formatMessage(messages.setting)}: ${props.inlay}`}
-                    </Typography>
-                    <Typography>
-                        {`${intl.formatMessage(messages.sideStoneSize)}: ${props.sideStone}`}
-                    </Typography>
-                    <Typography>
-                        {`${intl.formatMessage(messages.mainStoneSize)}: ${props.mainStone}`}
-                    </Typography>
-                    {comments && (
-                        <>
-                            <Typography>
-                                {`${intl.formatMessage(messages.modelComments)}: ${comments}`}
-                            </Typography>
-                            {contextValue.role === ROLES.DESIGN_MANAGER && modelStatus === MODEL_STATUS.NEEDS_WORK && (
-                                <Button
-                                    onClick={() => setShowUpdateModelModal(true)}
-                                >
-                                    עדכן מודל
-                                </Button>
-                            )}
-                        </>
-                    )}
-                    {contextValue.role === ROLES.MANAGER && (modelStatus === MODEL_STATUS.CREATED || modelStatus === MODEL_STATUS.UPDATED) && (
+                    <Stack
+                        direction="row"
+                        sx={{
+                            width: '100%'
+                        }}
+                    >
                         <Stack
-                            direction="row"
-                            columnGap="12px"
+                            sx={{
+                                width: '50%'
+                            }}
                         >
-                            <Button
-                                onClick={() => setShowCommentsModal(true)}
+                            <img
+                                width="250px"
+                                height="250px"
+                                src={props.designUrl}
+                            />
+                            <Typography
+                                variant="body1"
                             >
-                                {intl.formatMessage(messages.reject)}
-                            </Button>
-                            <Button
-                                onClick={() => onConfirmModel()}
+                                {`${intl.formatMessage(generalMessages.setting)}: ${props.setting}`}
+                            </Typography>
+                            <Typography
+                                variant="body1"
                             >
-                                {intl.formatMessage(messages.confirm)}
-                            </Button>
+                                {`${intl.formatMessage(generalMessages.sideStoneSize)}: ${props.sideStoneSize}`}
+                            </Typography>
+                            <Typography
+                                variant="body1"
+                            >
+                                {`${intl.formatMessage(generalMessages.mainStoneSize)}: ${props.mainStoneSize}`}
+                            </Typography>
                         </Stack>
-                    )}
-                    {modelStatus === MODEL_STATUS.APPROVED && contextValue.role === ROLES.MANAGER && (
-                        <Button
-                            onClick={() => setShowPriceModal(true)}
-                        >
-                           עדכן חומרים ומחיר
-                        </Button>
-                    )}
-                    {modalPriceData && (
-                        <>
-                            <Typography>
-                                {`חומרים: ${modalPriceData.materials}`}
-                            </Typography>
-                            <Typography>
-                                {`מחיר עם חורמים: ${modalPriceData.priceWithMaterials}`}
-                            </Typography>
-                            <Typography>
-                                {`מחיר בלי חומרים: ${modalPriceData.priceWithoutMaterials}`}
-                            </Typography>
-                        </>
-                    )}
+                    </Stack>
                 </Stack>
-            </Stack>
-            {showCommentsModal && (
-                <ModelReviewModalComponent
-                    onClose={handleCloseModal}
-                    onSubmit={(data) => onRejectModel(data)}
-                />
-            )}
-            {showUpdateModelModal && (
-                <NewModelModalComponent
-                    onClose={() => setShowUpdateModelModal(false)}
-                    onSubmit={(data) => updateModel(data)}
-                    modelData={{
-                        modelNumber: props.id,
-                        item: props.item,
-                        setting: props.inlay,
-                        mainStoneSize: props.mainStone,
-                        sideStoneSize: props.sideStone,
-                        description: props.description
-                    }}
-                />
-            )}
-            {showPriceModal && (
-                <ModelPriceComponent
-                    onClose={() => setShowPriceModal(true)}
-                    onSubmit={(data) => updateModelPrice(data)}
-                />
-            )}
-        </Box>
+            </Box>  
+        </AppTemplateComponent>
     )
 }
 
@@ -263,28 +197,22 @@ export const getServerSideProps = async (context) => {
         }
     })
 
-    const imageResponse = await axios.get(`${process.env.SERVER_URL}/image/getImage/${modelResponse.data.model.image}`, {
-        headers: {
-            Authorization: `Bearer ${userField.userToken}`
-        }
-    })
-
-    console.log(modelResponse.data.model)
-
     return {
         props: {
             id: modelResponse.data.model.id,
+            title: modelResponse.data.mddel.title,
             status: modelResponse.data.model.status,
             item: modelResponse.data.model.item,
-            inlay: modelResponse.data.model.setting,
-            mainStone: modelResponse.data.model.mainStone,
-            sideStone: modelResponse.data.model.sideStone,
+            setting: modelResponse.data.model.setting,
+            mainStoneSize: modelResponse.data.model.mainStoneSize,
+            sideStoneSize: modelResponse.data.model.sideStoneSize,
             image: modelResponse.data.model.image,
+            initialDesign: modelResponse.data.initialDesign,
             description: modelResponse.data.model.description,
-            comments: modelResponse.data.model.comments ? modelResponse.data.model.comments : null,
-            modalPriceData: modelResponse.data.model.priceData ? modelResponse.data.model.priceData : null
+            // comments: modelResponse.data.model.comments ? modelResponse.data.model.comments : null,
+            // modalPriceData: modelResponse.data.model.priceData ? modelResponse.data.model.priceData : null
         }
     }
 }
 
-export default AppTemplateComponent(ModelPage)
+export default ModelPage

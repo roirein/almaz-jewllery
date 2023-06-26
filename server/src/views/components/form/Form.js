@@ -1,10 +1,20 @@
 import {FormProvider, useForm} from 'react-hook-form';
 import {Stack} from '@mui/material'
+import { useEffect } from 'react';
 
 const FormComponent = (props) => {
 
     const methods = useForm();
     const {handleSubmit} = methods;
+    const defaultVals = props.defaultValues
+
+    useEffect(() => {
+        if (props.defaultValues) {
+            methods.reset(props.defaultValues)
+        } else {
+            methods.reset({})
+        }
+    }, [defaultVals])
 
     const onSubmit = (data) => {
         props.onSubmit(data)

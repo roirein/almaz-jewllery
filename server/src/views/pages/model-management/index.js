@@ -1,173 +1,177 @@
-import {Box, Button, Stack, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Paper} from '@mui/material';
+import {Button, Stack, Typography, Tabs, Tab} from '@mui/material';
 import {Add} from '@mui/icons-material'
 import AppTemplateComponent from "../../components/template/AppTemplate";
 import AppContext from '../../context/appContext';
-import {useContext, useState} from 'react';
+import {useContext, useState, useEffect} from 'react';
 import { ROLES } from '../../../consts/system-consts';
 import {useIntl} from 'react-intl';
-import messages from '../../i18n'
+import { modelsPageMessages } from '../../i18n'
 import axios from 'axios'
-import { HTTP_STATUS_CODE } from '../../../consts/http-consts';
-import NotificationComponent from '../../components/feedbacks/notification';
-import NewModelModalComponent from '../../components/modals/NewModelModal';
 import {parse} from 'cookie'
-import {useRouter} from 'next/router'
+import { getModelsMetadataUrl } from '../../routes/server-routes';
+import { MANAGER_MODELS_TABLE, MODEL_METADATA_TABLE_COLUMNS, MODEL_TABLE_COLUMS } from '../../const/tables-columns';
+import CreateModelModalComponent from './components/CreateModelModal';
+import ModelsMetaDataComponent from './components/ModelsMetadatComponent';
+import ModelsComponent from './components/ModelsComponent';
+import ModelsManagerViewComponent from './components/ModelMangerViewComponent';
 
-const ModelsManagementPage = (props) => {
+const ModelManagementPageComponent = (props) => {
 
-    const contextValue = useContext(AppContext);
     const [showModal, setShowModal] = useState(false);
-    const [notificationData, setNotificationData] = useState(null);
+    const [selectedTab, setSelectedTab] = useState(1)
+    const [modelData, setModelData] = useState(null)
+    const contextValue = useContext(AppContext);
     const intl = useIntl();
-    const router = useRouter()
 
-    const onCreateNewModel = async (data) => {
-        const formData = new FormData();
-        formData.append('model', data.image[0])
-        const imageName = await axios.post(`${process.env.SERVER_URL}/image/upload`, formData,{
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${contextValue.token}`
-            }
-        });
-
-        const response = await axios.post(`${process.env.SERVER_URL}/model/newModel`, {
-            modelNumber: data.modelNumber,
-            item: data.item,
-            setting: data.setting,
-            mainStone: data.mainStoneSize,
-            sideStone: data.sideStoneSize,
-            image: imageName.data.path,
-            description: data.description
-        }, {
-            headers: {
-                Authorization: `Bearer ${contextValue.token}`
-            } 
-        });
-
-        if (response.status === HTTP_STATUS_CODE.CREATED) {
-            setNotificationData({
-                color: 'success',
-                message: intl.formatMessage(messages.newOrderSuccess),
-                onClose: () => setNotificationData(null)
-            })
+    const onCreateNewModel = (modalData) => {
+        if (modalData) {
+            setModelData(modalData)
         }
-    }
-
-    const onClickModel = (modelId) => {
-        router.push(`/model-management/${modelId}`)
+        setShowModal(true)
     }
 
     return (
-        <Box
-            sx={{
-                width: '100%',
-                height: '100%',
-                justifyContent: 'center',
-                alignItem: 'center'
-            }}
-        >
+        <AppTemplateComponent>
             {contextValue.role === ROLES.DESIGN_MANAGER && (
+                <>
+                    <Stack
+                        sx={{
+                            width: '10%',
+                        }}
+                    >   
+                        <Button
+                            variant="outlined"
+                            sx={{
+                                color: '#a05444'
+                            }}
+                            onClick={() => onCreateNewModel()}
+                        >
+                            <Add/>
+                            <Typography>
+                                {intl.formatMessage(modelsPageMessages.createNewModel)}
+                            </Typography>
+                        </Button>
+                    </Stack>
+                    <Stack
+                        sx={{
+                            width: '60%'
+                        }}
+                    >  
+                        <Tabs
+                            value={selectedTab}
+                            onChange={(event, value) => setSelectedTab(value)}
+                        >
+                            <Tab label={intl.formatMessage(modelsPageMessages.models)} value={1}/>
+                            <Tab label={intl.formatMessage(modelsPageMessages.modelsRequest)} value={2}/>
+                        </Tabs>
+                    </Stack>
+                    <Stack
+                        sx={{
+                            width: '60%',
+                        }}
+                    >   {selectedTab === 1 && (
+                            <ModelsComponent
+                                tableColumns={props.modelTableColumns}
+                                data={props.modelsData}
+                            />
+                        )}
+                        {selectedTab === 2 && (
+                            <ModelsMetaDataComponent
+                                tableColumns={props.metadataTableColumns}
+                                data={props.modelMetadata}
+                                onCreateNewModel={onCreateNewModel}
+                            />
+                        )}
+                    </Stack>
+                    <CreateModelModalComponent
+                        open={showModal}
+                        modelData={modelData}
+                        onClose={() => {
+                            setModelData(null)
+                            setShowModal(false);
+                        }}
+                    />
+                </>
+            )}
+            {contextValue.role === ROLES.MANAGER && (
                 <Stack
                     sx={{
-                        height: '10%'
+                        width: '60%'
                     }}
                 >
-                    <Button
-                        onClick={() => setShowModal(true)}
-                        sx={{
-                            width: 'fit-content'
-                        }}
-                    >
-                        <Add/>
-                        <Typography
-                            variant="body1"
-                        >
-                            {intl.formatMessage(messages.createNewModel)}
-                        </Typography>
-                    </Button>
+                    <ModelsManagerViewComponent
+                        tableColumns={props.columns}
+                        data={props.models}
+                    />
                 </Stack>
             )}
-            <Stack
-                sx={{
-                    width: '100%',
-                    height: '80%',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <TableContainer component={Paper}>
-                    <Table sx={{maxWidth: '70%'}}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>{intl.formatMessage(messages.modelNumber)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.setting)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.sideStoneSize)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.mainStoneSize)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.modelNumber)}</TableCell>
-                                <TableCell>{intl.formatMessage(messages.status)}</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {props.modelsList.map((model) => (
-                            <TableRow
-                                key={model.modelNumber}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {intl.formatMessage(messages[model.item])}
-                                </TableCell>
-                                <TableCell>{model.setting}</TableCell>
-                                <TableCell>{model.sideStone}</TableCell>
-                                <TableCell>{model.mainStone}</TableCell>
-                                <TableCell>{model.modelNumber}</TableCell>
-                                <TableCell>{intl.formatMessage(messages[model.status])}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        onClick={() => onClickModel(model.modelNumber)}
-                                    >
-                                        {intl.formatMessage(messages.seeMore)}
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Stack>
-            {showModal && (
-                <NewModelModalComponent
-                    onClose={() => setShowModal(false)}
-                    onSubmit={(data) => onCreateNewModel(data)}
-                />
-            )}
-            {notificationData && (
-                <NotificationComponent
-                    color={notificationData.color}
-                    message={notificationData.message}
-                    onClose={() => notificationData.onClose()}
-                />
-            )}
-        </Box>
+        </AppTemplateComponent>
     )
-};
+}
+
+export default ModelManagementPageComponent
 
 export const getServerSideProps = async (context) => {
+    const url = getModelsMetadataUrl();
     const cookie = parse(context.req.headers.cookie);
     const userField = JSON.parse(cookie.userFields);
 
-    const modelResponse = await axios.get(`${process.env.SERVER_URL}/model/getAllModels`, {
+    const response = await axios.get(url, {
         headers: {
             Authorization: `Bearer ${userField.userToken}`
         }
     })
 
-    return {
-        props: {
-            modelsList: modelResponse.data.models
+    let props = {}
+
+    if (userField.userRole === ROLES.DESIGN_MANAGER) {
+        const modelsMetadata = response.data.modelsData.map((model) => {
+            const {modelData, ...rest} = model
+            return {
+                metaData: rest,
+            }
+        })
+        let models = response.data.modelsData.map((model) => {
+            if (model.modelData) {
+                return {
+                    model: {
+                        modelNumber: model.modelNumber,
+                        title: model.modelData.title,
+                        status: model.modelData.status
+                    }
+                }
+            }
+        })
+        models = models.filter((model) => model !== undefined)
+        props = {
+            metadataTableColumns: MODEL_METADATA_TABLE_COLUMNS,
+            modelTableColumns: MODEL_TABLE_COLUMS,
+            modelMetadata: modelsMetadata,
+            modelsData: models
         }
     }
-}
+    if (userField.userRole === ROLES.MANAGER) {
+        const modelsData = response.data.modelsData.filter((model) => model.modelData !== null)
+        const models = modelsData.map((model) => {
+            const {modelData, ...rest} = model
+            let result = {...rest}
+            if (modelData) {
+                result = {
+                    ...result,
+                    ...modelData
+                }
+            } 
+            return {
+                model: result,
+            }
+        })
+        props = {
+            columns: MANAGER_MODELS_TABLE,
+            models
+        }
+    }
 
-export default AppTemplateComponent(ModelsManagementPage)
+    return {
+        props
+    }
+}

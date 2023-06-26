@@ -102,5 +102,17 @@
     "send": "שלח",
     "orderNumber": "מספר הזמנה",
     "orderStatus": "סטטוס הזמנה",
-    "orderType": "סוג הזמנה"
+    "orderType": "סוג הזמנה",
+    "created": "נוצר",
+    "numberOfOrder": "הזמנה מספר {value}",
+    "sendToDesignManager": "שלח למנהל עיצוב",
+    "createNewModel": "צור מודל חדש",
+    "modelNumber": "מספר מודל",
+    "in_design": "בעיצוב",
+    "createModel": "צור מודל",
+    "numberOfModel": "מודל מספר {value}",
+    "title": "כותרת",
+    "description": "תיאור",
+    "modelsRequest": "בקשות למודלים",
+    "modelStatus": "סטטוס מודל"
 }

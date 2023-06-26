@@ -349,6 +349,22 @@ export const orderPageMessages = defineMessages({
     orderStatus: {
         id: 'orderStatus',
         defaultMessage: 'order status'
+    },
+    created: {
+        id: 'created',
+        defaultMessage: 'created'
+    },
+    in_design: {
+        id: 'in_design',
+        defaultMessage: 'in design'
+    },
+    numberOfOrder: {
+        id: 'numberOfOrder',
+        defaultMessage: 'Order Number {value}'
+    },
+    sendToDesignManager: {
+        id: 'sendToDesignManager',
+        defaultMessage: 'Send to design manager'
     }
 
 })
@@ -471,11 +487,94 @@ export const generalMessages = defineMessages({
         defaultMessage: 'required'
     },
     notRequired: {
-        id: 'not required',
+        id: 'notRequired',
         defaultMessage: 'not required'
     },
     send: {
         id: 'send',
         defaultMessage: 'send'
+    }
+})
+
+export const modelsPageMessages = defineMessages({
+    createNewModel: {
+        id: 'createNewModel',
+        defaultMessage: 'create new model'
+    },
+    modelNumber: {
+        id: 'modelNumber',
+        defaultMessage: 'Model Number'
+    },
+    item: {
+        id: 'item',
+        defaultMessage: 'item'
+    },
+    setting: {
+        id: 'setting',
+        defaultMessage: 'setting'
+    },
+    sideStoneSize: {
+        id: 'sideStoneSize',
+        defaultMessage: 'side stone size'
+    },
+    mainStoneSize: {
+        id: 'mainStoneSize',
+        defaultMessage: 'main stone size'
+    },
+    orderNumber: {
+        id: 'orderNumber',
+        defaultMessage: 'orderNumber'
+    },
+    earrings: {
+        id: 'earrings',
+        defaultMessage: 'earrings'
+    }, 
+    ring: {
+        id: 'ring',
+        defaultMessage: 'ring'
+    },
+    bracelet: {
+        id: 'bracelet',
+        defaultMessage: 'bracelet'
+    },
+    pendant: {
+        id: 'pendant',
+        defaultMessage: 'pendant'
+    },
+    numberOfOrder: {
+        id: 'numberOfOrder',
+        defaultMessage: 'Order Number {value}'
+    },
+    createModel: {
+        id: 'createModel',
+        defaultMessage: 'Create Model'
+    },
+    numberOdModel: {
+        id: 'numberOfModel',
+        defaultMessage: 'model number {value}'
+    },
+    title: {
+        id: 'title',
+        defaultMessage: 'title'
+    },
+    description: {
+        id: 'description',
+        defaultMessage: 'description'
+    },
+    models: {
+        id: 'models',
+        defaultMessage: 'models'
+    },
+    modelsRequest: {
+        id: 'modelsRequest',
+        defaultMessage: 'models requests'
+    },
+    modelStatus: {
+        id: 'modelStatus',
+        defaultMessage: 'modelStatus'
+    },
+    created: {
+        id: 'created',
+        defaultMessage: 'created'
     }
 })

@@ -15,10 +15,14 @@ import {useRouter} from 'next/router'
 import CreateOrderModal from './components/CreateOrderModal';
 import { ORDERS_TABLE_COLUMNS } from '../../const/tables-columns';
 import { getActiveOrdersUrl } from '../../routes/server-routes';
+import TableComponent from '../../components/table/TableComponent';
+import ROUTES from '../../routes/client-routes';
 
 const OrderManagementPage= (props) => {
 
     const [showModal, setShowModal] = useState(false);
+    const [tableColumns, setTableColumns] = useState([]);
+    const [data, setData] = useState([])
     const contextValue = useContext(AppContext);
     const intl = useIntl();
     const router = useRouter();
@@ -27,57 +31,16 @@ const OrderManagementPage= (props) => {
     const isAllowedToCreateNewOrder = contextValue.role === ROLES.MANAGER || contextValue.role === USER_TYPES.CUSTOMER
 
     useEffect(() => {
-
+        const tableData = []
+        const cols = props.tableColumns.map((col) => intl.formatMessage(orderPageMessages[col]));
+        setTableColumns(cols);
+        props.data.forEach((dataElement) => {
+            const orderStatus = intl.formatMessage(orderPageMessages[dataElement.orderStatus]);
+            const orderType = intl.formatMessage(orderPageMessages.personalDesign)
+            tableData.push([dataElement.orderNumber, orderType, dataElement.customerName, orderStatus, new Date(dataElement.deadline).toLocaleDateString('he-IL')])
+        })
+        setData(tableData)
     }, [])
-    // const handleOpenModal = (type) => {
-    //     setShowMenu(false)
-    //     setShowModal(true)
-    //     setModalType(type)
-    // }
-
-    // const onClickOrder = (orderId) => {
-    //     router.push(`/order-management/${orderId}`)
-    // }
-
-    // const createNewOrder = async (data) => {
-    //     const imageData = new FormData();
-    //     imageData.append("model", data.image[0])
-    //     const imageResponse = await axios.post(`${process.env.SERVER_URL}/image/upload`, imageData, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data',
-    //             'Authorization': `Bearer ${contextValue.token}`
-    //         }
-    //     })
-    //     const newModelOrderData = {
-    //         type: ORDER_TYPES.NEW_MODEL,
-    //         customerName: data.customerName,
-    //         deadline: data.deadline,
-    //         isCatingRequired: !!data.isCatingRequired,
-    //         action: 'newOrder',
-    //         modelData: {
-    //             item: data.item,
-    //             size: data.size,
-    //             metal: data.metal,
-    //             inlay: data.setting,
-    //             mainStone: data.mainStoneSize,
-    //             sideStone: data.sideStoneSize,
-    //             image: imageResponse.data.path,
-    //             comments: data.comments
-    //         }
-    //     }
-    //     const response = await axios.post('/api/order', newModelOrderData, {
-    //         headers: {
-    //             'Authorization': `Bearer ${contextValue.token}`
-    //         }
-    //     })
-    //     if (response.status === HTTP_STATUS_CODE.CREATED){
-    //         setNotificationData({
-    //             color: 'success',
-    //             message: intl.formatMessage(messages.newOrderSuccess),
-    //             onClose: () => setNotificationData(null)
-    //         })
-    //     }
-    // }
 
     return (
         <AppTemplateComponent>
@@ -99,138 +62,26 @@ const OrderManagementPage= (props) => {
                     </Typography>
                 </Button>
             </Stack>
-                <CreateOrderModal
-                    open={showModal}
-                    onClose={() => setShowModal(false)}
+            <Stack
+                sx={{
+                    width: '60%'
+                }}
+            >
+                <TableComponent
+                    columns={tableColumns}
+                    data={data}
+                    showMoreButton
+                    onShowMoreClick={(row) => router.push(`${ROUTES.ORDER_MANAGEMENT}/${row[0]}`)}
                 />
+            </Stack>
+            <CreateOrderModal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+            />
         </AppTemplateComponent>
-        // <Box
-        //     sx={{
-        //         padding: '12px'
-        //     }}
-        // >
-        //     {isAllowedToCreateNewOrder && (
-        //         <Stack
-        //             direction="column"
-        //             sx={{
-        //                 height: "10%"
-        //             }}
-        //         >
-        //             <Button
-        //                 onClick={() => setShowMenu(true)}
-        //                 sx={{
-        //                     width: 'fit-content'
-        //                 }}
-        //             >
-        //                 <AddIcon/>
-        //                 <Typography
-        //                     variant="body1"
-        //                 >
-        //                     {intl.formatMessage(messages.createNewOrder)}
-        //                 </Typography>
-        //             </Button>
-        //             <Menu
-        //                 open={showMenu}
-        //                 anchorOrigin={{
-        //                     horizontal: 'right',
-        //                     vertical: 'bottom'
-        //                 }}
-        //             >
-        //                 <MenuItem onClick={() => handleOpenModal(ORDER_TYPES.NEW_MODEL)}>
-        //                     {intl.formatMessage(messages.newModel)}
-        //                 </MenuItem>
-        //                 <MenuItem onClick={() => setShowMenu(false)}>
-        //                     {intl.formatMessage(messages.existingModel)}
-        //                 </MenuItem>
-        //                 <MenuItem onClick={() => setShowMenu(false)}>
-        //                     {intl.formatMessage(messages.fix)}
-        //                 </MenuItem>
-        //             </Menu>
-        //         </Stack>
-        //     )}
-        //     <Stack
-        //         sx={{
-        //             width: '100%',
-        //             height: '80%',
-        //             alignItems: 'center',
-        //             justifyContent: 'center'
-        //         }}
-        //     >
-        //         <TableContainer component={Paper}>
-        //             <Table sx={{maxWidth: '70%'}}>
-        //                 <TableHead>
-        //                     <TableRow>
-        //                         <TableCell>{intl.formatMessage(messages.item)}</TableCell>
-        //                         <TableCell>{intl.formatMessage(messages.setting)}</TableCell>
-        //                         <TableCell>{intl.formatMessage(messages.sideStoneSize)}</TableCell>
-        //                         <TableCell>{intl.formatMessage(messages.mainStoneSize)}</TableCell>
-        //                         <TableCell>{intl.formatMessage(messages.modelNumber)}</TableCell>
-        //                         <TableCell>{intl.formatMessage(messages.status)}</TableCell>
-        //                         <TableCell></TableCell>
-        //                     </TableRow>
-        //                 </TableHead>
-        //                 <TableBody>
-        //                 {props.orderList.map((order) => (
-        //                     <TableRow
-        //                         key={order.id}
-        //                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-        //                     >
-        //                         <TableCell component="th" scope="row">
-        //                             {intl.formatMessage(messages[order.item])}
-        //                         </TableCell>
-        //                         <TableCell>{order.setting}</TableCell>
-        //                         <TableCell>{order.sideStone}</TableCell>
-        //                         <TableCell>{order.mainStone}</TableCell>
-        //                         <TableCell>{order.modelNumber}</TableCell>
-        //                         <TableCell>{intl.formatMessage(messages[order.status])}</TableCell>
-        //                         <TableCell>
-        //                             <Button
-        //                                 onClick={() => onClickOrder(order.id)}
-        //                             >
-        //                                 {intl.formatMessage(messages.seeMore)}
-        //                             </Button>
-        //                         </TableCell>
-        //                     </TableRow>
-        //                 ))}
-        //                 </TableBody>
-        //             </Table>
-        //         </TableContainer>
-        //     </Stack>
-        //     {showModal && (
-        //         <NewOrderModalComponent
-        //             orderType={modalType}
-        //             onClose={() => setShowModal(false)}
-        //             onSubmit={(data) => createNewOrder(data)}
-        //         />
-        //     )}
-        //     {notificationData && (
-        //         <NotificationComponent
-        //             color={notificationData.color}
-        //             message={notificationData.message}
-        //             onClose={() => notificationData.onClose()}
-        //         />
-        //     )}
-        // </Box>
     )
 }
 
-// export const getServerSideProps = async (context) => {
-//     const cookie = parse(context.req.headers.cookie);
-//     const userField = JSON.parse(cookie.userFields);
-//     const response = await axios.get(`${process.env.SERVER_URL}/order/ordersInDesign`, {
-//         headers: {
-//             Authorization: `Bearer ${userField.userToken}`
-//         }
-//     })
-
-   
-    
-//     return {
-//         props: {
-//             orderList: response.data.orders
-//         }
-//     }
-// }
 
 export default OrderManagementPage
 
@@ -245,9 +96,6 @@ export const getServerSideProps = async (context) => {
             Authorization: `Bearer ${userField.userToken}`
         }
     })
-
-    console.log(response.data)
-
 
     return {
         props: {
